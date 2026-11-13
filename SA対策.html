@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>システムアーキテクト試験 論文対策 総合攻略レポート</title>
+  <style>
+    :root {
+      --bg-primary: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --accent: #2563eb;
+      --accent-soft: #eff6ff;
+      --accent-border: #bfdbfe;
+      --emerald: #059669;
+      --emerald-soft: #ecfdf5;
+      --amber: #d97706;
+      --amber-soft: #fffbeb;
+      --rose: #e11d48;
+      --rose-soft: #fff1f2;
+      --purple: #7c3aed;
+      --purple-soft: #f5f3ff;
+      --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+      --radius: 12px;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0b1120;
+      --bg-surface: #1e293b;
+      --bg-subtle: #0f172a;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --accent: #60a5fa;
+      --accent-soft: rgba(59, 130, 246, 0.15);
+      --accent-border: rgba(96, 165, 250, 0.35);
+      --emerald: #34d399;
+      --emerald-soft: rgba(16, 185, 129, 0.15);
+      --amber: #fbbf24;
+      --amber-soft: rgba(245, 158, 11, 0.15);
+      --rose: #fb7185;
+      --rose-soft: rgba(244, 63, 94, 0.15);
+      --purple: #a78bfa;
+      --purple-soft: rgba(139, 92, 246, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.75;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Header */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 0.75rem 1.5rem;
+    }
+
+    .header-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-badge {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      width: 210px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: var(--accent-border);
+    }
+
+    /* Main Layout */
+    .layout {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      position: sticky;
+      top: 4.5rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
+      max-height: calc(100vh - 6rem);
+      overflow-y: auto;
+    }
+
+    .sidebar-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      padding: 0 0.5rem;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 0.45rem 0.6rem;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+
+    .nav-link:hover {
+      background: var(--bg-subtle);
+      color: var(--accent);
+    }
+
+    .nav-sub {
+      padding-left: 1.25rem;
+      font-size: 0.8rem;
+    }
+
+    .kpi-grid {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .kpi-mini {
+      background: var(--bg-subtle);
+      padding: 0.5rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .kpi-mini-val {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .kpi-mini-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* Main Content */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      min-width: 0;
+    }
+
+    /* Hero Banner */
+    .hero-card {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #ffffff;
+      border-radius: var(--radius);
+      padding: 1.75rem 2rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero-card h1 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-card p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .hero-metrics {
+      margin-top: 1.25rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .hero-metric-item {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 0.7rem 0.9rem;
+    }
+
+    .hero-metric-label {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .hero-metric-value {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-top: 0.15rem;
+    }
+
+    /* Section Card */
+    .section-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      scroll-margin-top: 4.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-lead {
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+      font-size: 0.93rem;
+    }
+
+    /* Table Styles */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--bg-subtle);
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: var(--accent-soft);
+    }
+
+    .td-item {
+      font-weight: 700;
+      white-space: nowrap;
+      color: var(--text-primary);
+    }
+
+    .td-value {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .td-note {
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+    }
+
+    /* Module Grid */
+    .module-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .module-box {
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.25rem;
+      background: var(--bg-subtle);
+    }
+
+    .module-box h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .module-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .module-list li {
+      position: relative;
+      padding-left: 1.1rem;
+      font-size: 0.92rem;
+    }
+
+    .module-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .module-label {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Theme Filter Tabs */
+    .theme-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .theme-tab {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 0.5rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .theme-tab:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .theme-tab.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    /* Essay Card */
+    .essay-card {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      background: var(--bg-surface);
+      margin-bottom: 2rem;
+      overflow: hidden;
+      scroll-margin-top: 4.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .essay-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .essay-card-header {
+      background: var(--bg-subtle);
+      padding: 1.15rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .essay-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .theme-badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+    }
+
+    .essay-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .essay-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .char-pill {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      background: var(--emerald-soft);
+      color: var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .essay-body {
+      padding: 1.5rem;
+    }
+
+    /* Requirements Box */
+    .req-box {
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .req-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .req-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-size: 0.9rem;
+    }
+
+    /* Essay Content Typography */
+    .chapter-block {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .chapter-block:last-of-type {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .chapter-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+      flex-wrap: wrap;
+    }
+
+    .chapter-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      border-left: 4px solid var(--accent);
+      padding-left: 0.65rem;
+    }
+
+    .chapter-char-badge {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: var(--bg-subtle);
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .section-sub {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0.9rem 0 0.45rem;
+    }
+
+    .essay-text p {
+      margin-bottom: 0.75rem;
+      text-align: justify;
+      line-height: 1.85;
+      color: var(--text-primary);
+    }
+
+    .essay-text ul, .essay-text ol {
+      margin: 0.6rem 0 0.85rem 1.5rem;
+    }
+
+    .essay-text li {
+      margin-bottom: 0.45rem;
+      line-height: 1.75;
+    }
+
+    .essay-end {
+      text-align: right;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* Guide List */
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .guide-item {
+      border: 1px solid var(--border-color);
+      background: var(--bg-subtle);
+      border-radius: 10px;
+      padding: 1.15rem;
+    }
+
+    .guide-item h3 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .guide-item p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* Memorization / Masking Mode */
+    .kw-mask {
+      transition: all 0.15s;
+      border-radius: 4px;
+      padding: 0 2px;
+    }
+
+    body.memorize-mode .kw-mask {
+      background: var(--accent);
+      color: transparent;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    body.memorize-mode .kw-mask.revealed,
+    body.memorize-mode .kw-mask:hover {
+      background: var(--amber-soft);
+      color: var(--amber);
+      font-weight: 700;
+    }
+
+    /* Highlight Mode */
+    body.highlight-mode .kw-reason {
+      background: var(--amber-soft);
+      color: var(--amber);
+      font-weight: 700;
+      padding: 0.05rem 0.25rem;
+      border-radius: 4px;
+    }
+
+    body.highlight-mode .kw-mask {
+      background: var(--emerald-soft);
+      color: var(--emerald);
+      font-weight: 700;
+      padding: 0.05rem 0.25rem;
+      border-radius: 4px;
+    }
+
+    mark.search-hit {
+      background: #fde047;
+      color: #0f172a;
+      padding: 0 2px;
+      border-radius: 3px;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: static;
+        max-height: none;
+      }
+    }
+
+    @media print {
+      .top-header, .sidebar, .theme-tabs, .btn-copy {
+        display: none !important;
+      }
+      .layout {
+        display: block;
+        padding: 0;
+      }
+      .section-card, .essay-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #cbd5e1;
+      }
+    }
+  </style>
+</head>
+<body class="highlight-mode">
+
+  <!-- Sticky Top Bar -->
+  <header class="top-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-badge">SA 午後II 論文</span>
+        <span class="brand-title">システムアーキテクト試験 論文対策 総合攻略レポート</span>
+      </div>
+      <div class="controls">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="キーワード検索 (例: SAX, ステートマシン)...">
+        </div>
+        <button class="btn active" id="btnHighlight" title="重要数値・論理表現をハイライト">
+          <span>✨ 重要語句ハイライト</span>
+        </button>
+        <button class="btn" id="btnMemorize" title="重要数値を黒塗りにして暗記テスト（クリック/ホバーで表示）">
+          <span>🎯 暗記マスクモード</span>
+        </button>
+        <button class="btn" id="btnTheme" title="ダークモード切替">
+          <span>🌙 ダーク</span>
+        </button>
+        <button class="btn" onclick="window.print()" title="印刷・PDF保存">
+          <span>🖨️ 印刷</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Sidebar TOC -->
+    <aside class="sidebar">
+      <div class="sidebar-title">目次ナビゲーション</div>
+      <ul class="nav-list">
+        <li><a class="nav-link" href="#sec-intro">はじめに（総合概要）</a></li>
+        <li><a class="nav-link" href="#sec-1">1. 質問票（システムの概要）</a></li>
+        <li><a class="nav-link" href="#sec-2">2. 論文骨子（モジュール構造）</a></li>
+        <li><a class="nav-link" href="#sec-3">3. 6テーマごとの完全版論文</a></li>
+        <li><a class="nav-link nav-sub" href="#theme-1">① 非機能要件の定義 (H29)</a></li>
+        <li><a class="nav-link nav-sub" href="#theme-2">② システム方式設計 (H27)</a></li>
+        <li><a class="nav-link nav-sub" href="#theme-3">③ ソフトウェア構造 (H24)</a></li>
+        <li><a class="nav-link nav-sub" href="#theme-4">④ 新技術の検証・PoC (R4)</a></li>
+        <li><a class="nav-link nav-sub" href="#theme-5">⑤ 移行計画・データ移行 (R6)</a></li>
+        <li><a class="nav-link nav-sub" href="#theme-6">⑥ 大規模分散開発・標準化 (H25)</a></li>
+        <li><a class="nav-link" href="#sec-4">4. 学習・本番活用ガイド</a></li>
+      </ul>
+
+      <div class="kpi-grid">
+        <div class="kpi-mini">
+          <div class="kpi-mini-val">5,000→3万局</div>
+          <div class="kpi-mini-label">基地局拡張規模</div>
+        </div>
+        <div class="kpi-mini">
+          <div class="kpi-mini-val">6h → 1.5h</div>
+          <div class="kpi-mini-label">バッチ処理短縮</div>
+        </div>
+        <div class="kpi-mini">
+          <div class="kpi-mini-val">3GB→350MB</div>
+          <div class="kpi-mini-label">メモリ88%削減</div>
+        </div>
+        <div class="kpi-mini">
+          <div class="kpi-mini-val">4.2s→0.18s</div>
+          <div class="kpi-mini-label">1局あたり解析</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="contentRoot">
+
+      <!-- Intro Hero -->
+      <section class="hero-card" id="sec-intro">
+        <h1>システムアーキテクト試験 論文対策 総合攻略レポート</h1>
+        <p>
+          本レポートは、システムアーキテクト（SA）試験の午後II論述式試験において確実に合格水準（A判定）を獲得するための実践的対策ドキュメントである。実務経験（通信キャリアにおける5G仮想化基地局＝vRANのデータ処理基盤構築）を軸とした「鉄板ネタ1本」を完全に固め、答案用紙の質問票から、あらゆる出題パターンに対応できる論文骨子、そして過去問の頻出6大テーマに対応した完全版論文（各約2,500〜2,800字）までを体系的に網羅・統合している。
+        </p>
+        <div class="hero-metrics">
+          <div class="hero-metric-item">
+            <div class="hero-metric-label">対象システム</div>
+            <div class="hero-metric-value">5G vRAN 構成データ処理基盤</div>
+          </div>
+          <div class="hero-metric-item">
+            <div class="hero-metric-label">コアアーキテクチャ刷新</div>
+            <div class="hero-metric-value">DOM O(n²) → SAX + State Machine O(n)</div>
+          </div>
+          <div class="hero-metric-item">
+            <div class="hero-metric-label">体制・規模</div>
+            <div class="hero-metric-value">120人月 / 1.5億円 / 100名分散</div>
+          </div>
+          <div class="hero-metric-item">
+            <div class="hero-metric-label">収録論文数</div>
+            <div class="hero-metric-value">頻出6大テーマ 完全版</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1: 質問票 -->
+      <section class="section-card" id="sec-1">
+        <div class="section-header">
+          <h2 class="section-title">1. 質問票（論述の対象とするシステムの概要）完全版</h2>
+          <button class="btn btn-copy" onclick="copySectionText('sec-1')">📋 コピー</button>
+        </div>
+        <p class="section-lead">
+          答案用紙の表紙に続く「論述の対象とするシステムの概要」の記入項目である。採点官にプロフェッショナルなシステムアーキテクトとしての客観性と信頼性を印象づけるため、工数、開発費、期間、体制の整合性を完全に揃え、不明点を一切排除した設定としている。
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>質問項目</th>
+                <th>記入内容・選択項目</th>
+                <th>補足・採点上の着眼点</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-item">① システムの名称</td>
+                <td class="td-value"><span class="kw-mask">5G仮想化基地局における構成データ高速処理基盤の構築</span>（27字）</td>
+                <td class="td-note">30字以内。業種・対象・目的・対象システムが簡潔明瞭に伝わる名称。</td>
+              </tr>
+              <tr>
+                <td class="td-item">② 企業・機関等の種類・業種</td>
+                <td class="td-value"><span class="kw-mask">5. 運輸・通信</span></td>
+                <td class="td-note">大手電気通信事業者（通信キャリア）を想定。</td>
+              </tr>
+              <tr>
+                <td class="td-item">③ 企業・機関等の規模</td>
+                <td class="td-value"><span class="kw-mask">5. 5,001人以上</span></td>
+                <td class="td-note">全国規模のインフラを支える企業規模。</td>
+              </tr>
+              <tr>
+                <td class="td-item">④ 対象業務の領域</td>
+                <td class="td-value"><span class="kw-mask">9. 技術・制御</span>（または 6. 管理一般）</td>
+                <td class="td-note">ネットワーク監視・運用保守・電波品質最適化業務。</td>
+              </tr>
+              <tr>
+                <td class="td-item">⑤ システムの形態と規模</td>
+                <td class="td-value">5. その他：<span class="kw-mask">コンテナ型分散バッチクラスタ（処理ノード 約20台、管理ノード 約3台）</span></td>
+                <td class="td-note">クラウドネイティブ基盤。選択肢に従う場合は「2. Webシステム（サーバ約23台、クライアント約150台）」でも可。</td>
+              </tr>
+              <tr>
+                <td class="td-item">⑥ ネットワークの範囲</td>
+                <td class="td-value"><span class="kw-mask">2. 同一企業・同一機関の複数事業所間</span></td>
+                <td class="td-note">全国のvRAN設備、データセンタ、運用統括センタ間を広域網で接続。</td>
+              </tr>
+              <tr>
+                <td class="td-item">⑦ システムの利用者数</td>
+                <td class="td-value"><span class="kw-mask">4. 101～300人</span></td>
+                <td class="td-note">運用監視オペレータ、エリア最適化エンジニア、保全技術者。</td>
+              </tr>
+              <tr>
+                <td class="td-item">⑧ 総開発工数</td>
+                <td class="td-value">1.（約 <span class="kw-mask">120</span> ）人月</td>
+                <td class="td-note">100名規模のグローバル分散開発体制のうち、本基盤開発にかかる工数。</td>
+              </tr>
+              <tr>
+                <td class="td-item">⑨ 開発費総額</td>
+                <td class="td-value">1.（約 <span class="kw-mask">150</span> ）百万円（ハードウェア費用を：イ．含まない）</td>
+                <td class="td-note">150百万円 ÷ 120人月 ＝ 1人月あたり約125万円（標準的相場に合致）。</td>
+              </tr>
+              <tr>
+                <td class="td-item">⑩ 開発期間</td>
+                <td class="td-value">1.（ <span class="kw-mask">2024 年 4 月</span>）～（ <span class="kw-mask">2025 年 3 月</span>）</td>
+                <td class="td-note">12か月間（要件定義〜設計〜結合・総合テスト〜段階移行）。</td>
+              </tr>
+              <tr>
+                <td class="td-item">⑪ あなたが所属する企業・機関等</td>
+                <td class="td-value"><span class="kw-mask">1. ソフトウェア企業・情報処理サービス企業等</span></td>
+                <td class="td-note">通信キャリアA社から基盤構築を受注したSIベンダの立場。</td>
+              </tr>
+              <tr>
+                <td class="td-item">⑫ あなたが担当したフェーズ</td>
+                <td class="td-value"><span class="kw-mask">1. システム企画・計画、2. システム設計</span></td>
+                <td class="td-note">システムアーキテクトの職責に直結するフェーズを選択。</td>
+              </tr>
+              <tr>
+                <td class="td-item">⑬ あなたの役割</td>
+                <td class="td-value"><span class="kw-mask">3. チームリーダ</span>（または 1. プロジェクトの全体責任者）</td>
+                <td class="td-note">アーキテクチャ設計・共通方式策定を率いる技術リーダ（PMとの混同を防止）。</td>
+              </tr>
+              <tr>
+                <td class="td-item">⑭ あなたの管理対象人数</td>
+                <td class="td-value">（ 約 <span class="kw-mask">10</span> 人 ～ 約 <span class="kw-mask">15</span> 人 ）</td>
+                <td class="td-note">コアアーキテクチャチーム（共通ライブラリ設計・方式検証担当）の規模。</td>
+              </tr>
+              <tr>
+                <td class="td-item">⑮ あなたの担当期間</td>
+                <td class="td-value">（ <span class="kw-mask">2024 年 4 月</span>）～（ <span class="kw-mask">2024 年 11 月</span>）</td>
+                <td class="td-note">要件定義、方式設計、プロトタイプ検証、共通モジュール結合方針策定までの8か月間。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 2: 論文骨子 -->
+      <section class="section-card" id="sec-2">
+        <div class="section-header">
+          <h2 class="section-title">2. 論文骨子（多展開対応モジュール構造）</h2>
+          <button class="btn btn-copy" onclick="copySectionText('sec-2')">📋 コピー</button>
+        </div>
+        <p class="section-lead">
+          本番のいかなる出題に対しても論理破綻なく2時間以内で書き切るため、論文を3つの独立モジュールとして管理する。
+        </p>
+
+        <div class="module-grid">
+          <div class="module-box">
+            <h3>
+              <span>2.1 第1章用モジュール（固定パーツ：700〜800字）</span>
+              <span class="chapter-char-badge">全テーマ共通導入</span>
+            </h3>
+            <ul class="module-list">
+              <li><span class="module-label">対象業務:</span> 大手通信キャリアA社における全国の5G仮想化基地局（vRAN）の保守運用・品質監視業務。全国の基地局から定期的に送信される構成定義データ（XML）を集約・解析し、パラメータ不整合検知や電波干渉最適化を行う。</li>
+              <li><span class="module-label">業務の特徴:</span> 「管理対象となる基地局数が極めて多く、かつリアルタイムな運用判断が求められる点」。</li>
+              <li><span class="module-label">システム開発の背景:</span> 5Gエリア全国展開に伴い、収容基地局数が<span class="kw-mask">5,000局から30,000局</span>へ急増する中期計画。現行システムは夜間バッチ処理に<span class="kw-mask">約6時間</span>を要しており、データ量6倍に伴い24時間を超過して日中運用に深刻な遅延をもたらす危機が生じた。</li>
+              <li><span class="module-label">アーキテクトの立場:</span> コアアーキテクチャチームのリーダとして、抜本的な処理性能向上と拡張性を備えた新データ処理基盤の方式設計を主導。</li>
+            </ul>
+          </div>
+
+          <div class="module-box">
+            <h3>
+              <span>2.2 第2章用モジュール（論点選択パーツ：1,000〜1,200字）</span>
+              <span class="chapter-char-badge">出題テーマの「問い」に応じて選択</span>
+            </h3>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.65rem;">出題テーマの「問い」に応じて、以下の3つの引き出しから主役を選択する。</p>
+            <ul class="module-list">
+              <li><span class="module-label">視点A（非機能要件・性能）:</span> 業務視点（夜間バッチ<span class="kw-mask">2時間以内</span>完了、緊急変更<span class="kw-mask">10秒以内</span>反映）とシステム視点（コンテナメモリ消費<span class="kw-mask">500MB以下</span>、スケールアウト抑制）の定義。</li>
+              <li><span class="module-label">視点B（アーキテクチャ・ソフトウェア構造）:</span> 従来のDOM方式（全ツリーオンメモリ展開、数GB消費、GC頻発、走査計算量 <span class="kw-mask">O(n²)</span>）から、イベント駆動型<span class="kw-mask">SAXストリーム解析</span>への刷新とハッシュインデックスによる <span class="kw-mask">O(n)</span> 化。インフラ増強（案1）とソフトウェア刷新（案2）のトレードオフ評価。</li>
+              <li><span class="module-label">視点C（新技術導入・移行）:</span> ストリーム解析の性能プロトタイプ検証（PoC）と、24時間365日の商用運用を止めないクラスタ別段階移行方式の設計。</li>
+            </ul>
+          </div>
+
+          <div class="module-box">
+            <h3>
+              <span>2.3 第3章用モジュール（工夫・評価パーツ：700〜800字）</span>
+              <span class="chapter-char-badge">課題解決・定量的成果</span>
+            </h3>
+            <ul class="module-list">
+              <li><span class="module-label">技術的工夫（新たな課題への対処）:</span> SAX化によりデータ全体がメモリ上にないため生じる「要素間の親子・依存関係の整合性検証の複雑化」に対し、スキーマに基づく<span class="kw-mask">軽量ステートマシン型パーサ</span>を考案。最小限のリングバッファで識別子とパラメータのみを保持し、ストリーム読込中に整合性を一括検証。</li>
+              <li><span class="module-label">組織的工夫（大規模連携・標準化）:</span> 100名規模のグローバル分散開発において、パーサコアを<strong>「共通SDK（共通ライブラリ）」</strong>としてパッケージ化。XMLスキーマ（XSD）および共通データオブジェクトを標準化し、テスト用XML自動生成ツール（スタブ・ハーネス）を先行提供。</li>
+              <li><span class="module-label">定量的成果・評価:</span> メモリ消費量を1プロセスあたり<span class="kw-mask">約3GBから約350MBへ88%削減</span>。1局あたりの解析時間を<span class="kw-mask">約4.2秒から約0.18秒</span>へ短縮。30,000局規模のデータを<span class="kw-mask">約1時間30分</span>で完了（目標2時間以内を大幅達成）。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: 6テーマごとの完全版論文 -->
+      <section class="section-card" id="sec-3">
+        <div class="section-header">
+          <h2 class="section-title">3. 6テーマごとの完全版論文（各約2,500〜2,800字）</h2>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="theme-tabs">
+          <button class="theme-tab active" data-target="all">すべて表示 (全6本)</button>
+          <button class="theme-tab" data-target="theme-1">テーマ① 非機能要件 (H29)</button>
+          <button class="theme-tab" data-target="theme-2">テーマ② 方式設計 (H27)</button>
+          <button class="theme-tab" data-target="theme-3">テーマ③ ソフト構造 (H24)</button>
+          <button class="theme-tab" data-target="theme-4">テーマ④ 新技術PoC (R4)</button>
+          <button class="theme-tab" data-target="theme-5">テーマ⑤ 移行計画 (R6)</button>
+          <button class="theme-tab" data-target="theme-6">テーマ⑥ 大規模標準化 (H25)</button>
+        </div>
+
+        <!-- ==================== テーマ① ==================== -->
+        <article class="essay-card" id="theme-1">
+          <div class="essay-card-header">
+            <div class="essay-title-group">
+              <span class="theme-badge">テーマ①</span>
+              <h3 class="essay-title">非機能要件の定義（平成29年度 秋期 午後II 問1）</h3>
+            </div>
+            <div class="essay-meta">
+              <span class="char-pill" id="total-char-1">総文字数計算中...</span>
+              <button class="btn btn-copy" onclick="copySectionText('theme-1')">📋 論文コピー</button>
+            </div>
+          </div>
+
+          <div class="essay-body">
+            <div class="req-box">
+              <div class="req-title">【設問の要求事項】</div>
+              <ul class="req-list">
+                <li>・<strong>設問ア:</strong> 対象業務の概要と情報システムの概要（800字以内）</li>
+                <li>・<strong>設問イ:</strong> 非機能要件を、業務及び情報システム両方の視点から、どのようなプロセスで検討したか。検討結果とともに具体的に述べよ（800字以上1,600字以内）</li>
+                <li>・<strong>設問ウ:</strong> 意思決定者に判断してもらうためにどのような工夫をしたか（600字以上1,200字以内）</li>
+              </ul>
+            </div>
+
+            <div class="essay-text">
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第1章 対象業務の概要と情報システムの概要</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">1.1 対象業務の概要</div>
+                  <p>私は、大手通信キャリアA社において、モバイルネットワーク基盤のシステム開発を担当するソフトウェア企業に所属するシステムアーキテクトである。 A社では、全国規模で商用展開を進める5Gネットワークの通信品質維持および障害未然防止を目的として、ネットワーク運用保守部門が全国の基地局監視・設備計画業務を担っている。本業務では、全国の仮想化基地局（vRAN）から定期的に収集される構成定義データ（XML形式）や動作ログを集約・解析し、パラメータの整合性検証、セル間の電波干渉最適化、ならびにトラフィック急増に伴う設備増強計画の策定を日々行っている。 対象業務の特徴は、管理対象となる基地局数が極めて膨大であり、かつ電波品質の悪化や障害兆候を即座に検知して遠隔制御を行うリアルタイムな運用判断が強く求められる点にある。</p>
+                  <div class="section-sub">1.2 情報システムの概要</div>
+                  <p>論述の対象とする情報システムは、全国の基地局（vDU/vCU）からアップロードされる大量の構成データを収集・構文解析し、正規化データを統合監視DBおよび最適化エンジンへと連携する「ネットワーク構成管理・データ処理基盤」である。 本基盤の再構築が必要となった背景には、A社の5Gエリア全国展開計画に伴い、収容基地局数が従来の<span class="kw-mask">5,000局から30,000局</span>へと急増する中期経営計画があった。現行システムは、基地局ごとに送信される<span class="kw-mask">約50MB</span>の構成ファイルを夜間バッチ処理で解析していたが、全処理に<span class="kw-mask">約6時間</span>を要していた。このまま基地局数が6倍に達すると、夜間帯のバッチ処理が翌日の日中帯にまで突き抜け、日中の電波最適化や障害監視業務に深刻な遅延が生じることが明白であった。そこで、急増するデータ量に耐えうる高スループットと拡張性を備えた新データ処理基盤の要件定義プロジェクトが発足した。私はシステムアーキテクトとして参画した。</p>
+                </div>
+              </div>
+
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第2章 非機能要件の検討視点と検討プロセス</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">2.1 対象となる非機能要件と検討の視点</div>
+                  <p>本システムにおいて定義すべき中核的な非機能要件は「性能・拡張性要件」である。私は、業務及び情報システム両方の視点から検討課題を整理した。 第一に業務の視点である。運用保守部門へのヒアリングを実施した結果、基地局が30,000局に拡大した後も、夜間バッチ処理を午前0時から午前2時までの「<span class="kw-mask">2時間以内</span>」に確実に完了させ、翌朝の運用保守業務に遅延を生じさせないことが必須要件であった。また、日中の緊急パラメータ変更時にも、1局あたり<span class="kw-mask">10秒以内</span>に解析・反映できる即応性が求められた。 第二に情報システムの視点である。本基盤は仮想化コンテナ基盤上に構築されるため、ハードウェアリソース（特にメモリ使用量）に厳しい制約があった。1コンテナプロセスあたりのメモリ消費量を「<span class="kw-mask">500MB以下</span>」に抑え、インフラコストの急増を防ぎつつ、将来的な基地局数増加に対してリニアにスケールアウトできる構造を担保することが求められた。</p>
+                  <div class="section-sub">2.2 非機能要件の検討プロセス</div>
+                  <p>私は、これらの要件を定義・達成するため、次の3段階のプロセスで検討を進めた。 まずステップ1として、現行システムのボトルネック分析を行った。現行システムの処理遅延の原因をプロファイリングした結果、XML解析に<span class="kw-mask">DOM（Document Object Model）方式</span>を採用していることが判明した。DOMはファイル全体のツリー構造をオンメモリに展開するため、1局（約50MB）あたり数GBのメモリを消費し、ガベージコレクション（GC）の頻発とスラッシングによる処理停止を引き起こしていた。さらに、構成データの階層構造を走査するロジックが多重ループとなっており、計算量が <span class="kw-mask">O(n^2)</span> に達していたため、データ量増加に対して処理時間が指数関数的に増大していた。 次にステップ2として、実現方式の比較検討とトレードオフの評価を実施した。目標性能を達成するためのシステム方式として、2つの案を比較した。案1はインフラ拡張案であり、大容量メモリサーバを増設し、並行コンテナ数を増やして現行アプリのままスケールアウトする方式である。案2はソフトウェア構造刷新案であり、イベント駆動型のストリーム解析方式（<span class="kw-mask">SAX</span>）へ移行し、ハッシュインデックスを用いたデータ走査アルゴリズムの <span class="kw-mask">O(n)</span> 化を図る方式である。案1は初期改修工数を抑えられるが、クラウド利用料が約4倍に跳ね上がり、GC起因の遅延も根本解決しない。一方、案2はパーサの再設計工数が発生するものの、メモリ消費を抜本的に抑制でき、将来の拡張性にも優れる。 そしてステップ3として、検討結果の取りまとめと新たな課題への対処を行った。<span class="kw-reason">私は案2を採用した。なぜならば、</span>基地局数が今後さらに増加する長期運用を見据え、インフラコストを抑制しつつ、データ量に対してリニアなスケーラビリティを確保することを最優先すべきと考えたからである。ただし、SAX方式を採用すると、XML全体がメモリ上に存在しないため、タグ間の親子・前後関係の整合性検証が困難になるという新たな課題が生じた。そこで私は、スキーマ定義に基づく軽量な<span class="kw-mask">ステートマシン型パーサ</span>を設計し、依存関係判定に必要な識別子のみを最小限のリングバッファに保持しながらストリーム走査する構造を考案し、非機能要件としての性能目標とデータ整合性の両立を可能にした。</p>
+                </div>
+              </div>
+
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第3章 意思決定者に判断してもらうための工夫</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">3.1 制約事項の明示と評価軸の設定</div>
+                  <p>本検討結果を意思決定者であるA社のCIOおよび運用本部長に提示し、方式決定を仰ぐに当たり、私は2点の工夫を行った。 まず、前提となる制約事項の提示である。A社の次期ITインフラ方針として「コンテナ基盤のリソース枠の上限」が設定されており、メモリ使用量を無制限に拡張することは許容されないというシステム運用形態上の制約を明示した。 その上で、単に技術的な優位性を説くのではなく、経営・投資判断ができるよう、評価軸を「初期開発コスト」「月額インフラコスト」「将来の拡張限界（基地局数上限）」の3点に整理した。</p>
+                  <div class="section-sub">3.2 意思決定者に判断してもらうための工夫</div>
+                  <p>具体的な提示方法として、私は以下の工夫を実施した。 第一に、方式比較一覧表とトレードオフの視覚化である。案1（インフラ増強）と案2（ソフトウェア刷新）について、5年間のTCO（総所有コスト）を試算した一覧表を作成した。案1では初期開発費が<span class="kw-mask">2,000万円</span>で済むものの、月額インフラ費が年間<span class="kw-mask">4,800万円</span>増加し、3年目で案2の初期投資額（開発費<span class="kw-mask">約1億5,000万円</span>）を逆転することを示した。また、案1では基地局数が<span class="kw-mask">15,000局</span>を超えた時点でメモリ制約により限界を迎えるが、案2であれば<span class="kw-mask">30,000局以上</span>までリニアに処理能力を延伸できるという拡張性の優位性をグラフ化して提示した。 第二に、プロトタイプ検証データによる客観的裏付けである。SAX＋ステートマシン方式のパーサコアについて先行して簡易プロトタイプを作成し、実測値を提示した。実データを用いた検証において、1プロセスあたりのメモリ消費量を従来の<span class="kw-mask">約3GBから約350MB（約88%削減）</span>に圧縮でき、1局あたりの処理時間が<span class="kw-mask">約4.2秒から約0.18秒</span>へと飛躍的に高速化することを実証した。 これらの定量的・視覚的な比較提示により、意思決定者から「長期的なTCO削減と将来の拡張性担保の観点から、ソフトウェア構造の刷新こそが最も妥当な投資である」との確固たる判断と承認を得ることができた。 本方式を適用した新システムは、目標どおり夜間バッチを<span class="kw-mask">約1時間30分</span>で完了させ、基地局30,000局への拡大をトラブルなく支えている。</p>
+                  <div class="essay-end">（—以上—）</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== テーマ② ==================== -->
+        <article class="essay-card" id="theme-2">
+          <div class="essay-card-header">
+            <div class="essay-title-group">
+              <span class="theme-badge">テーマ②</span>
+              <h3 class="essay-title">システム方式設計（平成27年度 秋期 午後II 問1）</h3>
+            </div>
+            <div class="essay-meta">
+              <span class="char-pill" id="total-char-2">総文字数計算中...</span>
+              <button class="btn btn-copy" onclick="copySectionText('theme-2')">📋 論文コピー</button>
+            </div>
+          </div>
+
+          <div class="essay-body">
+            <div class="req-box">
+              <div class="req-title">【設問の要求事項】</div>
+              <ul class="req-list">
+                <li>・<strong>設問ア:</strong> 対象の業務と情報システムの概要を、それぞれの特徴を含めて述べよ（800字以内）</li>
+                <li>・<strong>設問イ:</strong> システム要件を実現するためにどのようなシステム方式を検討し、どのような理由で決定したか。トレードオフを含めて具体的に述べよ（800字以上1,600字以内）</li>
+                <li>・<strong>設問ウ:</strong> システム方式設計の結果を利用者に説明する際、利用者の理解度を高めるためにどのような工夫をしたか（600字以上1,200字以内）</li>
+              </ul>
+            </div>
+
+            <div class="essay-text">
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第1章 対象の業務と情報システムの概要</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">1.1 対象業務の概要と特徴</div>
+                  <p>私は、大手通信キャリアA社のモバイルネットワーク基盤を開発するシステムインテグレータに所属するシステムアーキテクトである。A社では、全国に展開する5Gネットワークの安定運用と設備投資の適正化を図るため、ネットワーク運用部門が全国の仮想化基地局（vRAN）の構成管理および通信トラフィック監視業務を担当している。本業務では、各基地局から送られる膨大な構成情報（XML形式）を集約・解析し、パラメータの不整合や電波干渉を検知して迅速に遠隔制御を行う。 対象業務の特徴は、対象設備が全国数万箇所に及び、障害検知や電波最適化の遅延が通信サービスの大規模障害に直結するため、極めて高度なリアルタイム性と連続稼働性が求められる点にある。</p>
+                  <div class="section-sub">1.2 情報システムの概要と特徴</div>
+                  <p>論述の対象とする情報システムは、全国の仮想化基地局（vDU/vCU）からアップロードされる構成定義ファイルを自動収集して構文解析し、正規化データを統合監視DBやエリア最適化エンジンへ連携する「ネットワーク構成管理・データ処理基盤」である。 情報システムの特徴としては、各基地局から送信される構成ファイルが1局あたり<span class="kw-mask">約50MB</span>と大容量であり、さらにA社の5G展開計画に伴い収容基地局数が従来の<span class="kw-mask">5,000局から30,000局</span>へと急増する計画であったため、データ処理量に対してリニアに処理能力を拡張できるスケーラビリティが必須となる点である。現行システムは夜間バッチ処理に<span class="kw-mask">約6時間</span>を要しており、基地局増に伴う処理破綻を回避するため、新基盤のシステム方式設計に着手した。</p>
+                </div>
+              </div>
+
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第2章 システム方式の検討と決定理由</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">2.1 実現すべきシステム要件</div>
+                  <p>本基盤のシステム方式設計において実現すべき中核要件は、基地局30,000局規模への拡張時においても全件の構成解析バッチを「<span class="kw-mask">2時間以内</span>」に完了させるスループット要件と、クラウド仮想化基盤上のコンテナ1プロセスあたりのメモリ消費量を「<span class="kw-mask">500MB以下</span>」に抑えるリソース制約要件の両立であった。</p>
+                  <div class="section-sub">2.2 システム方式の検討とトレードオフの評価</div>
+                  <p>現行システムのボトルネックを分析したところ、XML解析に<span class="kw-mask">DOM方式</span>を採用していたため、ファイル全体のツリー構造をオンメモリに保持することで1プロセスあたり数GBのメモリを浪費し、頻発するガベージコレクション（GC）による処理遅延が生じていた。また、タグ階層の走査ロジックが多重ループとなっており、計算量が <span class="kw-mask">O(n^2)</span> であることも遅延の一因であった。 この課題を解決するため、私は以下の2つのシステム方式を比較検討した。</p>
+                  <ul>
+                    <li><strong>案1（インメモリDBによる全ツリーキャッシュ方式）:</strong> サーバの物理メモリを大幅に増強し、DOMツリーをインメモリDBに展開して高速走査する方式。検索・アクセス速度は極めて高いが、メモリ消費量が膨大となり、インフラ月額コストが約4倍に跳ね上がる。さらにサーバ障害時の再ロード時間が長く、可用性に課題があった。</li>
+                    <li><strong>案2（SAXストリーム解析＋ハッシュインデックス走査方式）:</strong> XMLを先頭から順次読み込み、イベント駆動で必要な要素のみを抽出するストリーム解析方式（<span class="kw-mask">SAX</span>）を採用し、データ走査アルゴリズムをハッシュマップインデックス化により <span class="kw-mask">O(n)</span> に最適化する方式。オンメモリ保持を最小化できるためメモリ消費を劇的に削減でき、リニアな拡張性を確保できる。反面、パーサロジックの新規開発工数が発生するトレードオフがあった。</li>
+                  </ul>
+                  <div class="section-sub">2.3 システム方式の決定理由と新たな課題への対処</div>
+                  <p><span class="kw-reason">私は案2を採用した。なぜならば、</span>今後も基地局数や構成パラメータが増加し続ける長期的な運用において、インフラコストの肥大化を抑えつつ、将来にわたって安定したスループットを維持できる拡張性を最優先すべきと考えたからである。 ただし、SAX方式の採用により、XML全体がメモリ上に存在しないため、「要素間の親子関係やタグをまたがる依存関係の整合性検証が困難になる」という新たな課題が生じた。基地局設定では、アンテナ設定タグと周波数設定タグの整合性が崩れると電波発射不能に陥るため、整合性担保は妥協できない。そこで私は、XMLスキーマ定義に基づく軽量な状態遷移モデル（<span class="kw-mask">ステートマシン</span>）をパーサ内部に設計した。前後の依存関係判定に必要な識別子とパラメータのみを最小限のメモリリングバッファに一時保持し、ストリーム読込と並行して整合性を一括検証する構造を考案し、高速性とデータ一貫性の両立を実現した。</p>
+                </div>
+              </div>
+
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第3章 利用者の理解度を高めるための工夫</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">3.1 利用者の懸念事項の把握</div>
+                  <p>設計したシステム方式について、システムの利用者である運用保守部門の技術リーダやオペレーション担当者へ説明を実施した。利用者側からは、「従来のDOM方式と異なり、ストリーム解析で本当にパラメータの不整合や異常値を漏れなく検知できるのか」「処理中に構文エラーが発生した際、どの基地局のどのタグで問題が起きたのかを迅速に特定できるのか」という運用上の信頼性と保守性に関する強い懸念が示された。</p>
+                  <div class="section-sub">3.2 理解度を高めるための工夫</div>
+                  <p>利用者の不安を解消し、深い理解と合意を得るため、私は以下の工夫を行った。 第一に、業務フローと連動した「<span class="kw-mask">ステートマシン動作可視化モデル</span>」の提示である。単なるプログラム構造図ではなく、運用担当者が日常行っている「設定チェック業務」の思考プロセスと、ステートマシンパーサがタグを読み込みながらバッファ内で整合性を判定していくプロセスが完全に一致していることを、具体的なXMLサンプルを用いたアニメーション形式のシーケンス図で対比して説明した。 第二に、異常発生時の「<span class="kw-mask">詳細診断ログ出力機能</span>」のプロトタイプ実演である。ストリーム解析中にスキーマ違反やパラメータ不整合を検知した際、該当する基地局ID、エラー発生行番号、および前後のコンテキスト情報を即座にエラーキューへ退避し、運用コンソール上に分かりやすくハイライト表示するデモを実演した。これにより、従来のDOM方式よりも迅速に原因究明が可能になることを体感してもらった。 これらの工夫により、運用部門から新方式の信頼性と保守性に対する確固たる信頼を獲得し、システム方式設計の全面的な承認を得ることができた。新システムはカットオーバー後も障害ゼロで安定稼働を続けている。</p>
+                  <div class="essay-end">（—以上—）</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== テーマ③ ==================== -->
+        <article class="essay-card" id="theme-3">
+          <div class="essay-card-header">
+            <div class="essay-title-group">
+              <span class="theme-badge">テーマ③</span>
+              <h3 class="essay-title">ソフトウェア構造の設計・変更容易性（平成24年度 秋期 午後II 問1）</h3>
+            </div>
+            <div class="essay-meta">
+              <span class="char-pill" id="total-char-3">総文字数計算中...</span>
+              <button class="btn btn-copy" onclick="copySectionText('theme-3')">📋 論文コピー</button>
+            </div>
+          </div>
+
+          <div class="essay-body">
+            <div class="req-box">
+              <div class="req-title">【設問の要求事項】</div>
+              <ul class="req-list">
+                <li>・<strong>設問ア:</strong> 対象業務の概要及び特徴について述べよ（800字以内）</li>
+                <li>・<strong>設問イ:</strong> どのような業務の変化を想定したか。また、業務が変化してもシステム全体を大きく作り直す必要がないように、どのようなソフトウェア構造を設計したか（800字以上1,600字以内）</li>
+                <li>・<strong>設問ウ:</strong> 生じた課題とそれに対応するために重要と考えて工夫した内容、及び設計したソフトウェア構造に対するシステムアーキテクトとしての評価について述べよ（600字以上1,200字以内）</li>
+              </ul>
+            </div>
+
+            <div class="essay-text">
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第1章 対象業務の概要及び特徴</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">1.1 対象業務の概要</div>
+                  <p>私は、大手通信キャリアA社のモバイルインフラ領域におけるシステム開発を担当するソフトウェア企業のシステムアーキテクトである。A社では、全国の5Gモバイルネットワークの設備保全・品質管理業務を運用技術部門が主管している。本業務では、全国の仮想化基地局（vRAN）から定期的に収集される構成定義データ（XMLファイル）を集約・解析し、通信パラメータの正常性確認、セル間の電波干渉制御、ならびに障害発生時のパラメータロールバック判定を行っている。</p>
+                  <div class="section-sub">1.2 対象業務の特徴</div>
+                  <p>対象業務の特徴は、第一に通信技術の標準化進展に伴い、管理対象となるネットワーク機器の仕様やパラメータ体系が継続的かつ頻繁に変化する点にある。第二に、全国数万局に及ぶ基地局から送られるデータ量が極めて膨大であり、業務処理の遅延がネットワークサービスの品質劣化に直結するため、高度な処理性能を維持しながら仕様変更に即応できる運用性が求められる点にある。</p>
+                </div>
+              </div>
+
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第2章 想定した業務の変化とソフトウェア構造の設計</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">2.1 想定した業務の変化</div>
+                  <p>私は、本システムの要件定義および設計段階において、今後3〜5年間に発生する業務の変化として以下の2点を想定した。</p>
+                  <ul>
+                    <li><strong>変化1：マルチベンダ化に伴う基地局仕様（XMLスキーマ）の多様化:</strong> A社では基地局調達コストの削減とサプライチェーンリスク分散のため、<span class="kw-mask">O-RAN（Open RAN）仕様</span>に準拠したマルチベンダ基地局の導入を計画していた。これにより、ベンダごとに異なる拡張タグやパラメータ構造が頻繁に追加されることが確実であった。</li>
+                    <li><strong>変化2：基地局パラメータ自動最適化業務の追加:</strong> 従来の運用者が人手でパラメータを確認・変更する業務から、AI分析エンジンと連携して電波品質をリアルタイムに自律制御する高度化業務への移行が予定されていた。</li>
+                  </ul>
+                  <div class="section-sub">2.2 設計したソフトウェア構造</div>
+                  <p>これらの業務変化に対し、既存ロジックに影響を与えず最小限の工数で機能追加できるよう、私は「関心の分離」を徹底した<span class="kw-mask">パイプライン型・プラグイン構造</span>のソフトウェアアーキテクチャを設計した。 具体的には、従来のモノリシックな処理ロジックを以下の3つの疎結合なレイヤに分割した。</p>
+                  <ol>
+                    <li><strong>ストリーム構文解析層（共通エンジン）:</strong> SAXパーサをベースとし、XMLの構文解析とハッシュインデックス走査を <span class="kw-mask">O(n)</span> で高速実行する共通層。ベンダ固有の業務仕様には一切依存しない構造とした。</li>
+                    <li><strong>スキーマ駆動型ビジネスルール検証層（プラグインモジュール）:</strong> 基地局ベンダや装置種別ごとに独立した検証プラグインとして実装。外部のスキーマ定義（XSD）およびルールテーブルを読み込み、ステートマシンを用いてパラメータの整合性を検証する。新たなベンダ仕様が追加された際は、新規プラグインを配備するだけで対応可能とした。</li>
+                    <li><strong>データ正規化・出力層:</strong> 各種ベンダのパラメータをA社標準の共通データモデルに変換し、後続の統合監視DBやAI最適化エンジンへ配信する層。 この構造により、ベンダ仕様の追加・変更が発生しても、影響範囲を個別の検証プラグイン内に完全に局所化できる設計とした。</li>
+                  </ol>
+                </div>
+              </div>
+
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第3章 生じた課題への工夫とソフトウェア構造の評価</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">3.1 ソフトウェア構造の設計において生じた課題</div>
+                  <p>ソフトウェアを疎結合なプラグイン構造に分割したことにより、引き換えに「モジュール間インタフェースにおけるオーバーヘッドの増大による処理性能の低下」という課題が生じた。各層間でデータを引き渡すたびにオブジェクトの生成・コピーや型変換処理が発生し、基地局30,000局のデータを処理する際にCPU使用率とガベージコレクション（GC）負荷が増大し、目標スループット（バッチ<span class="kw-mask">2時間以内</span>完了）の達成を脅かすリスクが判明した。</p>
+                  <div class="section-sub">3.2 課題に対応するために工夫した内容</div>
+                  <p>この課題を解決するため、私は「<span class="kw-mask">ゼロコピー参照モデル</span>」を導入した。具体的には、構文解析層でストリームから読み込んだバイナリバッファ上のポインタ情報とハッシュインデックスのみを格納した軽量な共通コンテキストオブジェクトを生成し、後続の検証プラグイン層へ同一メモリ参照として引き渡す構造とした。各プラグインは必要なパラメータのみをポインタ経由で直接参照し、不要なデータコピーやオブジェクト生成を完全に排除した。これにより、モジュール間の疎結合性を維持したまま、データ引き渡しに伴うオーバーヘッドを極小化することに成功した。</p>
+                  <div class="section-sub">3.3 設計したソフトウェア構造に対する評価</div>
+                  <p>本ソフトウェア構造の導入後、実際に海外ベンダ2社のO-RAN仕様基地局が新規導入されたが、既存の共通解析エンジンに一切手を加えることなく、該当ベンダ向けの検証プラグインを新規追加するだけで迅速に対応を完了できた。仕様追加にかかる開発工数は、従来構造と比較して<span class="kw-mask">約70%削減</span>され、変更容易性の高さを実証した。また、ゼロコピー参照モデルの適用により、バッチ処理時間は目標の2時間を大幅に下回る<span class="kw-mask">約1時間30分</span>を達成した。変化への柔軟性と高スループットを高い次元で両立させたシステムアーキテクチャとして、極めて高い評価を得ている。</p>
+                  <div class="essay-end">（—以上—）</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== テーマ④ ==================== -->
+        <article class="essay-card" id="theme-4">
+          <div class="essay-card-header">
+            <div class="essay-title-group">
+              <span class="theme-badge">テーマ④</span>
+              <h3 class="essay-title">新技術の検証・PoC（令和4年度 春期 午後II 問1）</h3>
+            </div>
+            <div class="essay-meta">
+              <span class="char-pill" id="total-char-4">総文字数計算中...</span>
+              <button class="btn btn-copy" onclick="copySectionText('theme-4')">📋 論文コピー</button>
+            </div>
+          </div>
+
+          <div class="essay-body">
+            <div class="req-box">
+              <div class="req-title">【設問の要求事項】</div>
+              <ul class="req-list">
+                <li>・<strong>設問ア:</strong> どのような業務に、どのような目的で、どのような新技術を適用しようとしたか。業務の概要、情報システムの概要とともに述べよ（800字以内）</li>
+                <li>・<strong>設問イ:</strong> 新技術の適用に当たり、どのような仮説を立て、どのようにPoCを実施して検証したか（800字以上1,600字以内）</li>
+                <li>・<strong>設問ウ:</strong> PoCの結果をどのように評価し、本番開発・商用適用に向けてどのような課題を抽出し、どう対応したか（600字以上1,200字以内）</li>
+              </ul>
+            </div>
+
+            <div class="essay-text">
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第1章 業務の概要、情報システムの概要、新技術と適用目的</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">1.1 対象業務と情報システムの概要</div>
+                  <p>私は、大手通信キャリアA社のモバイルネットワーク基盤開発を請け負うシステムインテグレータのシステムアーキテクトである。A社では、全国に展開する5G仮想化基地局（vRAN）の運用保守・品質監視業務を行っている。全国の基地局から定期的に送信される構成定義データ（XML形式）を収集・解析し、パラメータの不整合検知や電波最適化を行うデータ処理基盤を運用している。</p>
+                  <div class="section-sub">1.2 適用しようとした新技術とその目的</div>
+                  <p>A社では5Gエリアの全国拡大に伴い、収容基地局数が<span class="kw-mask">5,000局から30,000局</span>へ急増する計画が進んでいた。しかし、既存基盤が採用していたDOM方式のパーサでは、1局（約50MB）あたり数GBのメモリを浪費し、夜間バッチ処理に<span class="kw-mask">約6時間</span>を要していた。このまま基地局数が6倍になると処理破綻が明白であった。 そこで私は、急増するデータ量に対応するため、「<span class="kw-mask">イベント駆動型ストリーム解析（SAX）技術</span>」と、XMLスキーマに基づく「<span class="kw-mask">動的ステートマシン整合性検証技術</span>」という新たなアーキテクチャ技術を適用することにした。新技術適用の目的は、メモリ消費量を抜本的に抑制し、基地局数の増加に対してリニアなスループットを維持できる高拡張性なデータ処理基盤を実現することである。</p>
+                </div>
+              </div>
+
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第2章 検証すべき仮説とPoCの実施</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">2.1 設定した検証仮説</div>
+                  <p>新技術は理論上優れているものの、大規模な商用通信基盤へ適用した実績がなかったため、私はシステムアーキテクトとして以下の2つの検証仮説を立てた。</p>
+                  <ul>
+                    <li><strong>仮説1（リソース・性能仮説）:</strong> SAXストリーム解析とハッシュインデックス走査（計算量 <span class="kw-mask">O(n)</span>）を適用することで、1コンテナプロセスあたりのメモリ消費量を既存の3GB以上から「<span class="kw-mask">500MB以下</span>」に抑え、かつ1局あたりの処理時間を「<span class="kw-mask">0.5秒以下</span>」に短縮できる。</li>
+                    <li><strong>仮説2（整合性検証精度仮説）:</strong> メモリ上にXML全体のツリーを持たないストリーム処理であっても、ステートマシンを用いて最小限のリングバッファでコンテキストを保持することにより、DOM方式と同等以上の精度でタグ間の依存関係エラーを<span class="kw-mask">100%検知</span>できる。</li>
+                  </ul>
+                  <div class="section-sub">2.2 PoCの実施内容と検証方法</div>
+                  <p>これらの仮説を検証するため、私は商用開発に先立ち、<span class="kw-mask">2か月間</span>のPoC（概念実証）を計画・主導した。 まず検証環境として、商用環境と同等のスペックを持つコンテナクラスタ（3ノード）を構築した。検証用データには、全国の商用基地局から実際に収集した50MBのXML構成ファイル<span class="kw-mask">1,000件</span>を用いた。さらに、アンテナ設定と周波数帯設定の不整合など、意図的に論理エラーを埋め込んだ異常データパターン<span class="kw-mask">50種</span>を作成した。 PoCでは、新方式のパーサプロトタイプを実装し、以下の測定を実施した。</p>
+                  <ol>
+                    <li><strong>負荷・リソース計測:</strong> 並行処理スレッド数を1から16まで段階的に増加させ、CPU使用率、メモリ使用量推移、GC（ガベージコレクション）発生頻度、および1局あたりの処理時間をプロファイラを用いて精密に計測した。</li>
+                    <li><strong>精度検証:</strong> 正常データおよび異常データを投入し、従来のDOMパーサの解析結果と新パーサの解析結果を全項目突合し、エラー検知の網羅性を検証した。</li>
+                  </ol>
+                </div>
+              </div>
+
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第3章 PoC結果の評価と商用適用に向けた課題と対応</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">3.1 PoC結果の評価</div>
+                  <p>PoCの結果、仮説1に関して、1プロセスあたりのメモリ消費量は最大負荷時でも<span class="kw-mask">約350MB</span>に収まり、目標の500MB以下を余裕をもってクリアした。処理時間も1局あたり<span class="kw-mask">平均0.18秒</span>を記録し、目標（0.5秒以下）を大幅に上回る性能を実証した。仮説2に関しても、埋め込んだ50パターンの論理エラーを<span class="kw-mask">100%検知</span>し、検知漏れや誤検知がゼロであることを確認した。これにより、新アーキテクチャの実現可能性と性能優位性が客観的に証明された。</p>
+                  <div class="section-sub">3.2 商用適用に向けた課題と対応</div>
+                  <p>一方で、商用適用に向けて以下の2つの実践的課題が抽出された。 第一に、「構文不正な壊れたXMLデータに対する耐障害性」である。PoC中のストレステストにおいて、通信切断等により途中で切断された不完全なXMLを投入した際、ストリームパーサがハングアップしスレッドが占有される事象が発生した。これに対し、タイムアウト監視機能と、不正タグ検出時に安全にストリームをスキップして後続処理を継続する「<span class="kw-mask">耐障害フェールセーフ機構</span>」を設計・追加した。 第二に、「グローバル分散開発体制への展開リスク」である。本番開発は100名規模のグローバル体制で進められるため、各開発者がパーサを独自に拡張すると品質がばらつく懸念があった。これに対し、PoCで検証したコアロジックを「<span class="kw-mask">共通ライブラリ（共通SDK）</span>」としてカプセル化し、ブラックボックスとして提供する方針を策定した。 PoC結果と対策を取りまとめたレポートをA社の経営層に提示し、本番開発への移行承認を満場一致で獲得した。新システムは本番稼働後も期待通りの性能を発揮している。</p>
+                  <div class="essay-end">（—以上—）</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== テーマ⑤ ==================== -->
+        <article class="essay-card" id="theme-5">
+          <div class="essay-card-header">
+            <div class="essay-title-group">
+              <span class="theme-badge">テーマ⑤</span>
+              <h3 class="essay-title">移行計画・データ移行（令和6年度 秋期 午後II 問2）</h3>
+            </div>
+            <div class="essay-meta">
+              <span class="char-pill" id="total-char-5">総文字数計算中...</span>
+              <button class="btn btn-copy" onclick="copySectionText('theme-5')">📋 論文コピー</button>
+            </div>
+          </div>
+
+          <div class="essay-body">
+            <div class="req-box">
+              <div class="req-title">【設問の要求事項】</div>
+              <ul class="req-list">
+                <li>・<strong>設問ア:</strong> 移行対象の情報システムの概要と、移行が必要となった背景、移行における制約条件について述べよ（800字以内）</li>
+                <li>・<strong>設問イ:</strong> 制約条件を踏まえ、どのような移行方式・データ移行計画を策定したか。並行稼働や検証方法を含めて具体的に述べよ（800字以上1,600字以内）</li>
+                <li>・<strong>設問ウ:</strong> 移行に伴うリスクをどのように評価し、どのようなリスク低減策や切り戻し基準を講じたか。結果の評価とともに述べよ（600字以上1,200字以内）</li>
+              </ul>
+            </div>
+
+            <div class="essay-text">
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第1章 システムの概要、移行の背景、移行の制約条件</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">1.1 システムの概要と移行の背景</div>
+                  <p>私は、大手通信キャリアA社のモバイルネットワーク基盤の設計・構築を担うシステムインテグレータのシステムアーキテクトである。A社では、全国の5G仮想化基地局（vRAN）から収集される構成データ（XML形式）を夜間バッチで解析し、設定の整合性検証や電波品質管理を行う「構成管理・データ処理基盤」を運用してきた。 本システムの移行が必要となった背景には、5G基地局数が従来の<span class="kw-mask">5,000局から30,000局</span>へ急増する中期計画があった。既存システムはDOM方式を採用していたため処理遅延が深刻であり、データ量急増に耐えうる「<span class="kw-mask">SAXストリーム解析基盤</span>」への全面刷新が決定された。</p>
+                  <div class="section-sub">1.2 移行における制約条件</div>
+                  <p>本システムの移行には、対象業務の特性に起因する以下の2つの極めて厳しい制約条件が存在した。</p>
+                  <ul>
+                    <li><strong>制約1：24時間365日のネットワーク運用監視の無停止継続:</strong> 全国の基地局に対する遠隔監視や緊急パラメータ変更は常時稼働しており、システム移行に伴う長時間の計画停止（ダウンタイム）は許容されなかった。</li>
+                    <li><strong>制約2：構成データの一貫性と完全性の担保:</strong> 万一、移行処理中にデータ欠落や誤変換が発生し、誤った構成情報が後続のネットワーク制御システムに送信された場合、全国的な電波停止を引き起こす重大リスクがあった。</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第2章 移行方式の検討とデータ移行計画の策定</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">2.1 移行方式の比較検討と決定</div>
+                  <p>制約条件を踏まえ、私は以下の2つの移行方式を比較検討した。</p>
+                  <ul>
+                    <li><strong>案1（一括切替方式）:</strong> ある特定期日の夜間に全5,000局の処理を新基盤へ一斉に切り替える方式。新旧の並行期間がなく運用コストは低いが、不具合発生時の影響が全国に波及し、トラブル時の切り戻しが極めて困難である。</li>
+                    <li><strong>案2（地域クラスタ別の段階移行＋シャドウ並行稼働方式）:</strong> 全国の基地局を地域クラスタ（北海道、東北、関東、中部、近畿、西日本）の<span class="kw-mask">6グループ</span>に分割し、1クラスタずつ順次切り替える方式。 <span class="kw-reason">私は案2を採用した。なぜならば、</span>段階移行であれば万一の新基盤の不具合発生時にも影響範囲を特定地域に限定でき、無停止運用の制約を確実に遵守できるからである。</li>
+                  </ul>
+                  <div class="section-sub">2.2 シャドウ実行によるデータ移行と並行検証</div>
+                  <p>データの整合性を担保するため、私は「<span class="kw-mask">シャドウ実行（並行稼働）方式</span>」による検証計画を策定した。 具体的には、基地局からアップロードされるXML構成ファイルをメッセージブローカ（<span class="kw-mask">Kafka</span>）で二重化し、現行システムと新システムの両方へ同時に並行入力した。新システム側では実際に解析とDB登録を行わせるが、後続のネットワーク制御システムへの反映フラグは無効化（シャドウ状態）とした。 そして、新旧両システムがDBに出力した正規化データ（パラメータ値、セル設定、周波数情報など<span class="kw-mask">全200項目</span>）を自動突合ツールにより日次で全件比較した。このシャドウ実行を各クラスタの切替前に<span class="kw-mask">最低2週間</span>継続し、突合一致率<span class="kw-mask">100%</span>が継続して達成されることを本番切替の必須条件とした。</p>
+                </div>
+              </div>
+
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第3章 移行リスクへの対処と移行結果の評価</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">3.1 移行リスクの評価と低減策</div>
+                  <p>移行に際して想定される最大のリスクは、「本番切替直後に潜在バグが顕在化し、新基盤の処理が停止または異常終了すること」であった。 このリスクを低減するため、私は以下の対策と切り戻し基準を講じた。 第一に、<span class="kw-mask">即時フォールバック機構</span>の実装である。新基盤でバッチ処理の異常停止やタイムアウトを検知した場合、ロードバランサのルーティングを自動的に現行システム側へ即時切り戻すトラフィック制御を配備した。 第二に、明確な切り戻し判定基準の策定である。切替当日の夜間バッチにおいて、「①処理遅延が許容上限（<span class="kw-mask">30分</span>）を超過した場合」「②データ突合エラーが<span class="kw-mask">1件でも発生</span>した場合」のいずれかに該当した際は、迷わず現行システムへ切り戻す運用ルールを策定し、運用部門およびPMと事前合意した。</p>
+                  <div class="section-sub">3.2 移行結果の客観的評価</div>
+                  <p>全6クラスタの段階移行は、計画通り<span class="kw-mask">約3か月間</span>をかけて実施された。事前のシャドウ実行において、特定の稀なベンダ拡張タグに対する新パーサの解釈差異が<span class="kw-mask">2件</span>検出されたが、本番切替前に修正を完了できた。結果として、本番切替時におけるトラブルや切り戻しは一度も発生せず、ダウンタイムゼロでの完全移行を達成した。 新基盤への移行完了後、夜間バッチ処理時間は<span class="kw-mask">6時間から約40分</span>へと劇的に短縮され、その後の基地局30,000局への拡大も極めて安定して支えられている。</p>
+                  <div class="essay-end">（—以上—）</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== テーマ⑥ ==================== -->
+        <article class="essay-card" id="theme-6">
+          <div class="essay-card-header">
+            <div class="essay-title-group">
+              <span class="theme-badge">テーマ⑥</span>
+              <h3 class="essay-title">大規模分散開発・標準化（平成25年度 秋期 午後II 問2）</h3>
+            </div>
+            <div class="essay-meta">
+              <span class="char-pill" id="total-char-6">総文字数計算中...</span>
+              <button class="btn btn-copy" onclick="copySectionText('theme-6')">📋 論文コピー</button>
+            </div>
+          </div>
+
+          <div class="essay-body">
+            <div class="req-box">
+              <div class="req-title">【設問の要求事項】</div>
+              <ul class="req-list">
+                <li>・<strong>設問ア:</strong> 開発体制の概要と、あなたが責任をもって設計・説明した設計の概要を述べよ（800字以内）</li>
+                <li>・<strong>設問イ:</strong> どのような課題に対し、設計内容の何を、誰に対して、どのような観点で説明したか（800字以上1,600字以内）</li>
+                <li>・<strong>設問ウ:</strong> 設計内容の説明を通じて関係者の理解・合意をどのように得たか。設計結果の評価とともに述べよ（600字以上1,200字以内）</li>
+              </ul>
+            </div>
+
+            <div class="essay-text">
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第1章 開発体制の概要と設計の概要</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">1.1 開発体制の概要とアーキテクトの役割</div>
+                  <p>私は、大手通信キャリアA社の次世代モバイルネットワーク基盤開発を受注したシステムインテグレータに所属するシステムアーキテクトである。 本プロジェクトは、日本国内のコアアーキテクチャチーム（<span class="kw-mask">12名</span>）、国内業務アプリケーション開発チーム（<span class="kw-mask">40名</span>）、および海外オフショア開発拠点（インド・ベトナム計<span class="kw-mask">約50名</span>）から構成される、総勢<span class="kw-mask">約100名規模</span>のグローバル分散開発体制であった。私はコアアーキテクチャチームのリーダとして、システム全体の基本アーキテクチャ策定、共通データ処理基盤の設計、およびサブシステム間インタフェース標準化の設計統括を担当した。</p>
+                  <div class="section-sub">1.2 責任をもって説明した設計の概要</div>
+                  <p>私が責任をもって設計し説明した内容は、全国30,000局の5G仮想化基地局から送信される大容量XML構成データを高速解析する「<span class="kw-mask">共通ストリームパーサSDK</span>」の構造設計と、各開発チームが遵守すべき「<span class="kw-mask">サブシステム間インタフェース標準化規約（Interface Contract）</span>」である。</p>
+                </div>
+              </div>
+
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第2章 直面した課題と説明の観点</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">2.1 大規模分散開発における課題</div>
+                  <p>本プロジェクトにおいて、以下の深刻なアーキテクチャ上の課題が存在した。 100名規模のグローバル分散開発では、各サブシステム（監視制御、電波最適化、設備台帳など）の開発チームが、それぞれの解釈でXMLデータの抽出やパース処理を個別実装する傾向があった。これにより、拠点間での仕様解釈の齟齬、非効率なDOMパーサ乱立によるメモリ枯渇と性能劣化、ならびにサブシステム結合時のインタフェース不整合による大規模な手戻りが極めて強く懸念された。</p>
+                  <div class="section-sub">2.2 説明の相手と説明の観点</div>
+                  <p>私は、このリスクを排除するため、全サブシステム開発チームのリーダおよびプロジェクトマネージャ（PM）を対象として、アーキテクチャ説明会およびインタフェース合意会議を設定した。説明にあたり、私は以下の2つの観点を重視した。</p>
+                  <ul>
+                    <li><strong>観点1：個別実装の禁止と共通SDK適用の義務付け（品質・性能の均一化）:</strong> コアチームが開発したSAXストリーム解析およびステートマシン整合性検証エンジンを「<span class="kw-mask">共通ライブラリ（共通SDK）</span>」として提供し、各チームはこれを利用してデータにアクセスすることを全体規約として提示した。各チームが個別パーサを開発する工数を削減できるメリットを訴求するとともに、基盤全体のメモリ消費を<span class="kw-mask">500MB以下</span>に抑制するための必須条件であることを技術的に説明した。</li>
+                    <li><strong>観点2：厳格なXMLスキーマ（XSD）と共通データモデルの合意（結合手戻り防止）:</strong> サブシステム間のデータ受け渡しは、すべて共通SDKが生成する<span class="kw-mask">標準DTO（Data Transfer Object）</span>を介して行うことを決定した。各属性の型、桁数、必須チェックルールを厳格に定義したXSD仕様をInterface Contractとして提示し、各チームの勝手な仕様拡張を制限した。</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="chapter-block" data-chapter>
+                <div class="chapter-header">
+                  <h4 class="chapter-title">第3章 関係者の合意獲得の工夫と設計結果の評価</h4>
+                  <span class="chapter-char-badge">文字数計測中</span>
+                </div>
+                <div class="chapter-content">
+                  <div class="section-sub">3.1 関係者の理解・合意を得るための工夫</div>
+                  <p>各チーム、特に海外オフショア拠点からは「共通SDKの仕様に縛られると個別の機能開発が進めにくい」「結合フェーズまで動作確認ができないのではないか」という懸念が出された。これに対し、私は以下の工夫により合意を獲得した。 第一に、「<span class="kw-mask">テスト用スタブおよびXMLデータ自動生成ハーネス</span>」の先行提供である。コアアーキテクチャチームが主導し、定義したXSDに適合するテスト用XMLデータ（正常系・異常系計数百パターン）を自動生成するツールを開発し、共通SDKとセットで各開発拠点に即座に配布した。これにより、各チームは他サブシステムの完成を待たずに自チームの単体検証を並行して進められる環境を整えた。 第二に、CI/CDパイプラインによる「<span class="kw-mask">インタフェース自動適合性検査</span>」の導入である。各チームがコミットしたコードに対し、共通SDKおよびXSDに対する適合性を自動検証するパイプラインを構築し、規約違反を即時に自動検知・フィードバックする仕組みを整えた。</p>
+                  <div class="section-sub">3.2 設計結果の客観的評価</div>
+                  <p>これらの標準化と支援環境の提供により、100名規模のグローバル分散開発でありながら、サブシステム間のインタフェース齟齬による手戻り工数を<span class="kw-mask">ほぼゼロ</span>に抑え込むことができた。また、全員が共通SDKを利用したことで、システム結合テスト時の全プロセスにおいて目標メモリ消費量（<span class="kw-mask">500MB以下</span>）と目標スループット（バッチ<span class="kw-mask">2時間以内</span>）を初回テストから完全に達成した。プロジェクトマネージャからも「アーキテクト主導のインタフェース標準化こそがプロジェクトのQCD達成の決定打であった」と極めて高い評価を得た。</p>
+                  <div class="essay-end">（—以上—）</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Section 4: 学習・本番活用ガイド -->
+      <section class="section-card" id="sec-4">
+        <div class="section-header">
+          <h2 class="section-title">4. 学習・本番活用ガイド（合格への鉄則）</h2>
+          <button class="btn btn-copy" onclick="copySectionText('sec-4')">📋 コピー</button>
+        </div>
+        <div class="guide-grid">
+          <div class="guide-item">
+            <h3>1. 第1章の完全暗記</h3>
+            <p>第1章（700〜800字）は、どの問題が出ても9割以上同一の文章で書き出せる。本番開始直後の緊張をほぐし、開始15分で第1章を書き切るペースを身体に染み込ませること。</p>
+          </div>
+          <div class="guide-item">
+            <h3>2. 問題文の設問要求（キーワード）を見出しに完全一致させる</h3>
+            <p>採点官は「問われたことに答えているか」を見出しで確認する。「どのようなプロセスで検討したか」とあれば見出しを「〜の検討プロセス」にし、「どのような工夫をしたか」とあれば「〜工夫した内容」とする。</p>
+          </div>
+          <div class="guide-item">
+            <h3>3. 「なぜならば〜」を用いた意思決定根拠の明示</h3>
+            <p>システムアーキテクト論文の合否を分けるのは「なぜその方式・構造を選んだのか」という客観的根拠（トレードオフ評価）である。本レポート中の「決定理由（なぜならば〜）」の論理展開を確実に踏襲すること。</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // 1. Calculate character counts for each chapter and essay
+    function updateCharacterCounts() {
+      const essays = document.querySelectorAll('.essay-card');
+      essays.forEach((essay, idx) => {
+        let totalChars = 0;
+        const chapters = essay.querySelectorAll('[data-chapter]');
+        chapters.forEach((ch) => {
+          const contentEl = ch.querySelector('.chapter-content');
+          const badgeEl = ch.querySelector('.chapter-char-badge');
+          if (contentEl && badgeEl) {
+            const rawText = contentEl.innerText.replace(/（—以上—）/g, '').replace(/\s+/g, '');
+            const len = rawText.length;
+            totalChars += len;
+            badgeEl.textContent = `約 ${len.toLocaleString()} 字`;
+          }
+        });
+        const totalPill = document.getElementById(`total-char-${idx + 1}`);
+        if (totalPill) {
+          totalPill.textContent = `本文計: ${totalChars.toLocaleString()} 字`;
+        }
+      });
+    }
+
+    // 2. Theme Tabs Filtering
+    const tabs = document.querySelectorAll('.theme-tab');
+    const essayCards = document.querySelectorAll('.essay-card');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const target = tab.getAttribute('data-target');
+        essayCards.forEach(card => {
+          if (target === 'all' || card.id === target) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // 3. Highlight & Memorization Mode Toggles
+    const btnHighlight = document.getElementById('btnHighlight');
+    const btnMemorize = document.getElementById('btnMemorize');
+
+    btnHighlight.addEventListener('click', () => {
+      document.body.classList.toggle('highlight-mode');
+      btnHighlight.classList.toggle('active');
+    });
+
+    btnMemorize.addEventListener('click', () => {
+      document.body.classList.toggle('memorize-mode');
+      btnMemorize.classList.toggle('active');
+      if (!document.body.classList.contains('memorize-mode')) {
+        document.querySelectorAll('.kw-mask.revealed').forEach(el => el.classList.remove('revealed'));
+      }
+    });
+
+    document.querySelectorAll('.kw-mask').forEach(mask => {
+      mask.addEventListener('click', () => {
+        if (document.body.classList.contains('memorize-mode')) {
+          mask.classList.toggle('revealed');
+        }
+      });
+    });
+
+    // 4. Dark Mode Toggle
+    const btnTheme = document.getElementById('btnTheme');
+    btnTheme.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        btnTheme.innerHTML = '<span>🌙 ダーク</span>';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        btnTheme.innerHTML = '<span>☀️ ライト</span>';
+      }
+    });
+
+    // 5. Copy Section Text
+    function copySectionText(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const text = el.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = el.querySelector('.btn-copy');
+        if (btn) {
+          const original = btn.innerHTML;
+          btn.innerHTML = '✅ コピー完了';
+          setTimeout(() => { btn.innerHTML = original; }, 1600);
+        }
+      });
+    }
+
+    // 6. Keyword Search Filter
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.trim().toLowerCase();
+      essayCards.forEach(card => {
+        if (!q) {
+          card.style.display = 'block';
+          return;
+        }
+        const match = card.innerText.toLowerCase().includes(q);
+        card.style.display = match ? 'block' : 'none';
+      });
+    });
+
+    updateCharacterCounts();
+  </script>
+</body>
+</html>
+
