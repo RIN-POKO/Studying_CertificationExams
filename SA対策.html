@@ -1001,18 +1001,236 @@
       }
     }
 
+    @page {
+      size: A4 portrait;
+      margin: 12mm 13mm;
+    }
+
     @media print {
+      :root, [data-theme="dark"] {
+        --bg-primary: #ffffff;
+        --bg-surface: #ffffff;
+        --bg-subtle: #f8fafc;
+        --text-primary: #0f172a;
+        --text-secondary: #334155;
+        --text-muted: #475569;
+        --border-color: #cbd5e1;
+        --accent: #1d4ed8;
+        --accent-soft: #eff6ff;
+        --accent-border: #bfdbfe;
+        --emerald: #047857;
+        --emerald-soft: #ecfdf5;
+        --amber: #b45309;
+        --amber-soft: #fffbeb;
+        --rose: #be123c;
+        --rose-soft: #fff1f2;
+        --purple: #6d28d9;
+        --purple-soft: #f5f3ff;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 9.5pt !important;
+        line-height: 1.6 !important;
+        padding: 0 !important;
+      }
+
       .top-header, .sidebar, .sidebar-backdrop, .theme-tabs, .btn-copy, .fab-top {
         display: none !important;
       }
+
       .layout {
-        display: block;
-        padding: 0;
+        display: block !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
       }
-      .section-card, .essay-card {
+
+      .main-content {
+        display: block !important;
+      }
+
+      /* Hero card print optimization */
+      .hero-card {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1.5px solid #1d4ed8 !important;
+        box-shadow: none !important;
+        padding: 12pt 14pt !important;
+        margin-bottom: 12pt !important;
         break-inside: avoid;
-        box-shadow: none;
-        border: 1px solid #cbd5e1;
+      }
+      .hero-card h1 {
+        font-size: 14pt !important;
+        color: #1e3a8a !important;
+        margin-bottom: 6pt !important;
+      }
+      .hero-card p {
+        color: #334155 !important;
+        font-size: 9pt !important;
+      }
+      .hero-metrics {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6pt !important;
+        margin-top: 8pt !important;
+      }
+      .hero-metric-item {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 5pt 8pt !important;
+      }
+      .hero-metric-label {
+        color: #475569 !important;
+        font-size: 7.5pt !important;
+      }
+      .hero-metric-value {
+        color: #0f172a !important;
+        font-size: 9pt !important;
+      }
+
+      /* Allow large containers to break naturally across pages */
+      .section-card {
+        background: #ffffff !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin-bottom: 16pt !important;
+        break-inside: auto !important;
+        page-break-inside: auto !important;
+      }
+      #sec-2, #sec-3, #sec-4, #sec-5, #sec-6 {
+        break-before: page;
+      }
+
+      .section-header {
+        margin-bottom: 8pt !important;
+        padding-bottom: 4pt !important;
+        break-after: avoid;
+      }
+      .section-title {
+        font-size: 12.5pt !important;
+      }
+      .section-lead {
+        font-size: 9pt !important;
+        margin-bottom: 8pt !important;
+      }
+      .sub-heading {
+        font-size: 10.5pt !important;
+        margin: 10pt 0 5pt !important;
+        break-after: avoid;
+      }
+
+      /* Essay cards: 1 essay starts cleanly if needed, no clipped boxes */
+      .essay-card {
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        margin-bottom: 14pt !important;
+        break-inside: auto !important;
+        page-break-inside: auto !important;
+        overflow: visible !important;
+      }
+      .essay-card + .essay-card {
+        break-before: page;
+      }
+      .essay-card-header {
+        padding: 7pt 10pt !important;
+        break-after: avoid;
+      }
+      .essay-title {
+        font-size: 11pt !important;
+      }
+      .essay-body {
+        padding: 9pt 11pt !important;
+      }
+      .req-box {
+        padding: 6pt 9pt !important;
+        margin-bottom: 9pt !important;
+        break-inside: avoid;
+      }
+      .req-list {
+        font-size: 8.5pt !important;
+      }
+
+      .chapter-block {
+        margin-bottom: 9pt !important;
+        padding-bottom: 7pt !important;
+        break-inside: auto !important;
+      }
+      .chapter-header {
+        margin-bottom: 4pt !important;
+        break-after: avoid;
+      }
+      .chapter-title {
+        font-size: 10pt !important;
+      }
+      .section-sub {
+        font-size: 9.5pt !important;
+        margin: 6pt 0 3pt !important;
+        break-after: avoid;
+      }
+      .essay-text p {
+        font-size: 9.2pt !important;
+        line-height: 1.62 !important;
+        margin-bottom: 5pt !important;
+        text-align: left !important;
+        orphans: 3;
+        widows: 3;
+      }
+      .essay-text li {
+        font-size: 9.2pt !important;
+        line-height: 1.55 !important;
+      }
+
+      /* Keep small cards & table rows intact */
+      .module-box, .trap-card, .guide-item, .template-box {
+        break-inside: avoid;
+        padding: 8pt 10pt !important;
+        margin-bottom: 7pt !important;
+      }
+      .guide-grid {
+        grid-template-columns: 1fr !important;
+        gap: 6pt !important;
+      }
+
+      /* Table A4 fit (prevent horizontal overflow/clipping) */
+      .table-wrap {
+        overflow: visible !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+      table {
+        width: 100% !important;
+        font-size: 8.3pt !important;
+        border-collapse: collapse !important;
+      }
+      thead {
+        display: table-header-group;
+      }
+      tr {
+        break-inside: avoid;
+      }
+      th, td {
+        padding: 4pt 6pt !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        min-width: 0 !important;
+      }
+      .td-item {
+        white-space: normal !important;
+        width: 18%;
+      }
+
+      /* Reveal masked keywords when printing */
+      body.memorize-mode .kw-mask {
+        background: #fffbeb !important;
+        color: #b45309 !important;
+        border-bottom: 1px solid #b45309;
+        font-weight: 700;
       }
     }
   </style>
