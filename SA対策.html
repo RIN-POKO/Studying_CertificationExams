@@ -2,7 +2,9 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>システムアーキテクト試験 論文対策 総合攻略レポート</title>
   <style>
     :root {
@@ -54,6 +56,11 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -63,6 +70,8 @@
       line-height: 1.75;
       font-size: 15px;
       -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
     /* Top Header */
@@ -74,6 +83,7 @@
       border-bottom: 1px solid var(--border-color);
       box-shadow: var(--shadow-sm);
       padding: 0.75rem 1.5rem;
+      padding-top: max(0.75rem, env(safe-area-inset-top));
     }
 
     .header-inner {
@@ -82,14 +92,31 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
+      gap: 0.75rem;
       flex-wrap: wrap;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.65rem;
+      min-width: 0;
+    }
+
+    .menu-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      font-size: 1.15rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      touch-action: manipulation;
     }
 
     .brand-badge {
@@ -673,13 +700,150 @@
       color: transparent;
       cursor: pointer;
       user-select: none;
+      -webkit-user-select: none;
     }
 
-    body.memorize-mode .kw-mask.revealed,
-    body.memorize-mode .kw-mask:hover {
+    body.memorize-mode .kw-mask.revealed {
       background: var(--amber-soft);
       color: var(--amber);
       font-weight: 700;
+    }
+
+    @media (hover: hover) {
+      body.memorize-mode .kw-mask:hover {
+        background: var(--amber-soft);
+        color: var(--amber);
+        font-weight: 700;
+      }
+    }
+
+    /* Badges for Map & Rules */
+    .fit-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+    .fit-best { background: var(--emerald-soft); color: var(--emerald); border: 1px solid rgba(16, 185, 129, 0.35); }
+    .fit-ok { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent-border); }
+    .fit-avoid { background: var(--rose-soft); color: var(--rose); border: 1px solid rgba(225, 29, 72, 0.3); }
+
+    .trap-card {
+      border: 1px solid var(--border-color);
+      background: var(--bg-subtle);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 0.85rem;
+    }
+    .trap-card:last-child { margin-bottom: 0; }
+    .trap-card h4 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.45rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .trap-card.avoid-card {
+      border-left: 4px solid var(--rose);
+    }
+    .trap-card.rule-card {
+      border-left: 4px solid var(--amber);
+    }
+    .trap-card.cheat-card {
+      border-left: 4px solid var(--purple);
+    }
+    .trap-card ul {
+      margin: 0.35rem 0 0 1.25rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .trap-card li {
+      margin-bottom: 0.3rem;
+    }
+
+    .template-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--emerald);
+      border-radius: 10px;
+      padding: 1.25rem;
+      font-size: 0.93rem;
+      line-height: 1.85;
+    }
+    .template-box h4 {
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 0.65rem;
+      color: var(--emerald);
+    }
+    .template-box p {
+      margin-bottom: 0.75rem;
+    }
+    .template-box p:last-child { margin-bottom: 0; }
+
+    .sub-heading {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 1.75rem 0 0.75rem;
+      padding-left: 0.65rem;
+      border-left: 4px solid var(--accent);
+    }
+    .sub-heading:first-of-type {
+      margin-top: 0.5rem;
+    }
+
+    /* Mobile Drawer Backdrop & Floating Back-to-Top */
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 190;
+      backdrop-filter: blur(2px);
+    }
+    .sidebar-backdrop.open {
+      display: block;
+    }
+    .sidebar-close {
+      display: none;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      border-radius: 6px;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .fab-top {
+      position: fixed;
+      right: 1rem;
+      bottom: max(1rem, env(safe-area-inset-bottom));
+      z-index: 150;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      box-shadow: var(--shadow-md);
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+    }
+    .fab-top.visible {
+      display: flex;
     }
 
     /* Highlight Mode */
@@ -706,19 +870,139 @@
       border-radius: 3px;
     }
 
-    /* Responsive */
+    /* Responsive: Tablet (iPad) & Mobile (iPhone) */
     @media (max-width: 960px) {
       .layout {
         grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1.25rem;
+      }
+      .menu-toggle {
+        display: inline-flex;
       }
       .sidebar {
-        position: static;
-        max-height: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: min(300px, 84vw);
+        max-height: 100vh;
+        z-index: 200;
+        border-radius: 0 14px 14px 0;
+        padding-top: max(1rem, env(safe-area-inset-top));
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+        transform: translateX(-105%);
+        transition: transform 0.25s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-header-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+      }
+      .sidebar-close {
+        display: inline-block;
+      }
+      .nav-link {
+        padding: 0.65rem 0.75rem;
+        font-size: 0.92rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        font-size: 15px;
+      }
+      .top-header {
+        padding: 0.6rem 0.85rem;
+        padding-top: max(0.6rem, env(safe-area-inset-top));
+      }
+      .brand-title {
+        font-size: 0.95rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .brand-badge {
+        font-size: 0.72rem;
+        padding: 0.2rem 0.45rem;
+        flex-shrink: 0;
+      }
+      .controls {
+        width: 100%;
+        gap: 0.4rem;
+      }
+      .search-box {
+        flex: 1 1 100%;
+      }
+      .search-box input {
+        width: 100%;
+        font-size: 16px; /* Prevent iOS Safari auto-zoom */
+        padding: 0.5rem 0.75rem;
+      }
+      .btn {
+        min-height: 38px;
+        padding: 0.4rem 0.65rem;
+        font-size: 0.78rem;
+        touch-action: manipulation;
+      }
+      .btn-print-hide {
+        display: none;
+      }
+      .hero-card {
+        padding: 1.25rem 1.1rem;
+      }
+      .hero-card h1 {
+        font-size: 1.25rem;
+      }
+      .hero-metrics {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+      }
+      .section-card {
+        padding: 1.15rem 1rem;
+        scroll-margin-top: 7rem;
+      }
+      .essay-card {
+        scroll-margin-top: 7rem;
+      }
+      .essay-card-header {
+        padding: 0.95rem 1rem;
+      }
+      .essay-body {
+        padding: 1rem;
+      }
+      .essay-text p {
+        text-align: left;
+        line-height: 1.8;
+      }
+      .theme-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 0.35rem;
+      }
+      .theme-tab {
+        white-space: nowrap;
+        flex-shrink: 0;
+        min-height: 38px;
+      }
+      th, td {
+        padding: 0.6rem 0.7rem;
+        font-size: 0.84rem;
+      }
+      .td-item {
+        white-space: normal;
+        min-width: 110px;
       }
     }
 
     @media print {
-      .top-header, .sidebar, .theme-tabs, .btn-copy {
+      .top-header, .sidebar, .sidebar-backdrop, .theme-tabs, .btn-copy, .fab-top {
         display: none !important;
       }
       .layout {
@@ -739,33 +1023,39 @@
   <header class="top-header">
     <div class="header-inner">
       <div class="brand">
-        <span class="brand-badge">SA 午後II 論文</span>
+        <button class="menu-toggle" id="btnMenu" aria-label="目次を開く">☰</button>
+        <span class="brand-badge">SA 午後II</span>
         <span class="brand-title">システムアーキテクト試験 論文対策 総合攻略レポート</span>
       </div>
       <div class="controls">
         <div class="search-box">
-          <input type="text" id="searchInput" placeholder="キーワード検索 (例: SAX, ステートマシン)...">
+          <input type="search" id="searchInput" placeholder="キーワード検索 (例: SAX, ステートマシン)...">
         </div>
         <button class="btn active" id="btnHighlight" title="重要数値・論理表現をハイライト">
-          <span>✨ 重要語句ハイライト</span>
+          <span>✨ ハイライト</span>
         </button>
-        <button class="btn" id="btnMemorize" title="重要数値を黒塗りにして暗記テスト（クリック/ホバーで表示）">
-          <span>🎯 暗記マスクモード</span>
+        <button class="btn" id="btnMemorize" title="重要数値を黒塗りにして暗記テスト（タップで表示）">
+          <span>🎯 暗記マスク</span>
         </button>
         <button class="btn" id="btnTheme" title="ダークモード切替">
           <span>🌙 ダーク</span>
         </button>
-        <button class="btn" onclick="window.print()" title="印刷・PDF保存">
+        <button class="btn btn-print-hide" onclick="window.print()" title="印刷・PDF保存">
           <span>🖨️ 印刷</span>
         </button>
       </div>
     </div>
   </header>
 
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
   <div class="layout">
     <!-- Sidebar TOC -->
-    <aside class="sidebar">
-      <div class="sidebar-title">目次ナビゲーション</div>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header-mobile">
+        <div class="sidebar-title" style="margin-bottom: 0;">目次ナビゲーション</div>
+        <button class="sidebar-close" id="btnCloseMenu">✕ 閉じる</button>
+      </div>
       <ul class="nav-list">
         <li><a class="nav-link" href="#sec-intro">はじめに（総合概要）</a></li>
         <li><a class="nav-link" href="#sec-1">1. 質問票（システムの概要）</a></li>
@@ -777,7 +1067,18 @@
         <li><a class="nav-link nav-sub" href="#theme-4">④ 新技術の検証・PoC (R4)</a></li>
         <li><a class="nav-link nav-sub" href="#theme-5">⑤ 移行計画・データ移行 (R6)</a></li>
         <li><a class="nav-link nav-sub" href="#theme-6">⑥ 大規模分散開発・標準化 (H25)</a></li>
-        <li><a class="nav-link" href="#sec-4">4. 学習・本番活用ガイド</a></li>
+        <li><a class="nav-link" href="#sec-4">4. 過去問全28問マッピング</a></li>
+        <li><a class="nav-link nav-sub" href="#sec-4-1">4.1 全年度対応マップ (H21〜R06)</a></li>
+        <li><a class="nav-link nav-sub" href="#sec-4-2">4.2 4つの除外パターン</a></li>
+        <li><a class="nav-link nav-sub" href="#sec-4-3">4.3 開始3分の問題選択手順</a></li>
+        <li><a class="nav-link" href="#sec-5">5. 本番実践マニュアル</a></li>
+        <li><a class="nav-link nav-sub" href="#sec-5-1">5.1 120分タイムマネジメント</a></li>
+        <li><a class="nav-link nav-sub" href="#sec-5-2">5.2 4大不合格トラップ回避</a></li>
+        <li><a class="nav-link nav-sub" href="#sec-5-3">5.3 トラブルシューティング</a></li>
+        <li><a class="nav-link" href="#sec-6">6. 本番直前チートシート</a></li>
+        <li><a class="nav-link nav-sub" href="#sec-6-1">6.1 統一数値セット一覧表</a></li>
+        <li><a class="nav-link nav-sub" href="#sec-6-2">6.2 必殺キラーフレーズ集</a></li>
+        <li><a class="nav-link nav-sub" href="#sec-6-3">6.3 第1章丸暗記テンプレート</a></li>
       </ul>
 
       <div class="kpi-grid">
@@ -1437,30 +1738,537 @@
         </article>
       </section>
 
-      <!-- Section 4: 学習・本番活用ガイド -->
+      <!-- Section 4: 過去問全年度（H21〜R06）完全対応マッピング＆問題選択の鉄則 -->
       <section class="section-card" id="sec-4">
         <div class="section-header">
-          <h2 class="section-title">4. 学習・本番活用ガイド（合格への鉄則）</h2>
+          <h2 class="section-title">4. 過去問全年度（H21〜R06）完全対応マッピング＆問題選択の鉄則</h2>
           <button class="btn btn-copy" onclick="copySectionText('sec-4')">📋 コピー</button>
         </div>
+        <p class="section-lead">
+          過去14回分（平成21年度〜令和6年度）の情報システム系（問1・問2）全28問に対し、本題材（5G仮想化基地局＝vRANのデータ処理基盤）をどのように適用・着せ替えして解答するかを網羅的に体系化したものである。本番で問題用紙を開いた際、瞬時に選択すべき問題と適用テーマを特定できる。
+        </p>
+
+        <h3 class="sub-heading" id="sec-4-1">4.1 全年度（H21〜R06）問1・問2の完全対応マップ（全28問）</h3>
+        <ul class="module-list" style="margin-bottom: 1rem;">
+          <li><span class="module-label">◎（直球対応）:</span> 本題材の論理展開（DOM vs SAX、メモリ削減、スループット向上、ステートマシン整合性検証など）が100%合致し、最高得点を狙える問題。</li>
+          <li><span class="module-label">◯（適用可能）:</span> 設問の要求事項に合わせて視点を少しスライド（切り口を調整）することで十分に合格水準（A判定）に達する問題。</li>
+          <li><span class="module-label">×（回避推奨）:</span> 画面UIや特定パッケージ、人手の業務手順改革が主題であり、本バックエンド基盤ネタでは不自然になるため、もう一方の問題を選択すべき問題。</li>
+        </ul>
+
+        <div class="theme-tabs" id="mapFilterTabs" style="margin-bottom: 1rem;">
+          <button class="theme-tab active" data-fit="all">すべて (28問)</button>
+          <button class="theme-tab" data-fit="best">◎ 直球対応のみ</button>
+          <button class="theme-tab" data-fit="ok">◯ 適用可能のみ</button>
+          <button class="theme-tab" data-fit="avoid">× 回避推奨のみ</button>
+        </div>
+
+        <div class="table-wrap">
+          <table id="pastExamTable">
+            <thead>
+              <tr>
+                <th>実施年</th>
+                <th>問</th>
+                <th>問題テーマ</th>
+                <th>適合度</th>
+                <th>適用するテーマ・論述戦略</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-fit="ok">
+                <td class="td-item">令和6年</td>
+                <td>問1</td>
+                <td class="td-value">外部サービスの活用</td>
+                <td><span class="fit-badge fit-ok">◯</span></td>
+                <td class="td-note">クラウド仮想化基盤（コンテナ基盤）上のマネージドメッセージブローカ（Kafka等）を活用した分散データ収集・連携方式として論述可能。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">令和6年</td>
+                <td>問2</td>
+                <td class="td-value">データ移行の計画と実施</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ⑤を適用】</strong> 全5,000局の24時間365日無停止運用を制約とし、地域クラスタ別段階移行とシャドウ実行（並行稼働による全件データ突合）を論述。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">令和5年</td>
+                <td>問1</td>
+                <td class="td-value">システム方式設計</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ②を適用】</strong> 30,000局急増に伴うDOM解析の限界に対し、SAXストリーム解析と走査計算量 O(n) 化のトレードオフ評価・決定理由を論述。</td>
+              </tr>
+              <tr data-fit="avoid">
+                <td class="td-item">令和5年</td>
+                <td>問2</td>
+                <td class="td-value">UI/UXの検討</td>
+                <td><span class="fit-badge fit-avoid">×</span></td>
+                <td class="td-note"><strong>【回避】</strong>直接の接点がないシステムのUI設計。エンドユーザー操作性が主眼のため見送り、問1を選択。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">令和4年</td>
+                <td>問1</td>
+                <td class="td-value">新技術適用のPoC</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ④を適用】</strong> SAXストリーム解析＋ステートマシン検証の新技術導入仮説（メモリ500MB以下、処理時間0.5秒以下）とPoC検証結果を論述。</td>
+              </tr>
+              <tr data-fit="avoid">
+                <td class="td-item">令和4年</td>
+                <td>問2</td>
+                <td class="td-value">業務手順の見直し</td>
+                <td><span class="fit-badge fit-avoid">×</span></td>
+                <td class="td-note"><strong>【回避】</strong>現場オペレーターの人手作業手順の改善が主眼のため見送り、問1を選択。</td>
+              </tr>
+              <tr data-fit="ok">
+                <td class="td-item">令和3年</td>
+                <td>問1</td>
+                <td class="td-value">アジャイル開発</td>
+                <td><span class="fit-badge fit-ok">◯</span></td>
+                <td class="td-note">SAXパーサとステートマシン検証のコアエンジンを2週間スプリントでプロトタイプ試作し、バックログ優先順位を制御した事例として論述可能。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">令和3年</td>
+                <td>問2</td>
+                <td class="td-value">新機能追加に伴う設計</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ③を適用】</strong> 5G新周波数帯やO-RANマルチベンダ仕様追加を見据え、構文解析層と業務検証層をプラグイン分離した疎結合設計を論述。</td>
+              </tr>
+              <tr data-fit="avoid">
+                <td class="td-item">令和元年</td>
+                <td>問1</td>
+                <td class="td-value">ユーザビリティ・UI</td>
+                <td><span class="fit-badge fit-avoid">×</span></td>
+                <td class="td-note"><strong>【回避】</strong>画面設計・操作性評価が主眼のため見送り、問2を選択。</td>
+              </tr>
+              <tr data-fit="ok">
+                <td class="td-item">令和元年</td>
+                <td>問2</td>
+                <td class="td-value">業務継続と復旧設計</td>
+                <td><span class="fit-badge fit-ok">◯</span></td>
+                <td class="td-note"><strong>【推奨】</strong> 基地局データ処理途中の通信断やプロセス障害に対し、ステートマシンのフェールセーフ機構とエラーキュー退避による業務継続性を論述。</td>
+              </tr>
+              <tr data-fit="ok">
+                <td class="td-item">平成30年</td>
+                <td>問1</td>
+                <td class="td-value">パイロット運用の計画</td>
+                <td><span class="fit-badge fit-ok">◯</span></td>
+                <td class="td-note"><strong>【推奨：テーマ④/⑤を適用】</strong> 先行地域クラスタでのパイロット運用計画、突合検証基準、および本番展開リスク低減策を論述。</td>
+              </tr>
+              <tr data-fit="avoid">
+                <td class="td-item">平成30年</td>
+                <td>問2</td>
+                <td class="td-value">ERPパッケージ導入</td>
+                <td><span class="fit-badge fit-avoid">×</span></td>
+                <td class="td-note"><strong>【回避】</strong>Fit&amp;Gap分析・アドオン抑制方針が主眼のため見送り、問1を選択。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成29年</td>
+                <td>問1</td>
+                <td class="td-value">非機能要件の定義</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ①を適用】</strong> 業務視点（夜間バッチ2時間以内）とシステム視点（メモリ500MB以下）の要件定義と、5年TCO比較による意思決定者への判断工夫を論述。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成29年</td>
+                <td>問2</td>
+                <td class="td-value">柔軟性の高い構造設計</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ③を適用】</strong> 将来の基地局仕様変更に耐えるパイプライン型・プラグイン構造と、ゼロコピー参照によるオーバーヘッド極小化を論述。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成28年</td>
+                <td>問1</td>
+                <td class="td-value">情報連携基盤の設計</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ⑥を適用】</strong> 全国のvRAN基地局群と統合監視DB・AIエンジンを疎結合に結ぶデータ処理基盤の連携方式およびXSD標準化を論述。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成28年</td>
+                <td>問2</td>
+                <td class="td-value">業務システムの移行</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ⑤を適用】</strong> 既存DOM処理基盤から新SAX処理基盤への段階移行、即時フォールバック機構、切り戻し基準の策定を論述。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成27年</td>
+                <td>問1</td>
+                <td class="td-value">システム方式設計</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ②を適用】</strong> 基地局急増に伴うスループット要件とリソース制約のトレードオフ評価、運用部門へのステートマシン動作可視化説明を論述。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成27年</td>
+                <td>問2</td>
+                <td class="td-value">他システムとの連携</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ⑥を適用】</strong> ネットワーク監視システムや設備管理システムとのAPI連携規約（Interface Contract）策定と共通SDK提供を論述。</td>
+              </tr>
+              <tr data-fit="avoid">
+                <td class="td-item">平成26年</td>
+                <td>問1</td>
+                <td class="td-value">業務プロセスの見直し</td>
+                <td><span class="fit-badge fit-avoid">×</span></td>
+                <td class="td-note"><strong>【回避】</strong>現場の業務ミス原因排除や人手業務フローの改変が主眼のため見送り、問2を選択。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成26年</td>
+                <td>問2</td>
+                <td class="td-value">企業間データ交換設計</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ⑥を適用】</strong> 基地局ベンダ各社（O-RAN仕様）とのXMLデータ交換仕様策定、XSD厳格化、検証ハーネスの提供を論述。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成25年</td>
+                <td>問1</td>
+                <td class="td-value">要求実現の課題と対策</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ①/②を適用】</strong> 基地局数急増（5,000→30,000局）という極めてシビアな拡張性要求に対し、DOMの限界を突破したSAX＋O(n)化の技術的課題解決を論述。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成25年</td>
+                <td>問2</td>
+                <td class="td-value">設計内容の説明責任</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ⑥を適用】</strong> 100名規模のグローバル分散開発体制において、共通SDKの適用義務付けとXSD標準化を説明し合意獲得したプロセスを論述。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成24年</td>
+                <td>問1</td>
+                <td class="td-value">ソフトウェア構造設計</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ③を適用】</strong> 基地局仕様のマルチベンダ化を見据えた関心の分離（構文解析層／検証プラグイン層／正規化層）と評価を論述。</td>
+              </tr>
+              <tr data-fit="ok">
+                <td class="td-item">平成24年</td>
+                <td>問2</td>
+                <td class="td-value">データの利活用基盤</td>
+                <td><span class="fit-badge fit-ok">◯</span></td>
+                <td class="td-note">全国のvRANから収集した構成・ログデータを正規化し、AI最適化エンジンや設備計画部門へ高速供給するデータハブ基盤として論述可能。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成23年</td>
+                <td>問1</td>
+                <td class="td-value">運用性・保守性の考慮</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ①/②を適用】</strong> メモリ枯渇による深夜の障害停止を防ぐSAX化と、異常XML検知時の詳細診断ログ出力による運用保守性向上を論述。</td>
+              </tr>
+              <tr data-fit="ok">
+                <td class="td-item">平成23年</td>
+                <td>問2</td>
+                <td class="td-value">業務要件の変更対応</td>
+                <td><span class="fit-badge fit-ok">◯</span></td>
+                <td class="td-note">通信規格の拡張に伴う構成パラメータ追加要求に対し、プラグイン構造により既存ロジックを修正せず対応した事例として論述可能。</td>
+              </tr>
+              <tr data-fit="avoid">
+                <td class="td-item">平成22年</td>
+                <td>問1</td>
+                <td class="td-value">統一コードの整備</td>
+                <td><span class="fit-badge fit-avoid">×</span></td>
+                <td class="td-note"><strong>【回避】</strong>顧客コードや商品コードの統一体系策定が主眼のため見送り、問2を選択。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成22年</td>
+                <td>問2</td>
+                <td class="td-value">外部システム連携方式</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ②/⑥を適用】</strong> 全国の基地局と統合監視コンソール間の非同期メッセージング連携方式およびデータ変換アーキテクチャを論述。</td>
+              </tr>
+              <tr data-fit="ok">
+                <td class="td-item">平成21年</td>
+                <td>問1</td>
+                <td class="td-value">業務要件の抽出</td>
+                <td><span class="fit-badge fit-ok">◯</span></td>
+                <td class="td-note">5G商用展開に向けた運用部門の「リアルタイム監視・自律制御要求」をヒアリングし、システム仕様へ落とし込んだプロセスを論述可能。</td>
+              </tr>
+              <tr data-fit="best">
+                <td class="td-item">平成21年</td>
+                <td>問2</td>
+                <td class="td-value">信頼性・性能の設計</td>
+                <td><span class="fit-badge fit-best">◎</span></td>
+                <td class="td-note"><strong>【推奨：テーマ①/②を適用】</strong> 基地局30,000局のバッチ2時間以内完了を保証する走査アルゴリズム O(n) 化と、ステートマシンによるデータ整合性担保を論述。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub-heading" id="sec-4-2">4.2 本番で迷わず回避すべき「4つの除外パターン」とトリガーキーワード</h3>
+        <p class="section-lead" style="margin-bottom: 0.85rem;">
+          問題冊子を開いた瞬間、以下のキーワードがタイトルや設問に含まれている問題は即座に見送り、もう一方の問題を選択する。これにより、不適合な題材で無理に論述して不合格になるリスクをゼロにする。
+        </p>
+
+        <div class="trap-card avoid-card">
+          <h4>1. 画面・UI/UX・ユーザビリティ系（令和5年問2、令和元年問1等）</h4>
+          <ul>
+            <li><strong>トリガーキーワード:</strong> 「ユーザーインタフェース」「画面設計」「操作性」「ユーザビリティ」「思考発話法」「画面遷移」</li>
+            <li><strong>回避理由:</strong> 本題材はバックエンドのデータ処理基盤（バッチ／ストリーム）であるため、画面操作やUIの工夫を主役に書くと設問の要求事項に対して不自然になる。</li>
+          </ul>
+        </div>
+        <div class="trap-card avoid-card">
+          <h4>2. ERP・業務パッケージ導入・Fit&amp;Gap系（平成30年問2等）</h4>
+          <ul>
+            <li><strong>トリガーキーワード:</strong> 「業務ソフトウェアパッケージ」「ERP」「SaaS」「Fit&amp;Gap分析」「アドオン」「ノンプログラミング」</li>
+            <li><strong>回避理由:</strong> パッケージの標準機能と業務とのギャップ解消方針が問われるため、スクラッチのアーキテクチャ設計・アルゴリズム刷新ネタは適合しない。</li>
+          </ul>
+        </div>
+        <div class="trap-card avoid-card">
+          <h4>3. 業務プロセス改革（BPR）・現場人手作業の見直し系（平成26年問1、平成22年問1等）</h4>
+          <ul>
+            <li><strong>トリガーキーワード:</strong> 「業務プロセスの見直し」「業務上のミス防止」「人手の作業手順」「統一コード」「コード体系」</li>
+            <li><strong>回避理由:</strong> 現場作業員や事務職の業務手順の変革が主眼であり、システムアーキテクトとしての方式設計や非機能要件の技術的判断をアピールしにくい。</li>
+          </ul>
+        </div>
+        <div class="trap-card avoid-card">
+          <h4>4. 組込みシステム・IoTデバイス系（各年度の問3全般）</h4>
+          <ul>
+            <li><strong>トリガーキーワード:</strong> 「ハードウェアとソフトウェアの機能分担」「リアルタイムOS」「マイコン」「回路」「フェールセーフ制御」</li>
+            <li><strong>回避理由:</strong> 午後IIは「問1または問2（情報システム系）」を選択して合格する戦略を採るため、問3（組込み系）は無条件で除外する。</li>
+          </ul>
+        </div>
+
+        <h3 class="sub-heading" id="sec-4-3">4.3 試験開始3分で決める「問題選択手順」</h3>
         <div class="guide-grid">
           <div class="guide-item">
-            <h3>1. 第1章の完全暗記</h3>
-            <p>第1章（700〜800字）は、どの問題が出ても9割以上同一の文章で書き出せる。本番開始直後の緊張をほぐし、開始15分で第1章を書き切るペースを身体に染み込ませること。</p>
+            <h3>ステップ1：タイトルと設問の高速スキャン（約1分）</h3>
+            <p>問1と問2の問題文タイトルおよび設問ア・イ・ウの末尾を素早く確認する。</p>
           </div>
           <div class="guide-item">
-            <h3>2. 問題文の設問要求（キーワード）を見出しに完全一致させる</h3>
-            <p>採点官は「問われたことに答えているか」を見出しで確認する。「どのようなプロセスで検討したか」とあれば見出しを「〜の検討プロセス」にし、「どのような工夫をしたか」とあれば「〜工夫した内容」とする。</p>
+            <h3>ステップ2：除外パターンの確認（約1分）</h3>
+            <p>片方の問題に画面UI、パッケージ導入、業務プロセス改革などの除外キーワードが含まれている場合、その場で即座にもう一方の問題を選択して確定する。</p>
           </div>
           <div class="guide-item">
-            <h3>3. 「なぜならば〜」を用いた意思決定根拠の明示</h3>
-            <p>システムアーキテクト論文の合否を分けるのは「なぜその方式・構造を選んだのか」という客観的根拠（トレードオフ評価）である。本レポート中の「決定理由（なぜならば〜）」の論理展開を確実に踏襲すること。</p>
+            <h3>ステップ3：6テーマへの割り振りと確定（約1分）</h3>
+            <p>両者とも除外パターンでない場合は、設問イ・ウの中心的な問いを照合し、最も書き慣れているテーマに合致する方を選択する。</p>
           </div>
+        </div>
+        <div class="module-box" style="margin-top: 1rem;">
+          <ul class="module-list">
+            <li>「非機能要件」「性能・拡張性」が主眼の場合：<strong>テーマ①（非機能要件）</strong></li>
+            <li>「方式検討」「トレードオフ」「決定理由」が主眼の場合：<strong>テーマ②（方式設計）</strong></li>
+            <li>「将来の変化」「変更容易性」「構造設計」が主眼の場合：<strong>テーマ③（ソフトウェア構造）</strong></li>
+            <li>「新技術」「仮説」「PoC」「プロトタイプ」が主眼の場合：<strong>テーマ④（新技術PoC）</strong></li>
+            <li>「移行計画」「並行稼働」「データ突合」「リスク」が主眼の場合：<strong>テーマ⑤（移行計画）</strong></li>
+            <li>「分散開発」「標準化」「インタフェース」「説明責任」が主眼の場合：<strong>テーマ⑥（分散開発・標準化）</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 5: 本番実践マニュアル -->
+      <section class="section-card" id="sec-5">
+        <div class="section-header">
+          <h2 class="section-title">5. 本番実践マニュアル（時間配分・採点官対策・A判定獲得テクニック）</h2>
+          <button class="btn btn-copy" onclick="copySectionText('sec-5')">📋 コピー</button>
+        </div>
+
+        <h3 class="sub-heading" id="sec-5-1">5.1 午後II（120分間）の厳格なタイムマネジメント</h3>
+        <p class="section-lead" style="margin-bottom: 0.85rem;">
+          午後II試験は、時間配分のミスが即座に不合格につながる。120分間を以下の通り分刻みで厳格に管理する。
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>時間帯（経過時間）</th>
+                <th>配分時間</th>
+                <th>作業内容・達成ゴール</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-item"><span class="kw-mask">0:00 〜 0:03</span></td>
+                <td class="td-value">3分</td>
+                <td class="td-note"><strong>問題選択:</strong> 問1・問2をスキャンし、除外キーワードを確認して1問に確定する。</td>
+              </tr>
+              <tr>
+                <td class="td-item"><span class="kw-mask">0:03 〜 0:08</span></td>
+                <td class="td-value">5分</td>
+                <td class="td-note"><strong>質問票の記入:</strong> 準備した「質問票完全版」の数値を無心で転記する（ノータイムで完了）。</td>
+              </tr>
+              <tr>
+                <td class="td-item"><span class="kw-mask">0:08 〜 0:25</span></td>
+                <td class="td-value">17分</td>
+                <td class="td-note"><strong>論文骨子設計（構成案作成）:</strong> 問題文の設問要求（ア・イ・ウ）のキーワードを見出しに変換し、第1章〜第3章で論じる具体的事実と数値を問題用紙の余白にメモする。</td>
+              </tr>
+              <tr>
+                <td class="td-item"><span class="kw-mask">0:25 〜 0:45</span></td>
+                <td class="td-value">20分</td>
+                <td class="td-note"><strong>第1章の執筆（約750字）:</strong> 暗記している第1章テンプレートを一気に書き上げる。文字数下限（目安650字以上）を確実にクリアする。</td>
+              </tr>
+              <tr>
+                <td class="td-item"><span class="kw-mask">0:45 〜 1:30</span></td>
+                <td class="td-value">45分</td>
+                <td class="td-note"><strong>第2章の執筆（約1,100字）:</strong> 本論の核心。アーキテクトとしての比較評価、トレードオフ、意思決定理由（なぜならば〜）を定量的根拠とともに詳述する。</td>
+              </tr>
+              <tr>
+                <td class="td-item"><span class="kw-mask">1:30 〜 1:55</span></td>
+                <td class="td-value">25分</td>
+                <td class="td-note"><strong>第3章の執筆（約750字）:</strong> 新たな課題への対処、ステートマシン設計、共通SDK展開、定量的成果・評価、今後の展望を書き切る。</td>
+              </tr>
+              <tr>
+                <td class="td-item"><span class="kw-mask">1:55 〜 2:00</span></td>
+                <td class="td-value">5分</td>
+                <td class="td-note"><strong>最終見直し:</strong> 設問番号の抜け漏れ、文字数枠の超過・不足、誤字脱字、末尾の「—以上—」を確認する。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub-heading" id="sec-5-2">5.2 採点官が真っ先に見る「4大不合格トラップ」の回避法</h3>
+        <p class="section-lead" style="margin-bottom: 0.85rem;">
+          採点官は数千通の答案を短時間で採点するため、形式要件に違反している答案を真っ先に足切り（C・D判定）にする。以下の4大ルールを厳格に遵守すること。
+        </p>
+
+        <div class="trap-card rule-card">
+          <h4>1. 文字数要件の絶対死守（下限割れは即不合格）</h4>
+          <ul>
+            <li><strong>設問ア（800字以内）:</strong> <span class="kw-mask">650字〜750字</span>を狙う（80%の640字未満は減点対象）。</li>
+            <li><strong>設問イ（800字以上1,600字以内）:</strong> <span class="kw-mask">1,000字〜1,200字</span>を狙う（800字未満は即不合格、1,400字以上は時間切れリスク大）。</li>
+            <li><strong>設問ウ（600字以上1,200字以内）:</strong> <span class="kw-mask">750字〜850字</span>を狙う（600字未満は即不合格）。</li>
+            <li><strong>合計文字数:</strong> 必ず<span class="kw-mask">2,400字〜2,800字</span>の範囲に収める。</li>
+          </ul>
+        </div>
+        <div class="trap-card rule-card">
+          <h4>2. 見出しの「設問オウム返し」の徹底</h4>
+          <ul>
+            <li>採点官は「設問で問われたことに答えているか」を目次（見出し）で確認する。独自の見出し（例：「1.1 はじめに」「2.1 課題と解決」など）は厳禁である。</li>
+            <li>設問が「どのようなプロセスで検討したか」と問うていれば、見出しは必ず「2.2 非機能要件の検討プロセス」とする。</li>
+            <li>設問が「意思決定者に判断してもらうための工夫」と問うていれば、見出しは「3.2 意思決定者に判断してもらうための工夫」とする。</li>
+          </ul>
+        </div>
+        <div class="trap-card rule-card">
+          <h4>3. プログラマ／PMとの役割分担（アーキテクトの思考を描く）</h4>
+          <ul>
+            <li><strong>プログラマ的記述の排除:</strong> 「SAXパーサを実装し、O(n^2)からO(n)へリファクタリングした」だけでは単なる優秀なプログラマである。「ハードウェア増強（スケールアウト）とソフトウェア刷新のコスト・将来拡張性を比較評価し、ソフトウェア刷新を選択した」という<strong>方式選択の根拠（なぜならば〜）</strong>を必ず記述する。</li>
+            <li><strong>PM的記述の排除:</strong> 「進捗遅延を防ぐためにWBSを見直した」「要員を追加した」はプロジェクトマネージャの仕事である。アーキテクトとしては「共通SDKを開発して各チームに配布した」「XMLスキーマ（XSD）を標準化し、テストスタブを先行提供して結合時の手戻りを防いだ」という技術的アーキテクチャによるガバナンスを記述する。</li>
+          </ul>
+        </div>
+        <div class="trap-card rule-card">
+          <h4>4. 定量的根拠の網羅（数字のない論文はB判定止まり）</h4>
+          <ul>
+            <li>「基地局が大幅に増えた」「メモリを大幅に削減した」「処理が非常に速くなった」などの定性的な表現は一切排除する。</li>
+            <li>「基地局数が5,000局から30,000局へ急増」「1局あたり約50MB」「バッチ処理時間が6時間から2時間以内目標（実績1.5時間）」「メモリ消費量が1プロセス数GBから約350MB（88%削減）」「処理速度が4.2秒から0.18秒」と、すべての主張に具体的な数値を対比させて記述する。</li>
+          </ul>
+        </div>
+
+        <h3 class="sub-heading" id="sec-5-3">5.3 トラブルシューティング（緊急リカバリ策）</h3>
+        <div class="guide-grid">
+          <div class="guide-item">
+            <h3>字数が足りない場合（あと100〜200字）</h3>
+            <p>抽象的な説明を足すのではなく、「定量的数値の対比」または「不具合が発生した場合の具体的な業務影響」を追加する。<br><em>（例：仮に現行のDOM方式のまま基地局が30,000局に達した場合、1日のバッチ処理時間は単純計算で36時間を要することになり、翌日の監視業務はおろか、障害検知自体が丸一日停止するという致命的な業務影響をもたらす危険があった。）</em></p>
+          </div>
+          <div class="guide-item">
+            <h3>時間が足りない場合（残り15分で第3章）</h3>
+            <p>文章を丁寧に書こうとせず、小見出し＋箇条書きスタイルに切り替えて要点のみを高速で埋める。「工夫した点は以下の2点である。第一に〜。第二に〜。」の形式で、最低限の文字数下限（600字）を何としてでも突破し、最後に「（—以上—）」を書いて完結させる。未完成論文は無条件で不合格となるため、何が何でも最後まで書き切る。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: 本番直前チートシート -->
+      <section class="section-card" id="sec-6">
+        <div class="section-header">
+          <h2 class="section-title">6. 本番直前チートシート（完全暗記用：数値・用語・決まり文句一覧）</h2>
+          <button class="btn btn-copy" onclick="copySectionText('sec-6')">📋 コピー</button>
+        </div>
+        <p class="section-lead">
+          試験会場に向かう電車の中や、試験開始直前の休憩時間にこの章を見直すことで、頭の中の数値を完全に固定化できる。（上部の「🎯 暗記マスク」をONにすると、数値部分をタップで隠して暗記テストができます）
+        </p>
+
+        <h3 class="sub-heading" id="sec-6-1">6.1 統一数値セット一覧表（試験開始前に頭に叩き込む表）</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>項目分類</th>
+                <th>具体的数値・設定値</th>
+                <th>答案での記述フレーズ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-item">企業・業務規模</td>
+                <td class="td-value"><span class="kw-mask">大手通信キャリアA社、5G vRAN運用保守部門</span></td>
+                <td class="td-note">大手通信キャリアA社において、全国規模の5Gネットワーク監視・設備計画業務を担当する…</td>
+              </tr>
+              <tr>
+                <td class="td-item">収容基地局数</td>
+                <td class="td-value">現行 <span class="kw-mask">5,000局</span> → 将来計画 <span class="kw-mask">30,000局</span>（6倍増）</td>
+                <td class="td-note">収容基地局数が従来の5,000局から30,000局へと急増する中期計画が策定された。</td>
+              </tr>
+              <tr>
+                <td class="td-item">データサイズ</td>
+                <td class="td-value">1局あたり <span class="kw-mask">約50MB</span>（XML形式、設定・ログ）</td>
+                <td class="td-note">各基地局から定期的に送信される約50MBの大容量XML構成定義データ…</td>
+              </tr>
+              <tr>
+                <td class="td-item">バッチ処理時間</td>
+                <td class="td-value">現行 <span class="kw-mask">6時間</span> → 目標 <span class="kw-mask">2時間以内</span> → 実績 <span class="kw-mask">約1.5時間</span></td>
+                <td class="td-note">現行の夜間バッチ処理に約6時間を要しており、午前0時から2時までの2時間以内完了を目標とした。</td>
+              </tr>
+              <tr>
+                <td class="td-item">日中即応スループット</td>
+                <td class="td-value">現行 <span class="kw-mask">約4.2秒/局</span> → 実績 <span class="kw-mask">約0.18秒/局</span>（目標 <span class="kw-mask">0.5秒以下</span>）</td>
+                <td class="td-note">日中の緊急パラメータ変更時にも、1局あたり平均0.18秒での高速解析・即時反映を実現した。</td>
+              </tr>
+              <tr>
+                <td class="td-item">プロセスリソース</td>
+                <td class="td-value">現行 1プロセス <span class="kw-mask">数GB</span> → 実績 <span class="kw-mask">約350MB</span>（目標 <span class="kw-mask">500MB以下</span>）</td>
+                <td class="td-note">1コンテナプロセスあたりのメモリ消費量を約3GBから約350MBへと88%削減した。</td>
+              </tr>
+              <tr>
+                <td class="td-item">計算量リファクタ</td>
+                <td class="td-value">多重ループ <span class="kw-mask">O(n²)</span> → ハッシュインデックス <span class="kw-mask">O(n)</span></td>
+                <td class="td-note">多重ループとなっていたデータ走査アルゴリズムをハッシュマップインデックス化により O(n) へ刷新した。</td>
+              </tr>
+              <tr>
+                <td class="td-item">プロジェクト規模</td>
+                <td class="td-value">開発費 <span class="kw-mask">約1億5,000万円</span>、工数 <span class="kw-mask">約120人月</span>、全体 <span class="kw-mask">100名</span></td>
+                <td class="td-note">総開発工数約120人月、100名規模のグローバル分散開発体制（コアアーキテクチャチーム12名）…</td>
+              </tr>
+              <tr>
+                <td class="td-item">TCO費用対効果</td>
+                <td class="td-value">ハード増強案（<span class="kw-mask">年間4,800万増</span>） vs ソフトウェア刷新案</td>
+                <td class="td-note"><span class="kw-mask">3年目</span>でハード増強案の累計追加コストがソフトウェア刷新の初期投資額を逆転する試算を示した。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub-heading" id="sec-6-2">6.2 アーキテクト必殺のキラーフレーズ集</h3>
+        <p class="section-lead" style="margin-bottom: 0.85rem;">
+          答案の各所でそのまま使える、採点官へのアピール度が高い定型構文である。
+        </p>
+
+        <div class="trap-card cheat-card">
+          <h4>方式決定の理由づけ（なぜならば〜構文）</h4>
+          <p style="font-size: 0.92rem; line-height: 1.8;"><span class="kw-reason">私は案2を採用した。なぜならば、</span>基地局数が今後さらに増加する長期運用を見据え、インフラコストの肥大化を抑えつつ、将来的なデータ量増加に対してリニアなスケーラビリティを確保することを最優先すべきと考えたからである。</p>
+        </div>
+        <div class="trap-card cheat-card">
+          <h4>新たな課題への直面とアーキテクトとしての解決</h4>
+          <p style="font-size: 0.92rem; line-height: 1.8;">ただし、<span class="kw-mask">SAX方式</span>の採用により、XML全体がメモリ上に存在しないため、タグ間の親子・前後関係の整合性検証が困難になるという課題が新たに生じた。そこで私は、XMLスキーマ定義に基づく軽量な<span class="kw-mask">ステートマシン型パーサ</span>を設計し、依存関係判定に必要な識別子のみを最小限のリングバッファに保持しながらストリーム走査する構造を考案し、高速性とデータ一貫性の両立を実現した。</p>
+        </div>
+        <div class="trap-card cheat-card">
+          <h4>大規模分散開発におけるガバナンス</h4>
+          <p style="font-size: 0.92rem; line-height: 1.8;">各開発チームが独自にパーサを実装することによる性能劣化や仕様齟齬を防ぐため、開発した解析コアを「<span class="kw-mask">共通SDK</span>」としてパッケージ化して提供するとともに、厳格な<span class="kw-mask">XMLスキーマ（XSD）</span>およびテスト用スタブ・検証ハーネスを先行提供し、インタフェース標準化を主導した。</p>
+        </div>
+
+        <h3 class="sub-heading" id="sec-6-3">6.3 第1章（約750字）丸暗記用テンプレート</h3>
+        <p class="section-lead" style="margin-bottom: 0.85rem;">
+          本番でどの問題を選んでも、第1章は以下の文章構成をベースにそのまま記述できる。
+        </p>
+
+        <div class="template-box" id="ch1-template">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+            <h4 style="margin-bottom: 0;">第1章 対象業務の概要と情報システムの概要</h4>
+            <button class="btn btn-copy" onclick="copySectionText('ch1-template')">📋 テンプレートをコピー</button>
+          </div>
+          <p><strong>1.1 対象業務の概要</strong><br>
+          私は、大手通信キャリアA社において、モバイルネットワーク基盤のシステム開発を担当するソフトウェア企業に所属するシステムアーキテクトである。 A社では、全国規模で商用展開を進める5Gネットワークの通信品質維持および障害未然防止を目的として、ネットワーク運用保守部門が全国の基地局監視・設備計画業務を担っている。本業務では、全国の仮想化基地局（vRAN）から定期的に収集される構成定義データ（XML形式）や動作ログを集約・解析し、パラメータの整合性検証、セル間の電波干渉最適化、ならびにトラフィック急増に伴う設備増強計画の策定を日々行っている。 対象業務の特徴は、管理対象となる基地局数が極めて膨大であり、かつ電波品質の悪化や障害兆候を即座に検知して遠隔制御を行うリアルタイムな運用判断が強く求められる点にある。</p>
+          <p><strong>1.2 情報システムの概要</strong><br>
+          論述の対象とする情報システムは、全国の基地局（vDU/vCU）からアップロードされる大量の構成データを収集・構文解析し、正規化データを統合監視DBおよび最適化エンジンへと連携する「ネットワーク構成管理・データ処理基盤」である。 本基盤の再構築が必要となった背景には、A社の5Gエリア全国展開計画に伴い、収容基地局数が従来の<span class="kw-mask">5,000局から30,000局</span>へと急増する中期経営計画があった。現行システムは、基地局ごとに送信される<span class="kw-mask">約50MB</span>の構成ファイルを夜間バッチ処理で解析していたが、全処理に<span class="kw-mask">約6時間</span>を要していた。このまま基地局数が6倍に達すると、夜間帯のバッチ処理が翌日の日中帯にまで突き抜け、日中の電波最適化や障害監視業務に深刻な遅延が生じることが明白であった。そこで、急増するデータ量に耐えうる高スループットと拡張性を備えた新データ処理基盤の要件定義プロジェクトが発足した。私はシステムアーキテクトとして参画した。</p>
         </div>
       </section>
 
     </main>
   </div>
+
+  <button class="fab-top" id="fabTop" aria-label="ページ上部へ戻る" title="ページ上部へ戻る">↑</button>
 
   <script>
     // 1. Calculate character counts for each chapter and essay
@@ -1486,12 +2294,12 @@
       });
     }
 
-    // 2. Theme Tabs Filtering
-    const tabs = document.querySelectorAll('.theme-tab');
+    // 2. Theme Tabs Filtering (Essays)
+    const essayTabs = document.querySelectorAll('#sec-3 > .theme-tabs .theme-tab');
     const essayCards = document.querySelectorAll('.essay-card');
-    tabs.forEach(tab => {
+    essayTabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
+        essayTabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         const target = tab.getAttribute('data-target');
         essayCards.forEach(card => {
@@ -1504,13 +2312,40 @@
       });
     });
 
-    // 3. Highlight & Memorization Mode Toggles
+    // 2b. Past Exam Map Filtering
+    const mapTabs = document.querySelectorAll('#mapFilterTabs .theme-tab');
+    const mapRows = document.querySelectorAll('#pastExamTable tbody tr');
+    mapTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        mapTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const fit = tab.getAttribute('data-fit');
+        mapRows.forEach(row => {
+          if (fit === 'all' || row.getAttribute('data-fit') === fit) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // 3. Highlight & Memorization Mode Toggles (with localStorage)
     const btnHighlight = document.getElementById('btnHighlight');
     const btnMemorize = document.getElementById('btnMemorize');
 
+    try {
+      if (localStorage.getItem('sa_highlight') === 'off') {
+        document.body.classList.remove('highlight-mode');
+        btnHighlight.classList.remove('active');
+      }
+    } catch (e) {}
+
     btnHighlight.addEventListener('click', () => {
       document.body.classList.toggle('highlight-mode');
-      btnHighlight.classList.toggle('active');
+      const isOn = document.body.classList.contains('highlight-mode');
+      btnHighlight.classList.toggle('active', isOn);
+      try { localStorage.setItem('sa_highlight', isOn ? 'on' : 'off'); } catch (e) {}
     });
 
     btnMemorize.addEventListener('click', () => {
@@ -1529,35 +2364,66 @@
       });
     });
 
-    // 4. Dark Mode Toggle
+    // 4. Dark Mode Toggle (with localStorage)
     const btnTheme = document.getElementById('btnTheme');
-    btnTheme.addEventListener('click', () => {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      if (isDark) {
-        document.documentElement.removeAttribute('data-theme');
-        btnTheme.innerHTML = '<span>🌙 ダーク</span>';
-      } else {
+    function applyTheme(dark) {
+      if (dark) {
         document.documentElement.setAttribute('data-theme', 'dark');
         btnTheme.innerHTML = '<span>☀️ ライト</span>';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        btnTheme.innerHTML = '<span>🌙 ダーク</span>';
       }
+    }
+    try {
+      const savedTheme = localStorage.getItem('sa_theme');
+      if (savedTheme === 'dark') applyTheme(true);
+    } catch (e) {}
+
+    btnTheme.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      applyTheme(!isDark);
+      try { localStorage.setItem('sa_theme', !isDark ? 'dark' : 'light'); } catch (e) {}
     });
 
-    // 5. Copy Section Text
+    // 5. Copy Section Text (with iOS / file:// fallback)
+    function showCopySuccess(el) {
+      const btn = el.querySelector('.btn-copy');
+      if (btn) {
+        const original = btn.innerHTML;
+        btn.innerHTML = '✅ コピー完了';
+        setTimeout(() => { btn.innerHTML = original; }, 1600);
+      }
+    }
+
     function copySectionText(id) {
       const el = document.getElementById(id);
       if (!el) return;
       const text = el.innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        const btn = el.querySelector('.btn-copy');
-        if (btn) {
-          const original = btn.innerHTML;
-          btn.innerHTML = '✅ コピー完了';
-          setTimeout(() => { btn.innerHTML = original; }, 1600);
-        }
-      });
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => showCopySuccess(el)).catch(() => fallbackCopy(text, el));
+      } else {
+        fallbackCopy(text, el);
+      }
     }
 
-    // 6. Keyword Search Filter
+    function fallbackCopy(text, el) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.top = '-9999px';
+      ta.setAttribute('readonly', '');
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, text.length);
+      try {
+        document.execCommand('copy');
+        showCopySuccess(el);
+      } catch (e) {}
+      document.body.removeChild(ta);
+    }
+
+    // 6. Keyword Search Filter (Essays & Past Exam Table)
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', () => {
       const q = searchInput.value.trim().toLowerCase();
@@ -1569,6 +2435,57 @@
         const match = card.innerText.toLowerCase().includes(q);
         card.style.display = match ? 'block' : 'none';
       });
+      mapRows.forEach(row => {
+        if (!q) {
+          row.style.display = '';
+          return;
+        }
+        const match = row.innerText.toLowerCase().includes(q);
+        row.style.display = match ? '' : 'none';
+      });
+    });
+
+    // 7. Mobile Drawer Navigation & Back-to-Top FAB
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebarBackdrop');
+    const btnMenu = document.getElementById('btnMenu');
+    const btnCloseMenu = document.getElementById('btnCloseMenu');
+    const fabTop = document.getElementById('fabTop');
+
+    function closeDrawer() {
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function openDrawer() {
+      sidebar.classList.add('open');
+      backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    btnMenu.addEventListener('click', openDrawer);
+    btnCloseMenu.addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+
+    document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 960) {
+          closeDrawer();
+        }
+      });
+    });
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 360) {
+        fabTop.classList.add('visible');
+      } else {
+        fabTop.classList.remove('visible');
+      }
+    }, { passive: true });
+
+    fabTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     updateCharacterCounts();
