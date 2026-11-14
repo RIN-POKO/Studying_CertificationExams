@@ -52,6 +52,70 @@
       --purple-soft: rgba(139, 92, 246, 0.15);
     }
 
+    [data-theme="bw"] {
+      --bg-primary: #ffffff;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f3f4f6;
+      --text-primary: #111827;
+      --text-secondary: #374151;
+      --text-muted: #4b5563;
+      --border-color: #9ca3af;
+      --accent: #111827;
+      --accent-soft: #f3f4f6;
+      --accent-border: #4b5563;
+      --emerald: #111827;
+      --emerald-soft: #e5e7eb;
+      --amber: #111827;
+      --amber-soft: #e5e7eb;
+      --rose: #111827;
+      --rose-soft: #f3f4f6;
+      --purple: #111827;
+      --purple-soft: #f3f4f6;
+    }
+
+    [data-theme="bw"] .hero-card {
+      background: #f3f4f6;
+      color: #111827;
+      border: 2px solid #111827;
+      box-shadow: none;
+    }
+    [data-theme="bw"] .hero-card p {
+      color: #374151;
+    }
+    [data-theme="bw"] .hero-metric-item {
+      background: #ffffff;
+      border: 1px solid #6b7280;
+    }
+    [data-theme="bw"] .hero-metric-label {
+      color: #4b5563;
+    }
+    [data-theme="bw"] .fit-best {
+      background: #111827;
+      color: #ffffff;
+      border-color: #111827;
+    }
+    [data-theme="bw"] .fit-ok {
+      background: #ffffff;
+      color: #111827;
+      border: 1.5px solid #111827;
+    }
+    [data-theme="bw"] .fit-avoid {
+      background: #f3f4f6;
+      color: #4b5563;
+      border: 1px dashed #6b7280;
+    }
+    [data-theme="bw"] body.highlight-mode .kw-reason,
+    [data-theme="bw"] body.highlight-mode .kw-mask {
+      background: #e5e7eb;
+      color: #111827;
+      border-bottom: 1.5px solid #111827;
+    }
+    [data-theme="bw"] mark.search-hit {
+      background: #d1d5db;
+      color: #111827;
+      border-bottom: 1.5px solid #111827;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -1232,6 +1296,44 @@
         border-bottom: 1px solid #b45309;
         font-weight: 700;
       }
+
+      /* Black & White (Monochrome) Print Overrides */
+      [data-theme="bw"],
+      [data-theme="bw"] body {
+        --bg-primary: #ffffff !important;
+        --bg-surface: #ffffff !important;
+        --bg-subtle: #f3f4f6 !important;
+        --text-primary: #111827 !important;
+        --text-secondary: #374151 !important;
+        --text-muted: #4b5563 !important;
+        --border-color: #9ca3af !important;
+        --accent: #111827 !important;
+        --accent-soft: #f3f4f6 !important;
+        --accent-border: #4b5563 !important;
+        --emerald: #111827 !important;
+        --emerald-soft: #e5e7eb !important;
+        --amber: #111827 !important;
+        --amber-soft: #e5e7eb !important;
+        --rose: #111827 !important;
+        --rose-soft: #f3f4f6 !important;
+        --purple: #111827 !important;
+        --purple-soft: #f3f4f6 !important;
+      }
+      [data-theme="bw"] .hero-card {
+        background: #f3f4f6 !important;
+        border-color: #111827 !important;
+      }
+      [data-theme="bw"] .hero-card h1 {
+        color: #111827 !important;
+      }
+      [data-theme="bw"] .char-pill {
+        border-color: #4b5563 !important;
+      }
+      [data-theme="bw"] body.memorize-mode .kw-mask {
+        background: #e5e7eb !important;
+        color: #111827 !important;
+        border-bottom: 1.5px solid #111827 !important;
+      }
     }
   </style>
 </head>
@@ -1257,6 +1359,9 @@
         </button>
         <button class="btn" id="btnTheme" title="ダークモード切替">
           <span>🌙 ダーク</span>
+        </button>
+        <button class="btn" id="btnBW" title="白黒印刷用モノクロモード切替">
+          <span>⬛ 白黒</span>
         </button>
         <button class="btn btn-print-hide" onclick="window.print()" title="印刷・PDF保存">
           <span>🖨️ 印刷</span>
@@ -2582,26 +2687,46 @@
       });
     });
 
-    // 4. Dark Mode Toggle (with localStorage)
+    // 4. Theme Toggles: Light / Dark / Black & White (with localStorage)
     const btnTheme = document.getElementById('btnTheme');
-    function applyTheme(dark) {
-      if (dark) {
+    const btnBW = document.getElementById('btnBW');
+
+    function applyThemeMode(mode) {
+      if (mode === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
         btnTheme.innerHTML = '<span>☀️ ライト</span>';
+        btnTheme.classList.add('active');
+        btnBW.classList.remove('active');
+      } else if (mode === 'bw') {
+        document.documentElement.setAttribute('data-theme', 'bw');
+        btnTheme.innerHTML = '<span>🌙 ダーク</span>';
+        btnTheme.classList.remove('active');
+        btnBW.classList.add('active');
       } else {
         document.documentElement.removeAttribute('data-theme');
         btnTheme.innerHTML = '<span>🌙 ダーク</span>';
+        btnTheme.classList.remove('active');
+        btnBW.classList.remove('active');
       }
     }
+
     try {
       const savedTheme = localStorage.getItem('sa_theme');
-      if (savedTheme === 'dark') applyTheme(true);
+      if (savedTheme === 'dark' || savedTheme === 'bw') applyThemeMode(savedTheme);
     } catch (e) {}
 
     btnTheme.addEventListener('click', () => {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      applyTheme(!isDark);
-      try { localStorage.setItem('sa_theme', !isDark ? 'dark' : 'light'); } catch (e) {}
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      applyThemeMode(next);
+      try { localStorage.setItem('sa_theme', next); } catch (e) {}
+    });
+
+    btnBW.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'bw' ? 'light' : 'bw';
+      applyThemeMode(next);
+      try { localStorage.setItem('sa_theme', next); } catch (e) {}
     });
 
     // 5. Copy Section Text (with iOS / file:// fallback)
