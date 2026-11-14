@@ -1,0 +1,2 @@
+# Studying_SystemArchitect
+IPA システムアーキテクトの勉強用レポジトリ
