@@ -48,10 +48,10 @@ flowchart TD
 | `isError` | 「この結果は失敗」とモデルに伝えるフラグ |
 | `errorCategory` | 失敗の種類。一時的（transient）・検証（validation）・権限（permission）・方針（policy）が典型 |
 | `isRetryable` | 同じやり方で再試行してよいか（`retriable` と書くこともある） |
-| 有効な空結果 | 問い合わせは成功し、該当がゼロ件だった状態 |
+| `valid empty result` | 問い合わせは成功し、該当がゼロ件だった状態 |
 | `tool_choice: auto` | ツールを呼ばず、文章で答えてもよい |
 | `tool_choice: any` | どれかのツールを必ず呼ぶ（どれかはモデルが選ぶ） |
-| 強制ツール選択 | 名前を指定したツールを、このターンで必ず呼ぶ |
+| `forced tool selection` | 名前を指定したツールを、このターンで必ず呼ぶ |
 | `.mcp.json` | リポジトリでチーム共有するMCPの設定 |
 | `~/.claude.json` | その人だけの実験用MCPの設定 |
 | 環境変数展開 | 設定ファイルに秘密を書かず、`${GITHUB_TOKEN}` のように参照だけ書いて実行時に埋める |
@@ -149,7 +149,7 @@ flowchart TD
   Q -->|入力の形が違う| V[検証<br>同じ引数で再試行しない<br>どの欄が違うか伝える]
   Q -->|期限切れなど規則に反する| P[方針<br>再試行しない<br>利用者に読める説明を返す]
   Q -->|この認証では読めない| A[権限<br>再試行しない<br>人の認証か別の手段]
-  Q -->|成功したが該当ゼロ件| Z[有効な空結果<br>isError は偽・空の配列]
+  Q -->|成功したが該当ゼロ件| Z[valid empty result<br>isError は偽・空の配列]
 ```
 
 | 種類 | `isError` | `isRetryable` | 利用者向けの文の例 |
@@ -378,7 +378,7 @@ MCP のツールのエラー報告には、性質の違う2種類があります
 - MCP のツールが多いときは、ツール検索（tool search）が既定で働き、ツールの定義を必要なときに読み込みます。読み込む時期の工夫で、使えるサーバーを1つに絞る仕組みではありません。
 - プロジェクトの `.mcp.json` のサーバーは、対話セッションでは使う前に承認を求められます。`claude -p` などの非対話の実行では、この確認は出ません。
 - `allowedTools` で MCP のツールを指定するときも `mcp__<サーバー名>__<ツール名>` の形で書きます。これは実行の許可（自動承認）を決める設定で、どのツールを選ぶかを導くものではありません。
-- MCP サーバーの動作確認には MCP Inspector（`uv run mcp dev mcp_server.py`）を使い、ツール、静的リソース（`Resources`）、テンプレート付きリソース（`Resource Templates`、例：`docs://documents/{doc_id}`）、プロンプトを単体で検証できます。接続方式（トランスポート）はローカルの標準入出力（`stdio`）とリモートの HTTP/SSE があります。
+- MCP サーバーの動作確認には MCP Inspector（`uv run mcp dev mcp_server.py`）を使い、Tools、`Resources`（静的URI）、`Resource Templates`（例：`docs://documents/{doc_id}`）、Prompts を単体で検証できます。transport にはローカルの `stdio` とリモートの HTTP/SSE があります。
 
 ### 2-13 組み込みツールの細部
 

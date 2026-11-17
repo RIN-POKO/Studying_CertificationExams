@@ -385,7 +385,7 @@ flowchart LR
 - `REVIEW.md` はプルリクエスト自身の変更ではなく、ベースブランチ（または既定のブランチ）から読まれます。
 - レビュー全体の丁寧さ（Quick・Standard・Deep）は、組織の Owner が設定するレビューのレベルで決まります。
 - GitHub Actions 連携（`/install-github-app` で `.github/workflows/claude.yaml` を作成、`anthropics/claude-code-action@v1`）では、`permissions` に `id-token: write` を設定し、`trigger_phrase`（既定 `@claude`）や `prompt`、`claude_args`（`--max-turns` 等）で制御します。
-- プラグイン（`.claude-plugin/plugin.json`）はスキル・`agents/`・`hooks/hooks.json`・`.mcp.json` をまとめて共有でき、`name` によりスキルが `/<plugin-name>:<skill-name>` に名前空間化されます。実行権限を引き継ぐため、導入前に必ず中身を検査します。
+- プラグイン（`.claude-plugin/plugin.json`）はスキル・`agents/`・`hooks/hooks.json`・`.mcp.json` をまとめて共有でき、`name` によりスキルが `/<plugin-name>:<skill-name>` の namespace に分かれ衝突を防げます。実行権限を引き継ぐため、導入前に必ず中身を検査します。
 
 ## まとめ：どう判断するか
 
