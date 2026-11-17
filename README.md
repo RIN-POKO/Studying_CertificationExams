@@ -3,7 +3,7 @@
 各種資格試験の勉強用ノート・Web版対策ページ・チートシートをまとめたリポジトリです。  
 GitHub Pages で公開しており、PC・iPhone・iPad からいつでも閲覧・暗記・A4印刷ができます。
 
-- **公開ポータル URL**: https://rin-poko.github.io/Studying_SystemArchitect/
+- **公開ポータル URL**: https://rin-poko.github.io/Studying_CertificationExams/
 
 ## 収録中の資格試験
 
