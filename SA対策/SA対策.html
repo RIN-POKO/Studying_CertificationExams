@@ -2783,7 +2783,7 @@
           card.style.display = 'block';
           return;
         }
-        const match = card.innerText.toLowerCase().includes(q);
+        const match = card.textContent.toLowerCase().includes(q);
         card.style.display = match ? 'block' : 'none';
       });
       mapRows.forEach(row => {
@@ -2791,7 +2791,7 @@
           row.style.display = '';
           return;
         }
-        const match = row.innerText.toLowerCase().includes(q);
+        const match = row.textContent.toLowerCase().includes(q);
         row.style.display = match ? '' : 'none';
       });
     });

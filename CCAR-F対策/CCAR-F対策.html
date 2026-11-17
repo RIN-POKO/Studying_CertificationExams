@@ -2239,29 +2239,109 @@
       updateThemeUI();
     });
 
-    // Cross-chapter Search
+    // Cross-chapter Search (uses textContent so hidden panels are searched too)
+    function clearSearchHighlights() {
+      document.querySelectorAll("mark.search-hit").forEach(mark => {
+        const parent = mark.parentNode;
+        if (parent) {
+          parent.replaceChild(document.createTextNode(mark.textContent), mark);
+          parent.normalize();
+        }
+      });
+    }
+
+    function highlightInPanel(panelEl, rawQuery) {
+      clearSearchHighlights();
+      if (!panelEl || !rawQuery) return null;
+      const body = panelEl.querySelector(".md-body");
+      if (!body) return null;
+      const qLower = rawQuery.toLowerCase();
+      const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          const p = node.parentElement;
+          if (!p || p.closest(".mermaid, .mermaid-wrap, svg, script, style")) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      const textNodes = [];
+      let n;
+      while ((n = walker.nextNode())) textNodes.push(n);
+
+      let firstMark = null;
+      textNodes.forEach(node => {
+        const text = node.nodeValue;
+        const lower = text.toLowerCase();
+        let idx = lower.indexOf(qLower);
+        if (idx === -1) return;
+        const frag = document.createDocumentFragment();
+        let last = 0;
+        while (idx !== -1) {
+          if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+          const mark = document.createElement("mark");
+          mark.className = "search-hit";
+          mark.textContent = text.slice(idx, idx + rawQuery.length);
+          if (!firstMark) firstMark = mark;
+          frag.appendChild(mark);
+          last = idx + rawQuery.length;
+          idx = lower.indexOf(qLower, last);
+        }
+        if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+        node.parentNode.replaceChild(frag, node);
+      });
+      if (firstMark) {
+        const det = firstMark.closest("details.qa-details");
+        if (det) det.open = true;
+      }
+      return firstMark;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
     searchInput.addEventListener("input", () => {
-      const q = searchInput.value.trim().toLowerCase();
+      const rawQ = searchInput.value.trim();
+      const q = rawQ.toLowerCase();
       if (!q) {
+        clearSearchHighlights();
         searchStatus.classList.remove("visible");
         searchStatus.textContent = "";
         return;
       }
       const hits = [];
       panels.forEach(p => {
-        if (p.innerText.toLowerCase().includes(q)) {
+        const body = p.querySelector(".md-body");
+        const txt = (body ? body.textContent : p.textContent).toLowerCase();
+        if (txt.includes(q)) {
+          let count = 0;
+          let pos = txt.indexOf(q);
+          while (pos !== -1) {
+            count++;
+            pos = txt.indexOf(q, pos + q.length);
+          }
           const title = document.querySelector(`.nav-link[data-sec="${p.id}"]`)?.textContent || p.id;
-          hits.push(`<a href="#${p.id}" data-search-jump="${p.id}" style="font-weight:700;margin-right:0.75rem;">${title}</a>`);
+          hits.push(`<a href="#${p.id}" data-search-jump="${p.id}" style="font-weight:700;margin-right:0.75rem;">${escapeHtml(title)} (${count}件)</a>`);
         }
       });
       searchStatus.innerHTML = hits.length
-        ? `🔍 「${q}」に一致した章 (${hits.length}件): ` + hits.join("")
-        : `🔍 「${q}」に一致する章は見つかりませんでした。`;
+        ? `🔍 「${escapeHtml(rawQ)}」に一致した章 (${hits.length}件): ` + hits.join("")
+        : `🔍 「${escapeHtml(rawQ)}」に一致する章は見つかりませんでした。`;
       searchStatus.classList.add("visible");
+
+      const currentPanel = document.querySelector(".chapter-panel:not([hidden])");
+      highlightInPanel(currentPanel, rawQ);
+
       searchStatus.querySelectorAll("[data-search-jump]").forEach(a => {
         a.addEventListener("click", e => {
           e.preventDefault();
-          showSection(a.dataset.searchJump);
+          const targetId = a.dataset.searchJump;
+          showSection(targetId);
+          const targetEl = document.getElementById(targetId);
+          const firstHit = highlightInPanel(targetEl, rawQ);
+          if (firstHit) {
+            firstHit.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
         });
       });
     });
