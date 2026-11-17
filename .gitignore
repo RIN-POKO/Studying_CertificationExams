@@ -27,6 +27,7 @@ node_modules/
 *.tmp
 *.bak
 
-# Local AI / Claude settings
+# Local AI / Claude settings & installed skills
 CLAUDE.local.md
 .claude/settings.local.json
+.agents/skills/
