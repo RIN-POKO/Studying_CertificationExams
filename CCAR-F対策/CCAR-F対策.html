@@ -17,6 +17,9 @@
   </script>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Claude Certified Architect - Foundations (CCA-F) 対策ノート</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
   <style>
     @font-face {
       font-family: "BIZ UD Mixed";
@@ -105,7 +108,7 @@
     }
 
     body {
-      font-family: "BIZ UD Mixed", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+      font-family: "BIZ UD Mixed", "BIZ UDGothic", "BIZ UDPGothic", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
       background-color: var(--bg-primary);
       color: var(--text-primary);
       line-height: 1.75;
@@ -2096,7 +2099,7 @@
         rankSpacing: 45
       },
       themeVariables: {
-        fontFamily: '"BIZ UD Mixed", "Yu Gothic UI", "Meiryo", -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif',
+        fontFamily: '"BIZ UD Mixed", "BIZ UDGothic", "BIZ UDPGothic", "Yu Gothic UI", "Meiryo", -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif',
         fontSize: "14px"
       },
       theme: document.documentElement.getAttribute("data-theme") === "bw" ? "neutral" : (isDark ? "dark" : "default")
@@ -2104,6 +2107,9 @@
     window.__renderMermaidIn = async (rootEl) => {
       const nodes = rootEl.querySelectorAll(".mermaid:not([data-processed])");
       if (nodes.length > 0) {
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
         await mermaid.run({ nodes: Array.from(nodes) });
       }
     };
