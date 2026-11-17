@@ -8,7 +8,7 @@
 - 学習用 HTML ページには、原則として以下の機能・設定を組み込んでください：
   - **テーマ切替**: ライト／ダークモード、および白黒印刷用の **白黒（モノクロ）モード**
   - **印刷対応**: **印刷ボタン**の設置、および `@page` / `@media print` による A4 印刷最適化（表の折り返し、改ページ制御、白黒印刷対応）
-  - **フォント設定**: Google Fonts（`BIZ UDGothic`・`BIZ UDPGothic`）を読み込みつつ、`@font-face`（`unicode-range`）により英語（ASCII）に `BIZ UDPGothic`、日本語に `BIZ UDGothic` を割り当て、環境非依存かつオフライン時はシステムフォントへフォールバックさせること
+  - **フォント設定**: Google Fonts（`BIZ UDPGothic` とソースコード用の `M PLUS 1 Code`）を読み込み、本文は日本語・英語を問わずプロポーショナルフォント `BIZ UDPGothic` に統一し、ソースコード表示（`code`, `pre`）には `M PLUS 1 Code` を使用すること（オフライン時はシステムフォントへフォールバック）
   - **Mermaid 図**: Windows での文字途切れを防ぐため、`flowchart` は `htmlLabels: false` とし、`themeVariables.fontFamily` に本文と同じフォント設定を指定したうえで、`await document.fonts.ready;` 後に描画すること
 
 ## 2. 日本語文章の作成・推敲

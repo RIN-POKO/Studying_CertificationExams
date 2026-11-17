@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -7,19 +8,8 @@
   <title>資格試験 学習ポータル | Studying Hub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=M+PLUS+1+Code:wght@100..700&display=swap" rel="stylesheet">
   <style>
-    @font-face {
-      font-family: "BIZ UD Mixed";
-      src: local("BIZ UDPGothic");
-      unicode-range: U+0000-00FF, U+2000-206F;
-    }
-    @font-face {
-      font-family: "BIZ UD Mixed";
-      src: local("BIZ UDGothic");
-      unicode-range: U+3000-30FF, U+4E00-9FFF, U+F900-FAFF, U+FF00-FFEF;
-    }
-
     :root {
       --bg-primary: #f8fafc;
       --bg-surface: #ffffff;
@@ -69,13 +59,17 @@
     }
 
     body {
-      font-family: "BIZ UD Mixed", "BIZ UDGothic", "BIZ UDPGothic", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+      font-family: "BIZ UDPGothic", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
       background-color: var(--bg-primary);
       color: var(--text-primary);
       line-height: 1.7;
       min-height: 100vh;
       padding-bottom: max(2rem, env(safe-area-inset-bottom));
       -webkit-font-smoothing: antialiased;
+    }
+
+    code, pre {
+      font-family: "M PLUS 1 Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
     .top-header {
@@ -295,18 +289,22 @@
       .container {
         padding: 1rem;
       }
+
       .hero {
         padding: 1.25rem 1.15rem;
       }
+
       .hero h1 {
         font-size: 1.25rem;
       }
+
       .exam-grid {
         grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
+
 <body>
   <header class="top-header">
     <div class="header-inner">
@@ -343,7 +341,9 @@
         </div>
         <div class="card-actions">
           <a class="btn btn-primary" href="./SA%E5%AF%BE%E7%AD%96/SA%E5%AF%BE%E7%AD%96.html">📖 学習ページを開く</a>
-          <a class="btn" href="https://github.com/RIN-POKO/Studying_CertificationExams/blob/main/SA%E5%AF%BE%E7%AD%96/SA%E5%AF%BE%E7%AD%96.md" target="_blank" rel="noopener">📝 MD</a>
+          <a class="btn"
+            href="https://github.com/RIN-POKO/Studying_CertificationExams/blob/main/SA%E5%AF%BE%E7%AD%96/SA%E5%AF%BE%E7%AD%96.md"
+            target="_blank" rel="noopener">📝 MD</a>
         </div>
       </article>
 
@@ -361,7 +361,9 @@
         </div>
         <div class="card-actions">
           <a class="btn btn-primary" href="./CCAR-F%E5%AF%BE%E7%AD%96/CCAR-F%E5%AF%BE%E7%AD%96.html">📖 学習ページを開く</a>
-          <a class="btn" href="https://github.com/RIN-POKO/Studying_CertificationExams/tree/main/CCAR-F%E5%AF%BE%E7%AD%96/CCAR-F%E5%AF%BE%E7%AD%96_%E5%8E%9F%E6%9C%AC" target="_blank" rel="noopener">📝 MD</a>
+          <a class="btn"
+            href="https://github.com/RIN-POKO/Studying_CertificationExams/tree/main/CCAR-F%E5%AF%BE%E7%AD%96/CCAR-F%E5%AF%BE%E7%AD%96_%E5%8E%9F%E6%9C%AC"
+            target="_blank" rel="noopener">📝 MD</a>
         </div>
       </article>
 
@@ -400,13 +402,14 @@
     }
     try {
       if (localStorage.getItem('sa_theme') === 'dark') applyTheme(true);
-    } catch (e) {}
+    } catch (e) { }
 
     btnTheme.addEventListener('click', () => {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       applyTheme(!isDark);
-      try { localStorage.setItem('sa_theme', !isDark ? 'dark' : 'light'); } catch (e) {}
+      try { localStorage.setItem('sa_theme', !isDark ? 'dark' : 'light'); } catch (e) { }
     });
   </script>
 </body>
+
 </html>
