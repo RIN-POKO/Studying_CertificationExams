@@ -12,7 +12,7 @@
 
 | 項目 | 内容 |
 | --- | --- |
-| 資格名 | Claude Certified Architect – Foundations (CCA-F) |
+| 資格名 | Claude Certified Architect – Foundations (CCAR-F) |
 | 問題数・試験時間 | 60問（4択：正答1・誤答3）・解答時間 120分（全体の拘束時間 145分） |
 | 合格ライン | スケールスコア 100〜1,000点のうち **720点以上** |
 | 実施形式 | 英語のみ・オンライン監督（Pearson VUE OnVUE）またはテストセンター・参照不可 |

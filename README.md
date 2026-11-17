@@ -10,4 +10,4 @@ GitHub Pages で公開しており、PC・iPhone・iPad からいつでも閲覧
 | 資格・試験名 | ディレクトリ | 内容 |
 | --- | --- | --- |
 | **IPA システムアーキテクト (SA) 午後II** | [`SA対策/`](./SA対策/) | 論文対策総合レポート（質問票・骨子・6テーマ論文・過去問28問マップ・チートシート）※Web版あり |
-| **Claude Certified Architect - Foundations (CCA-F)** | [`CCAR-F対策/`](./CCAR-F対策/) | エージェント設計・ツール/MCP・Claude Code・プロンプト・コンテキスト管理・用語集・直前チェック ※Web版あり |
+| **Claude Certified Architect - Foundations (CCAR-F)** | [`CCAR-F対策/`](./CCAR-F対策/) | エージェント設計・ツール/MCP・Claude Code・プロンプト・コンテキスト管理・用語集・直前チェック ※Web版あり |
