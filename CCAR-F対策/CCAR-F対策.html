@@ -996,7 +996,7 @@
 <p>全部終えたら <a href="#sec-check" class="internal-link" data-jump="sec-check">直前チェック</a> で見直します。</p>
 <h2>各章のつくり</h2>
 <p>どの章も同じ順番で並んでいます。</p>
-<ol><li><strong>たとえ</strong> ── 章の内容を身近なものにたとえた導入</li><li><strong>ゴール・要点3つ・30秒で全体像</strong> ── 先に結論と地図を示す</li><li><strong>用語</strong> ── この章で使う言葉</li><li><strong>本編</strong> ── 節ごとに、例・比較表・図で説明。各節に「一言まとめ」や注意の囲みがある</li><li><strong>まとめ：どう判断するか</strong> ── 状況と判断の対応表</li><li><strong>確認問題</strong> ── 8問。解答は折りたたみ</li><li><strong>自分で確かめる</strong> ── 手を動かして確認する課題</li></ol>
+<ol><li><strong>たとえ</strong>: 章の内容を身近なものにたとえた導入</li><li><strong>ゴール・要点3つ・30秒で全体像</strong>: 先に結論と地図を示す</li><li><strong>用語</strong>: この章で使う言葉</li><li><strong>本編</strong>: 節ごとに、例・比較表・図で説明。各節に「一言まとめ」や注意の囲みがある</li><li><strong>まとめ：どう判断するか</strong>: 状況と判断の対応表</li><li><strong>確認問題</strong>: 8問。解答は折りたたみ</li><li><strong>自分で確かめる</strong>: 手を動かして確認する課題</li></ol>
 <h2>この教材で繰り返し出てくる判断</h2>
 <ul><li>モデルはツールを実行しない。実行して結果を会話に戻すのはハーネス。</li><li>だいたい従えばよい案内は文章に書き、外れると事故になる順序はプログラムで止める。</li><li>ツール選びの決め手は説明文。失敗は、次の手が分かれる形で返す。</li><li>設定は、届けたい相手と読ませたいタイミングが一致する場所にだけ置く。</li><li>構文はスキーマで固定し、意味の矛盾は検証と、材料を添えた再試行で扱う。</li><li>金額や期日は要約の外に残し、出典の食い違いは1つの数字に潰さない。</li></ul>
           </div>
@@ -1027,12 +1027,12 @@
   H --&gt;|ツール結果| C</pre></div>
 <p>モデルは「このツールを呼んでほしい」と宣言し、ハーネスが実行して結果を会話に戻します。この往復がエージェントループです。仕事を分けるときは、コーディネーターがハブになり、子に渡す情報を明示します。返金のように順序を外すと事故になる箇所は、ゲートとフックで止めます。仕事の分け方は「やることが最初から見えているか」で選び、会話を続けるかどうかは「履歴の中身が今も正しいか」で選びます。</p>
 <h2>用語</h2>
-<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch1-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">ハーネス</th><td>モデルを呼び出し、ツールを実行し、結果を次の依頼に足すプログラム。つまり「あなたが書く側」</td></tr><tr><th scope="row"><code>stop_reason</code></th><td>返答が止まった理由。ループを続けるか止めるかの分岐に使う</td></tr><tr><th scope="row"><code>tool_use</code></th><td>「ツールを実行してほしい」という停止。実行して、ループを続ける</td></tr><tr><th scope="row"><code>end_turn</code></th><td>「返答を終えた」という停止。ループを閉じる</td></tr><tr><th scope="row">ツール結果</th><td>ハーネスが会話履歴へ戻す、ツールの戻り値</td></tr><tr><th scope="row">コーディネーター</th><td>仕事を分け、委任し、結果を集め、足りなければ再委任する親エージェント</td></tr><tr><th scope="row">サブエージェント</th><td>別の会話で、渡された依頼だけを処理するエージェント</td></tr><tr><th scope="row">Agent ツール</th><td>サブエージェントを起動するツール。旧称は Task（Claude Code v2.1.63 で改名）</td></tr><tr><th scope="row"><code>allowedTools</code></th><td>列挙したツールを<strong>承認の確認なしで実行させる</strong>設定。列挙していないツールも使えなくなるわけではない</td></tr><tr><th scope="row"><code>tools</code> / <code>disallowedTools</code></th><td>使えるツールを<strong>絞る</strong>設定。<code>disallowedTools</code> に書いたツールは定義ごと外れる</td></tr><tr><th scope="row"><code>AgentDefinition</code></th><td>サブエージェントの種類ごとの説明・システムプロンプト・使えるツールの定義</td></tr><tr><th scope="row"><code>Prerequisite gate</code>（前提条件ゲート）</th><td>前の手順の結果が記録されるまで、後のツールを実行させない検査</td></tr><tr><th scope="row"><code>PostToolUse</code></th><td>ツール実行の<strong>後</strong>、モデルが読む<strong>前</strong>に結果を整えるフック</td></tr><tr><th scope="row"><code>PreToolUse</code></th><td>ツール実行の<strong>前</strong>に、規則違反の呼び出しを止めるフック</td></tr><tr><th scope="row">ハンドオフ</th><td>会話ログを見られない人に渡す、判断に必要な情報だけをまとめた要約</td></tr><tr><th scope="row">プロンプトチェーン</th><td>やることが最初から決まっている仕事を、段階ごとに順番に処理する分け方</td></tr><tr><th scope="row">動的な分解</th><td>途中で分かったことに応じて、次のサブタスクを足していく分け方</td></tr><tr><th scope="row"><code>--resume</code></th><td>名前を付けた過去の会話を、履歴ごと再開する</td></tr><tr><th scope="row"><code>fork_session</code></th><td>同じ地点から会話を枝分かれさせ、別案を混ぜずに比べる</td></tr></tbody></table></div>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch1-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">ハーネス</th><td>モデルを呼び出し、ツールを実行し、結果を次の依頼に足すプログラム。つまり「あなたが書く側」</td></tr><tr><th scope="row"><code>stop_reason</code></th><td>返答が止まった理由。ループを続けるか止めるかの分岐に使う</td></tr><tr><th scope="row"><code>tool_use</code></th><td>「ツールを実行してほしい」という停止。実行して、ループを続ける</td></tr><tr><th scope="row"><code>end_turn</code></th><td>「返答を終えた」という停止。ループを終える</td></tr><tr><th scope="row">ツール結果</th><td>ハーネスが会話履歴へ戻す、ツールの戻り値</td></tr><tr><th scope="row">コーディネーター</th><td>仕事を分け、委任し、結果を集め、足りなければ再委任する親エージェント</td></tr><tr><th scope="row">サブエージェント</th><td>別の会話で、渡された依頼だけを処理するエージェント</td></tr><tr><th scope="row">Agent ツール</th><td>サブエージェントを起動するツール。旧称は Task（Claude Code v2.1.63 で改名）</td></tr><tr><th scope="row"><code>allowedTools</code></th><td>列挙したツールを<strong>承認の確認なしで実行させる</strong>設定。列挙していないツールも使えなくなるわけではない</td></tr><tr><th scope="row"><code>tools</code> / <code>disallowedTools</code></th><td>使えるツールを<strong>絞る</strong>設定。<code>disallowedTools</code> に書いたツールは定義ごと外れる</td></tr><tr><th scope="row"><code>AgentDefinition</code></th><td>サブエージェントの種類ごとの説明・システムプロンプト・使えるツールの定義</td></tr><tr><th scope="row"><code>Prerequisite gate</code>（前提条件ゲート）</th><td>前の手順の結果が記録されるまで、後のツールを実行させない検査</td></tr><tr><th scope="row"><code>PostToolUse</code></th><td>ツール実行の<strong>後</strong>、モデルが読む<strong>前</strong>に結果を整えるフック</td></tr><tr><th scope="row"><code>PreToolUse</code></th><td>ツール実行の<strong>前</strong>に、規則違反の呼び出しを止めるフック</td></tr><tr><th scope="row">ハンドオフ</th><td>会話ログを見られない人に渡す、判断に必要な情報だけをまとめた要約</td></tr><tr><th scope="row">プロンプトチェーン</th><td>やることが最初から決まっている仕事を、段階ごとに順番に処理する分け方</td></tr><tr><th scope="row">動的な分解</th><td>途中で分かったことに応じて、次のサブタスクを足していく分け方</td></tr><tr><th scope="row"><code>--resume</code></th><td>名前を付けた過去の会話を、履歴ごと再開する</td></tr><tr><th scope="row"><code>fork_session</code></th><td>同じ地点から会話を枝分かれさせ、別案を混ぜずに比べる</td></tr></tbody></table></div>
 <h2>本編</h2>
 <h3>1-1 ループは、モデルとハーネスのキャッチボール</h3>
 <p>モデルの1回の呼び出しは、「それまでの会話を読んで、次のメッセージを1つ返す」だけです。ファイルを開いたり、返金APIを呼んだりはしません。モデルが返すのは「このツールを、この引数で呼んでほしい」という<strong>宣言</strong>です。実際に実行するのはハーネスです。</p>
 <p>返答には停止理由（<code>stop_reason</code>）が付きます。</p>
-<ul><li><code>tool_use</code> なら：宣言されたツールを実行し、結果を会話に足し、もう一度モデルを呼びます。</li><li><code>end_turn</code> なら：モデルは利用者への返答を終えています。ループを閉じます。</li></ul>
+<ul><li><code>tool_use</code> なら：宣言されたツールを実行し、結果を会話に足し、もう一度モデルを呼びます。</li><li><code>end_turn</code> なら：モデルは利用者への返答を終えています。ループを終えます。</li></ul>
 <div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
   A[会話を添えてモデルを呼ぶ] --&gt; B{stop_reason は?}
   B --&gt;|tool_use| C[ハーネスがツールを実行]
@@ -1499,7 +1499,7 @@
 <div tabindex="0" role="region" aria-label="表 7" class="table-wrapper" id="sec-ch3-tbl-7"><table><thead><tr><th scope="col">仕組み</th><th scope="col">いつ効くか</th><th scope="col">向いているもの</th></tr></thead><tbody><tr><th scope="row"><code>CLAUDE.md</code> / ルール</th><td>常に（または <code>paths</code> 一致時に自動で）</td><td>常に守ってほしい標準</td></tr><tr><th scope="row">スキル（<code>SKILL.md</code>。旧来の <code>.claude/commands/</code> も同じ扱い）</th><td>利用者が <code>/名前</code> と打ったとき、または作業に合うと Claude が判断したとき</td><td>定型作業の呼び出し、ときどきしか使わない長い手順</td></tr></tbody></table></div>
 <ul><li><code>CLAUDE.md</code> にコマンドの手順を書いても、スラッシュコマンドとしては登録されません。</li><li>存在しない設定の配列にコマンド名を書く、という「第3の場所」はありません。</li><li>個人の好みで共有スキルを書き換えると、チーム全員の手順が変わります。別名の変種を <code>~/.claude/skills/</code> に作ります。</li></ul>
 <h3>3-6 スキルのフロントマター：何を隔離し、何を絞るか</h3>
-<p><strong><code>context: fork</code> ── 本会話を長い出力から守る</strong></p>
+<p><strong><code>context: fork</code>（本会話を長い出力から守る）</strong></p>
 <div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
   subgraph X[&quot;fork なし&quot;]
     A1[探索スキル] --&gt;|見つけたファイルの中身を全部| B1[本会話&lt;br&gt;コンテキストが埋まる]
@@ -1509,9 +1509,9 @@
   end
   X ~~~ Y</pre></div>
 <ul><li>フォークしないと、探索の長いログがそのまま本会話の履歴になります。そのあと実装を頼むと、モデルは貼られた中身の一部しか見ず、残りを忘れます。</li><li>フォークするなら、スキルの最後に「<strong>ファイル名と判断だけを返せ</strong>」と書きます。結論にファイル名がないと、本会話はその結論を使えません。</li></ul>
-<p><strong><code>allowed-tools</code> ── スキル実行中だけツールを絞る</strong></p>
+<p><strong><code>allowed-tools</code>（スキル実行中だけツールを絞る）</strong></p>
 <ul><li>読み取りのスキルなら、Read・Grep・Glob だけにします。シェルが入っていると、調査のつもりでマイグレーションを実行できてしまいます。</li><li>書き込みが必要な適用作業は<strong>別のスキル</strong>に分け、<strong>フォークしない</strong>で本会話で差分が見えるようにします。隔離と適用を1つのスキルにすると、差分がフォークの中に閉じこもり、利用者が差分を見ないまま終わります。</li></ul>
-<p><strong><code>argument-hint</code> ── 必要な引数を尋ねさせる</strong></p>
+<p><strong><code>argument-hint</code>（必要な引数を尋ねさせる）</strong></p>
 <p>ヒントがないと、引数なしで呼ばれたときにモデルが対象ファイルを推測して手順を始めてしまいます。</p>
 <h3>3-7 プランモードと直接実行の使い分け</h3>
 <div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
@@ -1690,7 +1690,7 @@
 <div tabindex="0" role="region" aria-label="表 9" class="table-wrapper" id="sec-ch4-tbl-9"><table><thead><tr><th scope="col">欄</th><th scope="col">設計</th></tr></thead><tbody><tr><th scope="row">請求番号</th><td>必須</td></tr><tr><th scope="row">明細</th><td>配列</td></tr><tr><th scope="row">税額</th><td>任意・null 可</td></tr><tr><th scope="row">通貨</th><td>判別できなければ <code>unclear</code></td></tr><tr><th scope="row">費目</th><td>既知の enum ＋ <code>other</code> と詳細</td></tr><tr><th scope="row">声明の合計</th><td>文書に書かれた合計</td></tr><tr><th scope="row">計算した合計</th><td>明細から足した合計</td></tr><tr><th scope="row"><code>conflict_detected</code></th><td>2つの合計が違えば真</td></tr></tbody></table></div>
 <h3>4-5 意味の検証と再試行：材料があるときだけ効く</h3>
 <p><strong>意味の検証はスキーマの外に足す</strong></p>
-<p>声明の合計と、明細から計算した合計を両方抜き出し、一致しなければ再依頼します。情報源どうしが矛盾するなら <code>conflict_detected</code> を立て、どちらかを黙って捨てさせません。</p>
+<p>声明の合計と、明細から計算した合計を両方抜き出し、一致しなければ再依頼します。情報源どうしが矛盾するなら <code>conflict_detected</code> を立て、どちらかを知らせずに捨てさせません。</p>
 <p><strong>再試行の2通目に入れる3つの材料</strong></p>
 <div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">sequenceDiagram
   participant P as プログラム
