@@ -2,14 +2,397 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0; url=./SA%E5%AF%BE%E7%AD%96.html">
-  <title>システムアーキテクト試験 論文対策 総合攻略レポート</title>
-  <script>
-    window.location.replace("./SA%E5%AF%BE%E7%AD%96.html");
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>資格試験 学習ポータル | Studying Hub</title>
+  <style>
+    :root {
+      --bg-primary: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --accent: #2563eb;
+      --accent-soft: #eff6ff;
+      --accent-border: #bfdbfe;
+      --emerald: #059669;
+      --emerald-soft: #ecfdf5;
+      --amber: #d97706;
+      --amber-soft: #fffbeb;
+      --purple: #7c3aed;
+      --purple-soft: #f5f3ff;
+      --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 10px -2px rgba(15, 23, 42, 0.08);
+      --radius: 14px;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0b1120;
+      --bg-surface: #1e293b;
+      --bg-subtle: #0f172a;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --accent: #60a5fa;
+      --accent-soft: rgba(59, 130, 246, 0.15);
+      --accent-border: rgba(96, 165, 250, 0.35);
+      --emerald: #34d399;
+      --emerald-soft: rgba(16, 185, 129, 0.15);
+      --amber: #fbbf24;
+      --amber-soft: rgba(245, 158, 11, 0.15);
+      --purple: #a78bfa;
+      --purple-soft: rgba(139, 92, 246, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+      padding-bottom: max(2rem, env(safe-area-inset-bottom));
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 0.75rem 1.25rem;
+      padding-top: max(0.75rem, env(safe-area-inset-top));
+    }
+
+    .header-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .brand-badge {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      padding: 0.45rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      min-height: 38px;
+      touch-action: manipulation;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #ffffff;
+      border-radius: var(--radius);
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.75rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero p {
+      font-size: 0.94rem;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .section-heading {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      padding-left: 0.65rem;
+      border-left: 4px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .exam-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .exam-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1.35rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+
+    .exam-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--accent-border);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .tag {
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+    }
+
+    .tag-ipa {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent-border);
+    }
+
+    .tag-ai {
+      background: var(--purple-soft);
+      color: var(--purple);
+      border: 1px solid rgba(124, 58, 237, 0.25);
+    }
+
+    .status-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+    }
+
+    .status-ready {
+      background: var(--emerald-soft);
+      color: var(--emerald);
+    }
+
+    .status-wip {
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .exam-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      margin-bottom: 0.45rem;
+      color: var(--text-primary);
+    }
+
+    .exam-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      flex: 1;
+      justify-content: center;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+      color: #ffffff;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 1rem;
+      }
+      .hero {
+        padding: 1.25rem 1.15rem;
+      }
+      .hero h1 {
+        font-size: 1.25rem;
+      }
+      .exam-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-  <p><a href="./SA%E5%AF%BE%E7%AD%96.html">システムアーキテクト試験 論文対策 総合攻略レポートを開く</a></p>
+  <header class="top-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-badge">STUDY HUB</span>
+        <span class="brand-title">資格試験 学習ポータル</span>
+      </div>
+      <button class="btn" id="btnTheme" title="ダークモード切替">🌙 ダーク</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>資格試験 総合学習リポジトリ</h1>
+      <p>
+        PC・iPhone・iPad からいつでも確認・復習できる資格試験対策ノート＆チートシート集です。暗記マスクモードやA4白黒印刷にも対応しています。
+      </p>
+    </section>
+
+    <h2 class="section-heading">収録中の資格試験</h2>
+
+    <section class="exam-grid">
+      <!-- 1. システムアーキテクト (SA) -->
+      <article class="exam-card">
+        <div>
+          <div class="card-top">
+            <span class="tag tag-ipa">IPA 情報処理技術者試験</span>
+            <span class="status-pill status-ready">Web版 公開中</span>
+          </div>
+          <h3 class="exam-title">システムアーキテクト (SA) 午後II 論文対策</h3>
+          <p class="exam-desc">
+            5G vRAN構成データ処理基盤を軸とした質問票・論文骨子・頻出6テーマ完全版論文・過去問全28問マッピング・本番実践マニュアル＆チートシート。
+          </p>
+        </div>
+        <div class="card-actions">
+          <a class="btn btn-primary" href="./SA%E5%AF%BE%E7%AD%96/SA%E5%AF%BE%E7%AD%96.html">📖 学習ページを開く</a>
+          <a class="btn" href="https://github.com/RIN-POKO/Studying_SystemArchitect/blob/main/SA%E5%AF%BE%E7%AD%96/SA%E5%AF%BE%E7%AD%96.md" target="_blank" rel="noopener">📝 MD</a>
+        </div>
+      </article>
+
+      <!-- 2. Claude Certified Architect - Foundations (CCA-F) -->
+      <article class="exam-card">
+        <div>
+          <div class="card-top">
+            <span class="tag tag-ai">Anthropic 認定資格</span>
+            <span class="status-pill status-ready">Web版 公開中</span>
+          </div>
+          <h3 class="exam-title">Claude Certified Architect - Foundations (CCA-F)</h3>
+          <p class="exam-desc">
+            エージェントアーキテクチャ、ツール設計とMCP統合、Claude Code設定、プロンプトエンジニアリング、コンテキスト管理、用語集・直前チェック。
+          </p>
+        </div>
+        <div class="card-actions">
+          <a class="btn btn-primary" href="./CCAR-F%E5%AF%BE%E7%AD%96_%E5%8E%9F%E6%9C%AC/CCA-F.html">📖 学習ページを開く</a>
+          <a class="btn" href="https://github.com/RIN-POKO/Studying_SystemArchitect/tree/main/CCAR-F%E5%AF%BE%E7%AD%96_%E5%8E%9F%E6%9C%AC/CCA-F" target="_blank" rel="noopener">📝 MD</a>
+        </div>
+      </article>
+
+      <!-- 今後の資格追加テンプレート:
+      <article class="exam-card">
+        <div>
+          <div class="card-top">
+            <span class="tag tag-ipa">カテゴリ</span>
+            <span class="status-pill status-ready">Web版 公開中</span>
+          </div>
+          <h3 class="exam-title">資格名</h3>
+          <p class="exam-desc">概要説明</p>
+        </div>
+        <div class="card-actions">
+          <a class="btn btn-primary" href="./フォルダ/ファイル.html">📖 学習ページを開く</a>
+        </div>
+      </article>
+      -->
+    </section>
+
+    <div class="footer-note">
+      PC / iPhone / iPad 対応 ・ Safariの「ホーム画面に追加」でアプリのように利用できます
+    </div>
+  </main>
+
+  <script>
+    const btnTheme = document.getElementById('btnTheme');
+    function applyTheme(dark) {
+      if (dark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        btnTheme.innerHTML = '☀️ ライト';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        btnTheme.innerHTML = '🌙 ダーク';
+      }
+    }
+    try {
+      if (localStorage.getItem('sa_theme') === 'dark') applyTheme(true);
+    } catch (e) {}
+
+    btnTheme.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      applyTheme(!isDark);
+      try { localStorage.setItem('sa_theme', !isDark ? 'dark' : 'light'); } catch (e) {}
+    });
+  </script>
 </body>
 </html>
