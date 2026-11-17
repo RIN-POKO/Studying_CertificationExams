@@ -332,11 +332,11 @@ flowchart LR
 | `-p`（`--print`） | 対話なしで実行し、結果を出して終了する | CI で使う |
 | `--system-prompt` / `--system-prompt-file` | 既定のシステムプロンプトを**置き換える** | ツールの使い方の指針、安全の指示、コーディングの規約がすべて消える。コーディング以外のエージェントなど、既定の振る舞いが合わないときに使う |
 | `--append-system-prompt` / `--append-system-prompt-file` | 既定のシステムプロンプトの末尾に**追加する** | 既定の指示は残る。コーディングアシスタントとして使いながら、指示や出力形式だけを足したいときはこちら |
-| `--bare` | スクリプトから速く起動するための最小構成。フック、スキル、カスタムコマンド、サブエージェント、プラグイン、MCP サーバー、自動メモリ、`CLAUDE.md` の自動検出をまとめて省く | 必要な指示や設定はフラグで明示的に渡す |
+| `--bare` | スクリプトから速く起動するための最小構成。フック、スキル、カスタムコマンド、サブエージェント、プラグイン、MCP サーバー、自動メモリ、`CLAUDE.md` の自動検出をまとめて省く | 必要な指示や設定はフラグ（`--settings` / `--mcp-config`）で明示的に渡す。サブスクリプションログインは使わず **`ANTHROPIC_API_KEY` が必須** |
 | `--max-turns` | エージェントのターン数を制限する。上限に達するとエラーで終了 | |
 | `--max-budget-usd` | API 呼び出しの推定支出が指定額に達したら止める | 推定はクライアント側なので、上限を多少超えることがある |
-| `--permission-mode dontAsk` | 事前に許可していないツールの使用を、確認なしで**拒否**する | |
-| `--output-format json` / `stream-json` | 出力の形式を決める | `--json-schema` と組み合わせて出力の形を固定できる |
+| `--permission-mode dontAsk` | 事前に許可していないツールの使用を、確認なしで**拒否**する | 権限モードは他に `Auto`（分類器が意図を事前検査し `Stop` フックが事後検査）や `bypassPermissions`（`--dangerously-skip-permissions`：隔離コンテナ・VM内限定）がある |
+| `--output-format json` / `stream-json` | 出力の形式を決める | `--json-schema` と組み合わせた構造化出力は JSON の `.structured_output` に入る。連続処理では `.session_id` を取得して `--resume` で引き継ぐ |
 | `--name`（`-n`）/ `--resume`（`-r`）/ `--continue`（`-c`） | セッションの名前付け・再開・直近の会話の再開 | 第1章 1-19 |
 
 ```mermaid
@@ -384,6 +384,8 @@ flowchart LR
 - 誤った指摘が多い種類には、「動作についての主張には、名前からの推測ではなく `file:line` の引用を求める」のように証拠を必須にすると、誤りが減ります。
 - `REVIEW.md` はプルリクエスト自身の変更ではなく、ベースブランチ（または既定のブランチ）から読まれます。
 - レビュー全体の丁寧さ（Quick・Standard・Deep）は、組織の Owner が設定するレビューのレベルで決まります。
+- GitHub Actions 連携（`/install-github-app` で `.github/workflows/claude.yaml` を作成、`anthropics/claude-code-action@v1`）では、`permissions` に `id-token: write` を設定し、`trigger_phrase`（既定 `@claude`）や `prompt`、`claude_args`（`--max-turns` 等）で制御します。
+- プラグイン（`.claude-plugin/plugin.json`）はスキル・`agents/`・`hooks/hooks.json`・`.mcp.json` をまとめて共有でき、`name` によりスキルが `/<plugin-name>:<skill-name>` に名前空間化されます。実行権限を引き継ぐため、導入前に必ず中身を検査します。
 
 ## まとめ：どう判断するか
 
