@@ -11,3 +11,4 @@ GitHub Pages で公開しており、PC・iPhone・iPad からいつでも閲覧
 | --- | --- | --- |
 | **IPA システムアーキテクト (SA) 午後II** | [`SA対策/`](./SA対策/) | 論文対策総合レポート（質問票・骨子・6テーマ論文・過去問28問マップ・チートシート）※Web版あり |
 | **Claude Certified Architect - Foundations (CCAR-F)** | [`CCAR-F対策/`](./CCAR-F対策/) | エージェント設計・ツール/MCP・Claude Code・プロンプト・コンテキスト管理・用語集・直前チェック ※Web版あり |
+| **Claude Certified Developer - Professional (CCDV-P)** | [`CCDV-P対策/`](./CCDV-P対策/) | 高度なマルチエージェント・本番統合/信頼性/検索・オブザーバビリティ・インシデント対応・評価・最適化・ガードレール・フリート運用 ※Web版あり |

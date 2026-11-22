@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    try {
+      var saved = localStorage.getItem("ccdvp_theme");
+      if (saved === "light" || saved === "dark") {
+        document.querySelector('meta[name="color-scheme"]').content = saved;
+      } else if (saved === "bw") {
+        document.querySelector('meta[name="color-scheme"]').content = "light";
+        document.documentElement.setAttribute("data-theme", "bw");
+      }
+    } catch (e) {}
+  </script>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Claude Certified Developer - Professional (CCDV-P) 対策ノート</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=M+PLUS+1+Code:wght@100..700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --target-size: 24px;
+      --bg-primary: light-dark(#f8fafc, #0b1120);
+      --bg-surface: light-dark(#ffffff, #1e293b);
+      --bg-subtle: light-dark(#f1f5f9, #0f172a);
+      --text-primary: light-dark(#0f172a, #f1f5f9);
+      --text-secondary: light-dark(#475569, #cbd5e1);
+      --text-muted: light-dark(#64748b, #94a3b8);
+      --border-color: light-dark(#e2e8f0, #334155);
+      --accent: light-dark(#0f766e, #2dd4bf);
+      --accent-soft: light-dark(#f0fdfa, rgba(45, 212, 191, 0.14));
+      --accent-border: light-dark(#99f6e4, rgba(45, 212, 191, 0.35));
+      --emerald: light-dark(#059669, #34d399);
+      --emerald-soft: light-dark(#ecfdf5, rgba(16, 185, 129, 0.15));
+      --amber: light-dark(#d97706, #fbbf24);
+      --amber-soft: light-dark(#fffbeb, rgba(245, 158, 11, 0.15));
+      --rose: light-dark(#e11d48, #fb7185);
+      --rose-soft: light-dark(#fff1f2, rgba(244, 63, 94, 0.15));
+      --blue: light-dark(#2563eb, #60a5fa);
+      --blue-soft: light-dark(#eff6ff, rgba(59, 130, 246, 0.15));
+      --code-bg: light-dark(#f1f5f9, #0f172a);
+      --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 10px -2px rgba(15, 23, 42, 0.1);
+      --radius: 12px;
+    }
+
+    :root:has(> head > meta[name="color-scheme"][content="dark"]) { color-scheme: dark; }
+    :root:has(> head > meta[name="color-scheme"][content="light"]) { color-scheme: light; }
+
+    @media (pointer: coarse) {
+      :root { --target-size: 44px; }
+    }
+
+    [data-theme="bw"] {
+      color-scheme: light !important;
+      --bg-primary: #ffffff;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f3f4f6;
+      --text-primary: #111827;
+      --text-secondary: #374151;
+      --text-muted: #4b5563;
+      --border-color: #9ca3af;
+      --accent: #111827;
+      --accent-soft: #f3f4f6;
+      --accent-border: #4b5563;
+      --emerald: #111827;
+      --emerald-soft: #e5e7eb;
+      --amber: #111827;
+      --amber-soft: #e5e7eb;
+      --rose: #111827;
+      --rose-soft: #f3f4f6;
+      --blue: #111827;
+      --blue-soft: #f3f4f6;
+      --code-bg: #f3f4f6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));
+    }
+
+    body {
+      font-family: "BIZ UDPGothic", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.75;
+      font-size: 15.5px;
+      overflow-wrap: break-word;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+      padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+    }
+
+    :where(a, code) { overflow-wrap: anywhere; }
+    :where(button, select, textarea, input:not([type="checkbox"], [type="radio"]), [role="button"], nav a) {
+      min-block-size: var(--target-size);
+      min-inline-size: var(--target-size);
+    }
+
+    .top-header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg-surface); border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 0.65rem 1.25rem;
+      padding-top: max(0.65rem, env(safe-area-inset-top, 0px));
+      padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+      padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+    }
+
+    .header-inner {
+      max-width: 1360px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.75rem; flex-wrap: wrap;
+    }
+
+    .brand { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }
+    .menu-toggle {
+      display: none; align-items: center; justify-content: center;
+      background: var(--bg-subtle); border: 1px solid var(--border-color);
+      color: var(--text-primary); width: 44px; height: 44px; border-radius: 8px;
+      font-size: 1.15rem; cursor: pointer; flex-shrink: 0; touch-action: manipulation;
+    }
+    .brand-badge {
+      background: var(--accent); color: #fff; font-weight: 700;
+      font-size: 0.76rem; padding: 0.25rem 0.6rem; border-radius: 6px; flex-shrink: 0;
+    }
+    [data-theme="light"] .brand-badge, :root:not([data-theme="bw"]) .brand-badge { color: #ffffff; }
+    .brand-title { font-size: 1.02rem; font-weight: 800; color: var(--text-primary); }
+
+    .controls { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
+    .search-box { position: relative; min-inline-size: 0; }
+    .search-box input {
+      background: var(--bg-subtle); border: 1px solid var(--border-color);
+      color: var(--text-primary); padding: 0.4rem 0.75rem; border-radius: 8px;
+      font-size: 0.88rem; width: 210px; outline: none;
+    }
+    .search-box input:focus { border-color: var(--accent); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;
+      background: var(--bg-subtle); color: var(--text-secondary);
+      border: 1px solid var(--border-color); padding: 0.4rem 0.75rem;
+      border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      touch-action: manipulation; text-decoration: none;
+      transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+    }
+    .btn:hover { border-color: var(--accent); color: var(--accent); }
+    .btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-border); }
+    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-primary:hover { color: #fff; opacity: 0.92; }
+    .btn-sm { font-size: 0.78rem; padding: 0.3rem 0.65rem; }
+
+    .tablist-bar { max-width: 1360px; margin: 0.75rem auto 0; padding: 0 1.25rem; display: none; }
+    .tablist-scroll {
+      display: flex; gap: 0.35rem; overflow-x: auto; scroll-snap-type: inline proximity;
+      scrollbar-width: none; -webkit-overflow-scrolling: touch; border-bottom: 1px solid var(--border-color);
+    }
+    .tablist-scroll::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex: none; scroll-snap-align: start; position: relative;
+      background: transparent; border: none; color: var(--text-secondary);
+      padding: 0.5rem 0.85rem; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      white-space: nowrap; touch-action: manipulation;
+    }
+    .tab-btn[aria-selected="true"] { color: var(--accent); }
+    .tab-btn[aria-selected="true"]::after {
+      content: ""; position: absolute; inset: auto 0 0; border-block-end: 3px solid var(--accent);
+    }
+
+    .layout {
+      max-width: 1360px; margin: 0 auto; padding: 1.5rem 1.25rem;
+      display: grid; grid-template-columns: 270px 1fr; gap: 1.75rem; align-items: start;
+    }
+
+    .sidebar {
+      position: sticky; top: 4.75rem; background: var(--bg-surface);
+      border: 1px solid var(--border-color); border-radius: var(--radius);
+      padding: 1rem; box-shadow: var(--shadow-sm);
+      max-height: calc(100vh - 6rem); overflow-y: auto;
+    }
+    .sidebar-header-mobile { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+    .sidebar-title {
+      font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--text-muted); font-weight: 700; padding: 0 0.5rem;
+    }
+    .sidebar-close {
+      display: none; background: var(--bg-subtle); border: 1px solid var(--border-color);
+      color: var(--text-secondary); border-radius: 6px; padding: 0.3rem 0.65rem;
+      font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    }
+    .nav-list { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
+    .nav-link {
+      display: flex; align-items: center; padding: 0.45rem 0.65rem; border-radius: 8px;
+      color: var(--text-secondary); text-decoration: none; font-size: 0.84rem; font-weight: 500;
+      transition: all 0.15s;
+    }
+    .nav-link:hover { background: var(--bg-subtle); color: var(--accent); }
+    .nav-link.active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+
+    .sidebar-backdrop {
+      display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5);
+      z-index: 190; backdrop-filter: blur(2px);
+    }
+    .sidebar-backdrop.open { display: block; }
+
+    .main-content { min-width: 0; }
+    .panel-card {
+      background: var(--bg-surface); border: 1px solid var(--border-color);
+      border-radius: var(--radius); padding: 1.75rem 2rem; box-shadow: var(--shadow-sm);
+    }
+
+    .md-body h1 {
+      font-size: 1.55rem; font-weight: 800; margin-bottom: 1rem;
+      padding-bottom: 0.6rem; border-bottom: 2px solid var(--border-color); text-wrap: balance;
+    }
+    .md-body h2 {
+      font-size: 1.25rem; font-weight: 800; margin: 2rem 0 0.85rem;
+      padding-left: 0.65rem; border-left: 4px solid var(--accent); text-wrap: balance;
+    }
+    .md-body h3 { font-size: 1.08rem; font-weight: 700; margin: 1.5rem 0 0.6rem; color: var(--text-primary); text-wrap: balance; }
+    .md-body h4 { font-size: 0.98rem; font-weight: 700; margin: 1.1rem 0 0.45rem; }
+    .md-body p { margin-bottom: 0.85rem; text-wrap: pretty; }
+    .md-body li { margin-bottom: 0.4rem; text-wrap: pretty; }
+    .md-body ul, .md-body ol { margin: 0.5rem 0 1rem 1.5rem; }
+    .md-body hr { border: none; border-top: 1px solid var(--border-color); margin: 1.75rem 0; }
+    .md-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+    .md-body code {
+      background: var(--code-bg); padding: 0.12rem 0.35rem; border-radius: 5px;
+      font-family: "M PLUS 1 Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88em; border: 1px solid var(--border-color);
+    }
+    .code-block {
+      background: var(--code-bg); border: 1px solid var(--border-color); border-radius: 10px;
+      padding: 0.95rem 1.1rem; overflow-x: auto; margin: 0.85rem 0 1.1rem; font-size: 0.86rem; line-height: 1.55;
+    }
+    .code-block code { background: none; border: none; padding: 0; font-size: inherit; }
+
+    .alert {
+      border-radius: 10px; padding: 0.95rem 1.15rem; margin: 1rem 0;
+      border: 1px solid var(--border-color); border-left-width: 4px;
+    }
+    .alert p:last-child { margin-bottom: 0; }
+    .alert-title { font-weight: 800; font-size: 0.88rem; margin-bottom: 0.35rem; }
+    .alert-tip { background: var(--emerald-soft); border-color: var(--emerald); }
+    .alert-tip .alert-title { color: var(--emerald); }
+    .alert-note { background: var(--blue-soft); border-color: var(--blue); }
+    .alert-note .alert-title { color: var(--blue); }
+    .alert-important { background: var(--accent-soft); border-color: var(--accent); }
+    .alert-important .alert-title { color: var(--accent); }
+    .alert-warning { background: var(--amber-soft); border-color: var(--amber); }
+    .alert-warning .alert-title { color: var(--amber); }
+    .alert-caution { background: var(--rose-soft); border-color: var(--rose); }
+    .alert-caution .alert-title { color: var(--rose); }
+
+    blockquote {
+      border-left: 4px solid var(--border-color); padding: 0.5rem 1rem; margin: 0.85rem 0;
+      color: var(--text-secondary); background: var(--bg-subtle); border-radius: 0 8px 8px 0;
+    }
+
+    .mermaid-wrap {
+      background: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: 10px;
+      padding: 1rem; margin: 1rem 0 1.25rem; overflow-x: auto;
+      -webkit-overflow-scrolling: touch; scrollbar-width: thin; text-align: center;
+    }
+    .mermaid-wrap svg { height: auto; max-width: none; overflow: visible; }
+    .mermaid foreignObject { overflow: visible; }
+    .mermaid .nodeLabel, .mermaid .edgeLabel { line-height: 1.4; }
+
+    .table-wrapper {
+      overflow: auto; max-inline-size: 100%; margin: 1rem 0 1.25rem;
+      border: 1px solid var(--border-color); border-radius: 10px;
+      container-type: inline-size; scrollbar-width: thin;
+    }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.9rem; }
+    th, td { padding: 0.65rem 0.9rem; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+    thead th { position: sticky; inset-block-start: 0; z-index: 1; background: var(--bg-subtle); font-weight: 700; color: var(--text-primary); }
+    tbody th { font-weight: 700; color: var(--text-primary); background: var(--bg-surface); }
+    tbody tr:last-child th, tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover th, tbody tr:hover td { background: var(--accent-soft); }
+
+    .qa-header { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin: 2rem 0 0.85rem; flex-wrap: wrap; }
+    .qa-header h2 { margin: 0; }
+    .qa-details { border: 1px solid var(--border-color); border-radius: 10px; margin: 0.5rem 0 1.15rem; background: var(--bg-subtle); }
+    .qa-details > summary {
+      list-style: none; display: flex; align-items: center; gap: 0.5ch;
+      padding: 0.65rem 1rem; font-weight: 700; font-size: 0.92rem; color: var(--accent);
+      cursor: pointer; user-select: none;
+    }
+    .qa-details > summary::-webkit-details-marker { display: none; }
+    .qa-details > summary::before { content: "▶"; font-size: 0.75em; display: inline-block; transition: rotate 0.2s; }
+    .qa-details[open] > summary::before { rotate: 90deg; }
+    .qa-details::details-content { interpolate-size: allow-keywords; overflow: clip; contain: layout; }
+    .qa-details:not([open])::details-content { block-size: 0; }
+    @media (prefers-reduced-motion: no-preference) {
+      .qa-details::details-content { transition: block-size 0.25s ease-in-out, content-visibility 0.25s ease-in-out; transition-behavior: allow-discrete; }
+    }
+    .details-body { padding: 0 1rem 0.9rem; border-top: 1px solid var(--border-color); padding-top: 0.75rem; }
+    .details-body p:last-child { margin-bottom: 0; }
+
+    .kw-mask { border-radius: 4px; padding: 0.05rem 0.25rem; transition: all 0.15s; }
+    body.memorize-mode .kw-mask {
+      background: var(--accent); color: transparent; cursor: pointer;
+      user-select: none; -webkit-user-select: none; display: inline;
+      box-decoration-break: clone; -webkit-box-decoration-break: clone;
+    }
+    body.memorize-mode .kw-mask * { visibility: hidden; }
+    body.memorize-mode .kw-mask.revealed { background: var(--amber-soft); color: var(--amber); font-weight: 700; }
+    body.memorize-mode .kw-mask.revealed * { visibility: visible; }
+    @media (hover: hover) {
+      body.memorize-mode .kw-mask:hover { background: var(--amber-soft); color: var(--amber); font-weight: 700; }
+      body.memorize-mode .kw-mask:hover * { visibility: visible; }
+    }
+
+    .chapter-pager {
+      display: flex; justify-content: space-between; gap: 0.75rem;
+      margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border-color); flex-wrap: wrap;
+    }
+
+    .search-status {
+      display: none; background: var(--accent-soft); border: 1px solid var(--accent-border);
+      color: var(--text-primary); border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.9rem;
+    }
+    .search-status.visible { display: block; }
+    mark.search-hit { background: #fde047; color: #0f172a; padding: 0 2px; border-radius: 3px; }
+
+    .fab-top {
+      position: fixed; right: max(1rem, env(safe-area-inset-right, 0px));
+      bottom: max(1rem, env(safe-area-inset-bottom, 0px)); z-index: 150;
+      width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: #fff;
+      border: none; box-shadow: var(--shadow-md); font-size: 1.1rem; font-weight: 700;
+      cursor: pointer; display: none; align-items: center; justify-content: center; touch-action: manipulation;
+    }
+    .fab-top.visible { display: flex; }
+
+    @media (max-width: 960px) {
+      .tablist-bar { display: block; }
+      .layout { grid-template-columns: 1fr; padding: 1rem; }
+      .menu-toggle { display: inline-flex; }
+      .sidebar {
+        position: fixed; top: 0; left: 0; bottom: 0; width: min(300px, 84vw); max-height: 100vh;
+        z-index: 200; border-radius: 0 14px 14px 0;
+        padding-top: max(1rem, env(safe-area-inset-top, 0px));
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+        transform: translateX(-105%); transition: transform 0.25s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-close { display: inline-block; }
+    }
+
+    @media (max-width: 640px) {
+      .top-header { padding: 0.6rem 0.85rem; padding-top: max(0.6rem, env(safe-area-inset-top, 0px)); }
+      .brand-title { font-size: 0.95rem; line-height: 1.3; white-space: normal; }
+      .controls { width: 100%; }
+      .search-box { flex: 1 1 100%; }
+      .search-box input { width: 100%; font-size: 16px; padding: 0.5rem 0.75rem; }
+      .btn-print-hide { display: none; }
+      .panel-card { padding: 1.15rem 1rem; }
+      .md-body h1 { font-size: 1.3rem; }
+      .md-body h2 { font-size: 1.12rem; }
+      th, td { padding: 0.55rem 0.65rem; font-size: 0.84rem; }
+    }
+
+    @page { size: A4 portrait; margin: 12mm 13mm; }
+
+    @media print {
+      :root, :root:has(> head > meta[name="color-scheme"][content="dark"]) {
+        color-scheme: light !important;
+        --bg-primary: #ffffff !important; --bg-surface: #ffffff !important; --bg-subtle: #f8fafc !important;
+        --text-primary: #0f172a !important; --text-secondary: #334155 !important; --text-muted: #475569 !important;
+        --border-color: #cbd5e1 !important; --code-bg: #f8fafc !important;
+      }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      body { background: #fff !important; color: #0f172a !important; font-size: 9.5pt !important; line-height: 1.6 !important; padding: 0 !important; }
+      .top-header, .tablist-bar, .sidebar, .sidebar-backdrop, .chapter-pager, .fab-top, .qa-toggle-all, .search-status { display: none !important; }
+      .layout { display: block !important; padding: 0 !important; max-width: 100% !important; }
+      .panel-card { border: none !important; box-shadow: none !important; padding: 0 !important; }
+      .table-wrapper { overflow: visible !important; }
+      table { font-size: 8.3pt !important; }
+      thead { display: table-header-group; }
+      tr, .alert, .qa-details, .mermaid-wrap { break-inside: avoid; }
+      h1, h2, h3, h4 { break-after: avoid; }
+      th, td { white-space: normal !important; padding: 4pt 6pt !important; }
+      body.memorize-mode .kw-mask { background: #f3f4f6 !important; color: #111827 !important; border-bottom: 1px solid #111827; }
+      body.memorize-mode .kw-mask * { visibility: visible !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-header">
+    <div class="header-inner">
+      <div class="brand">
+        <button type="button" class="menu-toggle" id="btnMenu" aria-label="目次を開く">☰</button>
+        <span class="brand-badge">CCDV-P</span>
+        <span class="brand-title">Claude Certified Developer - Professional 対策ノート</span>
+      </div>
+      <div class="controls">
+        <div class="search-box">
+          <input type="search" id="searchInput" placeholder="全章キーワード検索...">
+        </div>
+        <button type="button" class="btn" id="btnMemorize" title="直前チェック・用語集を隠して暗記テスト">🎯 暗記マスク</button>
+        <button type="button" class="btn" id="btnTheme" title="ダークモード切替">🌙 テーマ</button>
+        <button type="button" class="btn" id="btnBW" title="白黒印刷用モノクロモード">⬛ 白黒</button>
+        <button type="button" class="btn btn-print-hide" onclick="window.print()" title="表示中の章をA4印刷">🖨️ 印刷</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tablist-bar" aria-label="章の切り替え">
+    <div class="tablist-scroll" role="tablist" aria-label="章タブ">
+      <button type="button" class="tab-btn" id="tab-sec-readme" role="tab" aria-selected="true" data-sec="sec-readme" focusgroupstart>はじめに（全体像・学び方）</button><button type="button" class="tab-btn" id="tab-sec-ch1" role="tab" aria-selected="false" data-sec="sec-ch1">第1章 高度なエージェント設計</button><button type="button" class="tab-btn" id="tab-sec-ch2" role="tab" aria-selected="false" data-sec="sec-ch2">第2章 本番統合・信頼性・検索</button><button type="button" class="tab-btn" id="tab-sec-ch3" role="tab" aria-selected="false" data-sec="sec-ch3">第3章 オブザーバビリティ</button><button type="button" class="tab-btn" id="tab-sec-ch4" role="tab" aria-selected="false" data-sec="sec-ch4">第4章 デバッグ・インシデント</button><button type="button" class="tab-btn" id="tab-sec-ch5" role="tab" aria-selected="false" data-sec="sec-ch5">第5章 評価エンジニアリング</button><button type="button" class="tab-btn" id="tab-sec-ch6" role="tab" aria-selected="false" data-sec="sec-ch6">第6章 コストとレイテンシ最適化</button><button type="button" class="tab-btn" id="tab-sec-ch7" role="tab" aria-selected="false" data-sec="sec-ch7">第7章 ガードレール・セキュリティ</button><button type="button" class="tab-btn" id="tab-sec-ch8" role="tab" aria-selected="false" data-sec="sec-ch8">第8章 フリート運用</button><button type="button" class="tab-btn" id="tab-sec-glossary" role="tab" aria-selected="false" data-sec="sec-glossary">用語集</button><button type="button" class="tab-btn" id="tab-sec-check" role="tab" aria-selected="false" data-sec="sec-check">直前チェック</button>
+    </div>
+  </nav>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header-mobile">
+        <div class="sidebar-title">目次ナビゲーション</div>
+        <button type="button" class="sidebar-close" id="btnCloseMenu">✕ 閉じる</button>
+      </div>
+      <ul class="nav-list">
+        <li><a class="nav-link" href="../index.html" style="font-weight: 700; color: var(--accent);">← 資格一覧へ戻る</a></li><li><a class="nav-link active" href="#sec-readme" data-sec="sec-readme">はじめに（全体像・学び方）</a></li><li><a class="nav-link" href="#sec-ch1" data-sec="sec-ch1">第1章 高度なエージェント設計</a></li><li><a class="nav-link" href="#sec-ch2" data-sec="sec-ch2">第2章 本番統合・信頼性・検索</a></li><li><a class="nav-link" href="#sec-ch3" data-sec="sec-ch3">第3章 オブザーバビリティ</a></li><li><a class="nav-link" href="#sec-ch4" data-sec="sec-ch4">第4章 デバッグ・インシデント</a></li><li><a class="nav-link" href="#sec-ch5" data-sec="sec-ch5">第5章 評価エンジニアリング</a></li><li><a class="nav-link" href="#sec-ch6" data-sec="sec-ch6">第6章 コストとレイテンシ最適化</a></li><li><a class="nav-link" href="#sec-ch7" data-sec="sec-ch7">第7章 ガードレール・セキュリティ</a></li><li><a class="nav-link" href="#sec-ch8" data-sec="sec-ch8">第8章 フリート運用</a></li><li><a class="nav-link" href="#sec-glossary" data-sec="sec-glossary">用語集</a></li><li><a class="nav-link" href="#sec-check" data-sec="sec-check">直前チェック</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+      <div class="search-status" id="searchStatus"></div>
+
+      <section class="chapter-panel" id="sec-readme" role="tabpanel" aria-labelledby="tab-sec-readme" tabindex="0">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>本番環境で Claude を運用する8つの技能</h1>
+<p>Claude Certified Developer – Professional (CCDV-P) の対策教材です。単なるプロトタイプやチャットボットの構築にとどまらず、本番環境で大規模に稼働する Claude アプリケーションとエージェントの <strong>信頼性・品質・コスト・安全性・フリート運用</strong> に責任を持つエンジニア向けの知識を体系化しています。</p>
+<p>読み終えると、次の8つの領域で実務的かつ試験基準に沿った判断ができるようになります。</p>
+<ul><li>マルチエージェントの障害分離、状態永続化、コンテキストとメモリの最適化を設計する</li><li>障害種別に応じたリトライ／フォールバック、レート制限、MCP 運用、大規模検索を設計する</li><li>分散トレース、ZDR 下のログ設計、SLI/SLO、大規模トレースのコホート分析を実装する</li><li>マルチターン／マルチエージェントの非決定的な障害を切り分け、インシデント対応とポストモーテムを主導する</li><li>ゴールデンセット、CI/CD 評価ゲート、キャリブレーション済み LLM-as-judge、オンライン評価を構築する</li><li>モデルルーティング、Prompt Caching、Batch API、ストリーミング、<code>output_config.effort</code> でコストとレイテンシを最適化する</li><li>多層ランタイムガードレール、敵対的入力（プロンプトインジェクション等）への防御、ID・シークレット・監査を実装する</li><li>並列コーディングエージェント、AI コードレビュー、無人実行、組織ガバナンスを運用する</li></ul>
+<h2>試験の概要（公式試験ガイド v1.0 / 2026年11月発効より）</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-readme-tbl-1"><table><thead><tr><th scope="col">項目</th><th scope="col">内容</th></tr></thead><tbody><tr><th scope="row">資格名</th><td>Claude Certified Developer – Professional</td></tr><tr><th scope="row">試験コード</th><td><code>CCDV-P</code></td></tr><tr><th scope="row">問題数・形式</th><td>70問（うち <strong>60問が採点対象</strong>、10問が採点対象外で非明示）・シナリオに基づく択一式および複数選択式</td></tr><tr><th scope="row">試験時間</th><td>120分</td></tr><tr><th scope="row">合格ライン</th><td>スケールスコア 100〜1,000 のうち <strong>720</strong>（基準準拠型評価）</td></tr><tr><th scope="row">実施方法</th><td>監督付き：オンライン監督付き（Pearson VUE OnVUE）またはテストセンター</td></tr><tr><th scope="row">前提条件</th><td>なし（<code>CCDV-F</code> は準備として推奨されるが必須ではない）</td></tr><tr><th scope="row">受験料・有効期間</th><td>$175 USD / 取得日から12か月（期限内は Partner Academy の無料・監督なしアセスメントで更新可能）</td></tr></tbody></table></div>
+<h3>8つの試験分野と配点比率</h3>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-readme-tbl-2"><table><thead><tr><th scope="col">章</th><th scope="col">分野名</th><th scope="col">配点比率</th></tr></thead><tbody><tr><th scope="row">第1章</th><td>高度なエージェントアーキテクチャとオーケストレーション</td><td><strong>17%</strong></td></tr><tr><th scope="row">第2章</th><td>本番環境の統合、信頼性、知識グラウンディング</td><td><strong>20%</strong></td></tr><tr><th scope="row">第3章</th><td>オブザーバビリティと本番環境のモニタリング</td><td><strong>12%</strong></td></tr><tr><th scope="row">第4章</th><td>高度なデバッグとインシデント対応</td><td><strong>10%</strong></td></tr><tr><th scope="row">第5章</th><td>評価エンジニアリングと品質保証</td><td><strong>12%</strong></td></tr><tr><th scope="row">第6章</th><td>大規模環境でのコストとレイテンシの最適化</td><td><strong>8%</strong></td></tr><tr><th scope="row">第7章</th><td>ランタイムガードレールと本番環境のセキュリティ</td><td><strong>11%</strong></td></tr><tr><th scope="row">第8章</th><td>ソフトウェア提供のためのエージェントフリート運用</td><td><strong>10%</strong></td></tr></tbody></table></div>
+<div class="alert alert-note"><div class="alert-title">📝 メモ</div><p>公式の無料対策コース（Skilljar「<a href="https://anthropic-partners.skilljar.com/path/claude-certified-developer-professional-prep-course-japanese" target="_blank" rel="noopener">Claude Certified Developer – Professional 対策コース</a>」全8コース：本番環境での統合・信頼性・ナレッジグラウンディング、高度なエージェントアーキテクチャとオーケストレーション、オブザーバビリティと本番環境のモニタリング、評価エンジニアリングと品質保証、ランタイムガードレールと本番環境のセキュリティ、高度なデバッグとインシデント対応、ソフトウェアデリバリーのためのエージェントフリート運用、大規模環境でのコストとレイテンシの最適化）の学習目標・出題分野別リソース（Claude Platform docs、Engineering 記事、Claude Cookbook）を、本試験の8分野構成に沿って整理しています。</p></div>
+<h2>教材の構成</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-readme-tbl-3"><table><thead><tr><th scope="col">種類</th><th scope="col">中身</th><th scope="col">使いどころ</th></tr></thead><tbody><tr><th scope="row">第1章〜第8章</th><td>各分野の本編。たとえ・図解・比較表・実装判断・確認問題</td><td>分野別の体系的な学習</td></tr><tr><th scope="row"><a href="#sec-glossary" class="internal-link" data-jump="sec-glossary">用語集</a></th><td>試験で頻出する専門用語の意味と、混同しやすいポイント</td><td>曖昧な用語の確認</td></tr><tr><th scope="row"><a href="#sec-check" class="internal-link" data-jump="sec-check">直前チェック</a></th><td>8分野の二択判断表と、公式サンプル問題3問の完全解説</td><td>試験直前の総仕上げ</td></tr></tbody></table></div>
+<h2>学び方</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+  A[① たとえ・要点3つ・用語を読む] --&gt; B[② 本編を節ごとに読む]
+  B --&gt; C[③ まとめ判断表を自分の言葉で説明する]
+  C --&gt; D[④ 確認問題を解く]
+  D --&gt;|間違えた| B</pre></div>
+<ol><li>各章の冒頭にある「たとえ」「要点3つ」「用語」を読み、全体の地図を頭に入れます。</li><li>本編を節ごとに読みます。特に「なぜその選択肢がダメで、どれを選ぶべきか」の根拠を押さえます。</li><li>「まとめ：どう判断するか」の表を、自分の言葉で説明してみます。</li><li>確認問題（シナリオ形式）を、解答を開く前に解きます。誤答の理由まで理解できると本番で迷いません。</li></ol>
+<h2>進める順番と時間の目安</h2>
+<p>配点比率の高い <strong>第2章（20%）</strong> と <strong>第1章（17%）</strong> が土台になります。1日1〜2章のペースで進めると、約1週間で一周できます。</p>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-readme-tbl-4"><table><thead><tr><th scope="col">順</th><th scope="col">ノート</th><th scope="col">配点</th><th scope="col">目安</th></tr></thead><tbody><tr><th scope="row">1</th><td><a href="#sec-ch1" class="internal-link" data-jump="sec-ch1">第1章 高度なエージェントアーキテクチャとオーケストレーション</a></td><td>17%</td><td>75分</td></tr><tr><th scope="row">2</th><td><a href="#sec-ch2" class="internal-link" data-jump="sec-ch2">第2章 本番環境の統合・信頼性・知識グラウンディング</a></td><td>20%</td><td>85分</td></tr><tr><th scope="row">3</th><td><a href="#sec-ch3" class="internal-link" data-jump="sec-ch3">第3章 オブザーバビリティと本番環境のモニタリング</a></td><td>12%</td><td>60分</td></tr><tr><th scope="row">4</th><td><a href="#sec-ch4" class="internal-link" data-jump="sec-ch4">第4章 高度なデバッグとインシデント対応</a></td><td>10%</td><td>55分</td></tr><tr><th scope="row">5</th><td><a href="#sec-ch5" class="internal-link" data-jump="sec-ch5">第5章 評価エンジニアリングと品質保証</a></td><td>12%</td><td>65分</td></tr><tr><th scope="row">6</th><td><a href="#sec-ch6" class="internal-link" data-jump="sec-ch6">第6章 大規模環境でのコストとレイテンシの最適化</a></td><td>8%</td><td>50分</td></tr><tr><th scope="row">7</th><td><a href="#sec-ch7" class="internal-link" data-jump="sec-ch7">第7章 ランタイムガードレールと本番環境のセキュリティ</a></td><td>11%</td><td>65分</td></tr><tr><th scope="row">8</th><td><a href="#sec-ch8" class="internal-link" data-jump="sec-ch8">第8章 ソフトウェア提供のためのエージェントフリート運用</a></td><td>10%</td><td>60分</td></tr></tbody></table></div>
+<p>全部終えたら <a href="#sec-check" class="internal-link" data-jump="sec-check">直前チェック</a> で最終確認を行ってください。</p>
+<h2>本試験で繰り返し問われる5つの判断軸</h2>
+<ol><li><strong>失敗の種類を切り分ける</strong>：レート制限・長さ超過・安全性拒否・検索ミス・ツール故障は原因が異なるため、単一の雑なリトライやプロンプト修正で済ませない。</li><li><strong>プロンプトに頼らず決定論的に強制する</strong>：セキュリティ境界、不可逆な操作、順序制約はモデルの「お願い」ではなく、フック・ゲート・権限・サンドボックスで封じる。</li><li><strong>測定とキャリブレーションが先</strong>：LLM-as-judge も SLO も、人間のラベルや実際のトレースに照らして校正されるまではゲート権限を与えない。</li><li><strong>コンテキストとキャッシュを資産として設計する</strong>：長いセッションでは Compaction / Editing・外部メモリ・<code>tool_search</code> を組み合わせ、キャッシュプレフィックスを壊さない。</li><li><strong>自動化を段階的に信頼する</strong>：AI コードレビューや自律エージェントは、シャドーモード → キャリブレーション → 人間による承認ゲート（HITL）の順で権限を広げる。</li></ol>
+          </div>
+          <div class="chapter-pager">
+            <span></span>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch1">第1章 高度なエージェント設計 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch1" role="tabpanel" aria-labelledby="tab-sec-ch1" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第1章 高度なエージェントアーキテクチャとオーケストレーション（配点 17%）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：大規模プロジェクトの「プロジェクトマネージャー」と「各専門チーム」</strong></p>
+<p>1人の担当者に全工程と全資料を抱えさせると、机（コンテキストウィンドウ）がパンクし、停電（プロセス再起動）が起きれば最初からやり直しになります。本番のエージェント運用では、仕事を適切に分割して独立した作業室（コンテキスト分離）で動かし、進捗を日誌（チェックポイント／永続メモリ）に刻み、要所だけ承認（Human-in-the-Loop）を挟む設計が求められます。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>本番環境のマルチエージェント設計で、障害分離・通信境界・承認フローを正しく構成できる。</li><li>中断・再起動・モデル変更に耐えるセッション永続化とチェックポイント設計ができる。</li><li>コスト・信頼性・品質データに基づき、ワークフロー型とエージェント型の移行、およびハーネス選定ができる。</li><li>コンテキスト上限やコスト上限に近づいた長時間エージェントに対し、Compaction・Context Editing・永続メモリ・キャッシュ維持・大規模ツールカタログ管理を適切に組み合わせられる。</li></ul>
+<h2>要点3つ</h2>
+<ol><li><strong>エージェント間の委任はコンテキスト分離の境界になる。</strong> サブエージェントは親の会話履歴を自動共有しないため、必要な前提・出典・出力形式を明示して渡し、障害もサブエージェント単位で封じ込める。</li><li><strong>長時間稼働エージェントの命綱は「外出しした状態」である。</strong> メモリや会話履歴だけに状態を置かず、チェックポイント・構造化状態・セッション永続化によって、中断やモデル更新後も安全に再開できるようにする。</li><li><strong>コンテキストは「要約・削除・外出し・キャッシュ維持」の4手で守る。</strong> Context Compaction（要約）、Context Editing（古いツール結果・思考ブロックの除去）、永続メモリ（ファイル／DB）、<code>tool_search</code>（大規模ツールの遅延ロード）を使い分け、途中の指示変更でキャッシュプレフィックスを壊さない。</li></ol>
+<h2>30秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+  U[利用者 / イベント] --&gt; S[スーパーバイザー&lt;br&gt;分解・承認・集約]
+  S --&gt;|分離された委任| W1[ワーカーA&lt;br&gt;並列ディスパッチ]
+  S --&gt;|分離された委任| W2[ワーカーB&lt;br&gt;並列ディスパッチ]
+  W1 --&gt;|構造化結果| S
+  W2 --&gt;|構造化結果| S
+  S &lt;--&gt; CP[(チェックポイント / 永続メモリ)]
+  S --&gt;|高リスク操作| HITL{Human-in-the-Loop&lt;br&gt;承認ゲート}</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch1-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">スーパーバイザー／ワーカー階層</th><td>親が計画・委任・集約を担い、子が個別タスクを実行する階層構造</td></tr><tr><th scope="row">コンテキスト分離</th><td>サブエージェントごとに独立した会話履歴を持たせ、無関係な情報やノイズの混入を防ぐ境界</td></tr><tr><th scope="row">Human-in-the-Loop (HITL)</th><td>不可逆・高リスクな操作の前に人間の承認を必須とする制御フロー</td></tr><tr><th scope="row">チェックポイント</th><td>実行途中の状態・完了済みステップ・中間成果物を外部ストレージへ保存する仕組み</td></tr><tr><th scope="row">ワークフロー型パターン</th><td>実行経路がコードで事前に定義された決定論的なパイプライン（Routing, Prompt Chaining 等）</td></tr><tr><th scope="row">エージェント型パターン</th><td>モデルが状況に応じて次のツールや手順を動的に選択する自律ループ</td></tr><tr><th scope="row">Claude Managed Agents</th><td>Anthropic がホストするクラウドサンドボックス・状態管理・セッション永続化を備えたマネージド実行基盤</td></tr><tr><th scope="row">Agent SDK</th><td>ループ制御・ツール実行・セッション管理・フックを提供する開発者向け SDK</td></tr><tr><th scope="row">Context Compaction</th><td>長い会話履歴を要約に置き換えてコンテキストウィンドウ内に収める手法（API の <code>compact_20260112</code> 等）</td></tr><tr><th scope="row">Context Editing</th><td>古い <code>tool_result</code> や <code>thinking</code> ブロックをルールベースで削除するサーバーサイド機能（<code>context_management</code>）</td></tr><tr><th scope="row"><code>tool_search</code> / <code>defer_loading</code></th><td>数十〜数百のツール定義を初期コンテキストに載せず、必要なツールだけを動的に検索・ロードする手法</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>1-1 マルチエージェントのオーケストレーション</h3>
+<p>本番のマルチエージェントでは、「何人でどう分けるか」だけでなく <strong>「どこで失敗が止まるか（障害の封じ込め）」</strong> を設計します。</p>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch1-tbl-2"><table><thead><tr><th scope="col">パターン</th><th scope="col">適した場面</th><th scope="col">注意点・障害モード</th></tr></thead><tbody><tr><th scope="row"><strong>スーパーバイザー／ワーカー階層</strong></th><td>複合タスクの分解・進捗管理・結果統合が必要</td><td>スーパーバイザーがボトルネック化しやすい。ワーカーの途中経過は親に自動共有されない</td></tr><tr><th scope="row"><strong>並列サブエージェントディスパッチ</strong></th><td>互いに依存しない調査・ファイル処理・評価の同時実行</td><td>依存関係のあるタスクを並列化すると不整合が起きる。個別ワーカーの部分失敗を許容する集約設計が必要</td></tr><tr><th scope="row"><strong>エージェント間直接通信（メッシュ）</strong></th><td>対等なピア同士の交渉・反復レビュー</td><td>循環呼び出し（無限ループ）や状態発散のリスクが高い。本番ではスーパーバイザー経由のハブ＆スポークが原則</td></tr></tbody></table></div>
+<h4>コンテキスト分離と委任の境界</h4>
+<ul><li><strong>なぜ分離するのか</strong>: 大量の検索結果やログを1つのコンテキストに積むと「コンテキスト汚染（Context Rot）」が起き、モデルの判断精度が低下する。</li><li><strong>委任時に渡すもの</strong>: サブエージェントは親の履歴を見ないため、タスクの目的・制約・必要なIDや抜粋・期待する出力スキーマを明示的に渡す。</li><li><strong>承認フロー (HITL)</strong>: 返金実行、本番 DB 更新、外部メール送信などの高リスク操作は、ワーカーに自律実行させず、実行前に一時停止（suspend）して人間の承認を待つ。</li></ul>
+<div class="alert alert-important"><div class="alert-title">📌 重要</div><p>ワーカーの1つがタイムアウトやエラーで落ちても、スーパーバイザー全体がクラッシュしないよう、構造化されたエラーを返して「部分的成功の継続」または「該当タスクのみ再委任」できる設計にする。</p></div>
+<h3>1-2 耐久性のある実行と状態管理</h3>
+<p>長時間稼働するエージェントは、ネットワーク断、プロセス再起動、ワーカーのタイムアウト、さらには <strong>稼働中のモデルバージョン更新</strong> に直面します。</p>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  A[ステップ開始] --&gt; B[チェックポイント読込]
+  B --&gt; C{完了済み?}
+  C --&gt;|Yes| D[保存済み結果を使用]
+  C --&gt;|No| E[ツール / モデル実行]
+  E --&gt; F[べき等性キーで副作用保護]
+  F --&gt; G[チェックポイント保存]
+  G --&gt; H[次ステップへ]</pre></div>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch1-tbl-3"><table><thead><tr><th scope="col">要件</th><th scope="col">実装パターン</th><th scope="col">避けるべきアンチパターン</th></tr></thead><tbody><tr><th scope="row"><strong>セッションの永続化</strong></th><td>会話履歴・状態・メタデータを DB やマネージドセッションに保存し、プロセス再起動後も復元</td><td>インメモリ変数だけに会話配列を保持する</td></tr><tr><th scope="row"><strong>複数コンテキストウィンドウ跨ぎの継続</strong></th><td>Initializer Agent が環境・機能リスト JSON・進捗ファイル（<code>claude-progress.txt</code>）を初期化し、各セッションは Git コミットと進捗ファイルを読んで1機能ずつ進める</td><td>1つのセッションで全機能をやり切ろうとしてコンテキスト上限で途中崩壊する</td></tr><tr><th scope="row"><strong>チェックポイントと再開可能性</strong></th><td>ステップ／フェーズ単位で完了状態と成果物を保存し、失敗時は未完了ステップから再開</td><td>失敗時に最初から全ステップを再実行し、トークンと時間を浪費する</td></tr><tr><th scope="row"><strong>べき等性キーによる副作用保護</strong></th><td>外部 API 呼び出しに冪等性キー（idempotency key）を付与し、再開時の二重実行を防止</td><td>再開のたびに課金やメール送信が重複実行される</td></tr><tr><th scope="row"><strong>モデルバージョン変更への耐性</strong></th><td>状態データはモデル非依存の JSON スキーマで保持し、プロンプトやハーネス側で互換性を維持</td><td>特定モデルの非公開思考ブロックや暗黙の挙動に再開ロジックを依存させる</td></tr></tbody></table></div>
+<h3>1-3 大規模環境でのアーキテクチャの選択</h3>
+<p>「すべてを自律エージェントにする」のは本番では過剰設計になりがちです。本番のコスト・信頼性・品質データに基づいて <strong>ワークフロー型</strong> と <strong>エージェント型</strong> を適切に選び、必要に応じて移行します。</p>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-ch1-tbl-4"><table><thead><tr><th scope="col">比較軸</th><th scope="col">ワークフロー型（決定論的パイプライン）</th><th scope="col">エージェント型（自律ループ）</th></tr></thead><tbody><tr><th scope="row"><strong>手順の予測可能性</strong></th><td>ステップが事前に決まっている（抽出→検証→保存など）</td><td>入力や途中結果に応じて次の手が動的に変わる</td></tr><tr><th scope="row"><strong>コストとレイテンシ</strong></th><td>予測しやすく、最小限の呼び出しで済む</td><td>ステップ数が変動し、コスト・レイテンシの上振れがある</td></tr><tr><th scope="row"><strong>信頼性とテスト</strong></th><td>各ノードを単体テストしやすく、SLA を守りやすい</td><td>非決定的な経路をとるため、評価とガードレールが必須</td></tr><tr><th scope="row"><strong>移行の判断基準</strong></th><td>エージェントのトレースを分析し、80%以上が同じ固定経路を辿っているなら <strong>ワークフロー型へ切り出して固定化</strong> する</td><td>ワークフローの分岐が爆発し、例外処理がコードで書ききれなくなったら <strong>エージェント型へ移行</strong> する</td></tr></tbody></table></div>
+<h4>ハーネスと実行基盤の選択</h4>
+<div tabindex="0" role="region" aria-label="表 5" class="table-wrapper" id="sec-ch1-tbl-5"><table><thead><tr><th scope="col">選択肢</th><th scope="col">特徴</th><th scope="col">向いているケース</th></tr></thead><tbody><tr><th scope="row"><strong>Messages API + 自前ハーネス</strong></th><td>ループ・状態・リトライ・ツール実行を完全制御</td><td>既存の自社インフラや特殊な SLA・コンプライアンス要件に密結合させる場合</td></tr><tr><th scope="row"><strong>Agent SDK</strong></th><td>ループ・セッション・フック・サブエージェント機構を標準装備</td><td>アプリケーションコード内でカスタムツールやガードレールを組みつつ素早く本番構築したい場合</td></tr><tr><th scope="row"><strong>Claude Managed Agents</strong></th><td>Anthropic がホストするサンドボックス・セッション永続化・ツール実行・トレーシングを提供（セルフホストサンドボックスも選択可）</td><td>長時間自律タスクや並列セッションのインフラ構築・保守コストを削減したい場合</td></tr></tbody></table></div>
+<h3>1-4 コンテキストとメモリのアーキテクチャ</h3>
+<p>長時間稼働するエージェントがコンテキスト上限やコスト上限に近づいたとき、以下の4つの手法を組み合わせます。</p>
+<h4>1. Context Compaction と Context Editing の使い分け</h4>
+<div tabindex="0" role="region" aria-label="表 6" class="table-wrapper" id="sec-ch1-tbl-6"><table><thead><tr><th scope="col">手法</th><th scope="col">仕組み</th><th scope="col">強み</th><th scope="col">注意点</th></tr></thead><tbody><tr><th scope="row"><strong>Context Compaction</strong></th><td>古い会話ターンをモデルの要約に置き換える（サーバーサイド <code>compact_20260112</code> 等）</td><td>会話全体の流れや意図を保ったまま長期間継続できる</td><td>要約から漏れた数値・ID・制約は失われるため、重要事実は外部メモリへ退避する</td></tr><tr><th scope="row"><strong>Context Editing</strong></th><td>古い <code>tool_result</code> や <code>thinking</code> ブロックをルールに基づき削除する</td><td>API レベルでトークン数計算前・キャッシュ参照後に適用されるため、<strong>プロンプトキャッシュを壊しにくい</strong></td><td>大量のツール出力が蓄積するワークフローに特に有効</td></tr></tbody></table></div>
+<h4>2. キャッシュを損なわずに会話途中で指示を変更する方法</h4>
+<p>Prompt Caching は <strong>プレフィックス完全一致</strong> で機能します。会話の途中で <code>system</code> プロンプトやツール定義を書き換えると、それまでのキャッシュがすべて無効化（Cache Miss）され、コストとレイテンシが急増します。</p>
+<ul><li><strong>NG</strong>: 状況が変わるたびに <code>system</code> プロンプトの文言を書き換える。</li><li><strong>OK</strong>: <code>system</code> プロンプトとツール定義は不変のプレフィックスとして固定し、動的な指示変更や状態更新は <strong>最新の <code>user</code> メッセージ（またはシステム注入ブロック）として末尾に追加</strong> する。</li></ul>
+<h4>3. 大規模ツールカタログの扱い（<code>tool_search</code>）</h4>
+<p>MCP サーバーや社内 API が増え、ツール定義が数十〜数百個になると、それだけで数万トークンを消費し、ツール選択の精度も落ちます。</p>
+<ul><li>すべてのツール定義を毎回コンテキストに載せず、<code>defer_loading</code> と <strong><code>tool_search</code></strong> を用いて、タスクに必要なツールだけをオンデマンドで検索・ロードさせる。</li></ul>
+<h4>4. 永続メモリ（Persistent Memory）</h4>
+<p>セッションをまたいで保持すべきユーザーの好み、学習した手順、確定済みの事実（Case Facts）は、コンテキストウィンドウ内ではなく外部のメモリファイル・DB（または Memory Tool）に保存し、必要なものだけを読み込む。</p>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 7" class="table-wrapper" id="sec-ch1-tbl-7"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">ワーカーに巨大な検索結果をそのまま読ませた後、親へ渡す</th><td>親のコンテキストに全生ログを返す</td><td>コンテキスト分離し、ワーカーには構造化された要約・結論だけを返させる</td></tr><tr><th scope="row">決済や本番変更を伴う自律エージェント</th><td>プロンプトで「慎重に確認せよ」と書く</td><td>実行前に一時停止する HITL 承認ゲートを組み込む</td></tr><tr><th scope="row">長時間エージェントが途中でクラッシュした</th><td>最初から全ステップをやり直す</td><td>チェックポイントから未完了ステップのみ再開し、副作用は冪等性キーで保護する</td></tr><tr><th scope="row">会話途中で方針・コンテキストを追加したい</th><td><code>system</code> プロンプトを動的に書き換える</td><td><code>system</code> とツール定義は固定し、末尾の <code>user</code> メッセージで指示を追加してキャッシュを維持する</td></tr><tr><th scope="row">ツール数が100個を超え、精度とコストが悪化</th><td>全ツール定義を毎回リクエストに含める</td><td><code>tool_search</code>（遅延ロード）で必要なツールだけをコンテキストに読み込む</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問1</h3>
+<p>ある企業で、自律型エージェントが社内調査からレポート作成までを20ステップかけて実行しています。本番トレースを分析したところ、リクエストの90%は「データ取得 → 正規化 → テンプレート埋め込み」という完全に同じ3段階の経路を辿っており、不要な推論トークンと時折発生する分岐ミスがコストとエラー率を押し上げています。最も適切なアーキテクチャ改善はどれですか。</p>
+<p>A. エージェントのモデルをより大型のものに変更し、分岐ミスを減らす B. 90%の定型パターンを予測可能なワークフロー型パイプラインへ切り出し、例外的なケースのみエージェント型にフォールバックさせる C. 各ステップで全会話履歴を保持したまま <code>max_tokens</code> を増やす D. すべてのステップを複数の並列サブエージェントに分割し、メッシュ通信で合意形成させる</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。本番のトレースとコストデータから経路の大半が固定化していることが分かっている場合、決定論的なワークフロー型へ移行することでコスト・レイテンシ・信頼性を大幅に改善できます。</p></div></details>
+<h3>問2</h3>
+<p>長時間稼働するカスタマーサポート兼調査エージェントで、会話が長くなるにつれてコスト上限に近づいています。このエージェントは各ターンで大きなデータベース検索結果（<code>tool_result</code>）を受け取りますが、数ターン後には古い検索結果の詳細は不要になります。プロンプトキャッシュのヒット率を維持しつつコンテキスト消費を抑えるには、どの組み合わせが最適ですか。</p>
+<p>A. 毎回クライアント側で古い <code>user</code> メッセージを手動削除して再送信する B. <code>system</code> プロンプトを毎ターン要約して書き換える C. サーバーサイドの Context Editing（古い <code>tool_result</code> のクリア）を有効にし、確定した顧客・注文の重要事実は外部メモリ／先頭の固定領域外ではなく永続ストアへ保存する D. すべてのツール呼び出しを廃止し、全データベースを <code>system</code> プロンプトに埋め込む</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>C</strong>。Context Editing はキャッシュ参照後に API 側で古い <code>tool_result</code> を整理するためキャッシュプレフィックスを壊しにくく、ツール多用エージェントのコスト・精度を効果的に保てます。A や B はプレフィックスを変えてしまいキャッシュミスを招きます。</p></div></details>
+<h3>問3</h3>
+<p>複数のサブエージェントが並列で外部 SaaS のチケットを更新する処理で、3つ目のサブエージェントの実行中にネットワーク障害でプロセスが再起動しました。再起動後に安全かつ低コストで処理を完了させる設計はどれですか。</p>
+<p>A. プロセス起動時に最初から全3つのサブエージェントを再実行する B. 各サブエージェントの完了状態と成果物をチェックポイントに保存しておき、再起動後は未完了の3つ目のみ再開し、外部更新には冪等性キーを付与する C. サブエージェント間の直接通信で互いの進捗をメモリ上に記憶させる D. 障害が起きた場合は自動的にモデルバージョンをダウングレードして最初からやり直す</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。耐久性のある実行には、チェックポイントによる再開可能性と、再実行時の二重更新を防ぐ冪等性キーの両方が不可欠です。</p></div></details>
+<h3>問4</h3>
+<p>あるプラットフォームチームは、120個の社内 API ツールを MCP 経由でエージェントに公開したところ、初回トークンまでの時間（TTFT）と入力トークンコストが急増し、ツールの誤選択も増えました。最も直接的な解決策はどれですか。</p>
+<p>A. 120個のツール定義を <code>system</code> プロンプトに平文で書き直す B. <code>tool_search</code>（遅延ロード）を導入し、タスクに関連するツールだけを動的にコンテキストへ読み込む C. <code>output_config.effort</code> を <code>max</code> に引き上げる D. 会話の毎ターンでツール定義の順序をランダムにシャッフルする</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。大規模ツールカタログをコンテキストウィンドウの外に置き、必要なときに <code>tool_search</code> で取得することで、入力トークン削減とツール選択精度の向上を両立できます。</p></div></details>
+<h3>問5</h3>
+<p>稼働中の長時間エージェントで、会話の途中から「本日の出力は必ず英語の箇条書きにすること」という一時的な方針変更を適用したいと考えています。プロンプトキャッシュの効率を損なわない方法はどれですか。</p>
+<p>A. リクエストの <code>system</code> パラメータの先頭に新しい指示を挿入する B. <code>system</code> プロンプトとツール定義は変更せず、最新の <code>user</code> メッセージに指示変更を追記する C. すべてのツール定義の <code>description</code> に英語出力の指示を追記する D. 会話履歴をすべて破棄して新規セッションを開始する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。Prompt Caching は先頭からのプレフィックス一致で判定されるため、<code>system</code> やツール定義を変えるとキャッシュが無効化されます。末尾のメッセージで追加指示を渡すことでキャッシュヒットを維持できます。</p></div></details>
+<h2>自分で確かめる</h2>
+<ol><li>自身のエージェントループで <code>system</code> プロンプトを1文字だけ変更したとき、<code>usage.cache_read_input_tokens</code> がゼロになり <code>cache_creation_input_tokens</code> が発生することを確認する。</li><li>3ステップの処理にファイルベースのチェックポイントを追加し、2ステップ目の後に強制終了させて再開したとき、1ステップ目がスキップされることを検証する。</li></ol>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-readme">← はじめに（全体像・学び方）</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch2">第2章 本番統合・信頼性・検索 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch2" role="tabpanel" aria-labelledby="tab-sec-ch2" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第2章 本番環境の統合・信頼性・知識グラウンディング（配点 20%）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：国際空港の「管制塔」と「精密な図書館司書」</strong></p>
+<p>飛行機（リクエスト）が急増しても、滑走路が1本だけなら大渋滞します。天候不良（レート制限）なら待機旋回し、機体トラブル（安全性拒否や出力長超過）なら別の滑走路（フォールバックモデル）へそのまま飛ばすのではなく、専用の着陸手順へ振り分けなければなりません。そして図書館司書（検索・グラウンディング）は、曖昧な記憶で答えず、必ず「どの棚のどの資料の何ページか」を添えて回答します。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>停止理由やエラー種別を正確に分類し、適切なリトライ・サーキットブレーカー・モデル／リージョン／プラットフォーム間フォールバックを設計できる。</li><li>レート制限、トークンスループット、キューイング／バックプレッシャー、Batch API の経済性、マルチテナント分離からボトルネックを特定できる。</li><li>リモート MCP の認証・バージョン管理・段階的ロールアウト（カナリア／ロールバック）とプロンプト変更管理を運用できる。</li><li>エージェント型検索と RAG を比較評価し、ハイブリッド検索・リランキング・出典引用・不確実性明示・検索品質の段階的診断ができる。</li></ul>
+<h2>要点3つ</h2>
+<ol><li><strong>すべての失敗を同じリトライ／フォールバック経路に流してはならない。</strong> レート制限（<code>429</code> / <code>529</code>）は指数バックオフ＋ジッターでリトライし、<code>max_tokens</code> は上限調整や分割、安全性拒否（<code>refusal</code>）は専用処理経路へ分岐させる。</li><li><strong>スループット設計は「何が制約か」を見極める。</strong> RPM/ITPM/OTPM のレート制限なのか、同時実行によるトークンスループットなのか、遅延許容できるバッチ経済性なのかを切り分け、キューとバックプレッシャーで保護する。</li><li><strong>知識グラウンディングは「検索品質の4段階」で診断する。</strong> 取得漏れ（Recall）、チャンク分断（Chunking）、順位付け（Ranking）、生成時の無視（Synthesis）のどこで落ちたかを特定し、出典引用と不確実性シグナルを強制する。</li></ol>
+<h2>30秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  R[リクエスト] --&gt; Q[キュー / テナントクォータ]
+  Q --&gt; CB{サーキットブレーカー}
+  CB --&gt;|Open| FB[フォールバック / デグラデーション]
+  CB --&gt;|Closed| API[Claude API / Bedrock / Vertex]
+  API --&gt;|429 / 529| RT[指数バックオフ + ジッター]
+  API --&gt;|max_tokens| LN[出力上限見直し / 入力分割]
+  API --&gt;|refusal| SF[安全性ハンドリング経路]
+  API --&gt;|成功| OK[レスポンス返却]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch2-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">指数バックオフ＋ジッター</th><td>リトライ間隔を指数的に延ばしつつ乱数（ジッター）を加えて再試行集中（Thundering Herd）を防ぐ手法</td></tr><tr><th scope="row">サーキットブレーカー</th><td>下流障害が一定閾値を超えた際に回路を開き、無駄な呼び出しを止めて即座にフォールバックさせる保護機構</td></tr><tr><th scope="row">グレースフルデグラデーション</th><td>障害時に全停止させず、軽量モデル・キャッシュ応答・機能縮小などでサービスを継続する設計</td></tr><tr><th scope="row">バックプレッシャー</th><td>下流の処理能力を超えた際に、キュー長制限や <code>429</code> 返却などで上流からの流入速度を抑制する仕組み</td></tr><tr><th scope="row">Message Batches API</th><td>非同期一括処理 API。同期比 <strong>50% コスト削減</strong>、最大24時間以内処理（SLO 保証なし）、ツール往復不可</td></tr><tr><th scope="row">Streamable HTTP</th><td>リモート MCP サーバーで推奨される HTTP ベースのトランスポート方式（旧 SSE から移行）</td></tr><tr><th scope="row">エージェント型検索 (Agentic Search)</th><td>エージェントが Grep / 検索ツールを自律的に複数回呼び出して情報を探索する方式</td></tr><tr><th scope="row">ハイブリッド検索</th><td>キーワード検索（BM25 等）とベクトル意味検索を組み合わせ、固有名詞と意味の両方を捉える手法</td></tr><tr><th scope="row">リランキング (Reranking)</th><td>初期検索で広めに取得した候補を、クロスエンコーダ等で精査して上位に並べ替える処理</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>2-1 Claude サービスの信頼性エンジニアリング</h3>
+<p>本番環境で最も多い失敗は、<strong>原因の異なるエラーをすべて同じリトライやフォールバックモデルへ流してしまうこと</strong> です。</p>
+<h4>停止理由・エラー別の分岐設計</h4>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch2-tbl-2"><table><thead><tr><th scope="col">現象 / <code>stop_reason</code> / ステータス</th><th scope="col">原因</th><th scope="col">正しい対処</th><th scope="col">誤った対処</th></tr></thead><tbody><tr><th scope="row"><strong>HTTP <code>429</code> / <code>529</code> (overloaded)</strong></th><td>レート制限・一時的過負荷</td><td><code>Retry-After</code> ヘッダー尊重、指数バックオフ＋ジッター、別リージョン／別モデルへフォールバック</td><td>固定間隔の即座リトライ（負荷増幅）</td></tr><tr><th scope="row"><strong><code>stop_reason: &quot;max_tokens&quot;</code></strong></th><td>出力トークン上限に到達して切断</td><td>出力上限の引き上げ、または入力を分割して処理</td><td>そのまま別モデルへリトライ（同じ位置でまた切れる）</td></tr><tr><th scope="row"><strong><code>stop_reason: &quot;refusal&quot;</code></strong></th><td>安全性ポリシーによる拒否</td><td>安全性の専用ハンドリング経路へ回し、理由確認やユーザー案内を行う</td><td>拒否を別モデルで無差別にリトライしてコストを浪費する</td></tr><tr><th scope="row"><strong><code>400</code> / コンテキスト超過</strong></th><td>入力トークンがウィンドウ上限を超過</td><td>Compaction / Context Editing / 入力削減を行う</td><td>リトライ回数を増やす</td></tr></tbody></table></div>
+<h4>プラットフォーム間・リージョン間の差異に注意</h4>
+<p>ファーストパーティ API（Anthropic API）とクラウドプラットフォーム（Amazon Bedrock / Google Cloud Vertex AI）では、以下の差異があるため単純なフォールバックでは動作が変わることがあります。</p>
+<ul><li><strong>モデル ID と機能提供時期</strong>: 新機能（Context Editing や特定ベータ機能、Prompt Caching の仕様、Batch API の形式）の提供タイミングやパラメータ形式が異なる。</li><li><strong>リージョン制約とクォータ</strong>: クロスリージョン推論（Cross-Region Inference）やプロビジョンドスループット（Provisioned Throughput）の有無、データレジデンシー要件（EU/US/JP 等）。</li><li><strong>認証とネットワーク</strong>: API キー vs IAM ロール（STS / Workload Identity）。</li></ul>
+<h3>2-2 スケールとスループットの管理</h3>
+<p>大量のワークロードを捌く際は、<strong>何が真のボトルネックか</strong> を特定する必要があります。</p>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch2-tbl-3"><table><thead><tr><th scope="col">制約要因</th><th scope="col">症状と特徴</th><th scope="col">対策</th></tr></thead><tbody><tr><th scope="row"><strong>レート制限 (RPM / ITPM / OTPM)</strong></th><td>分間平均では上限未満でも、<strong>短時間のバースト（Token Bucket）</strong> や <strong>リクエスト時の <code>max_tokens</code> 事前予約</strong> により <code>429</code> が発生する</td><td>クライアント側ペーシング（スムージング）、<code>max_tokens</code> を実需に合わせて小さく設定、Prompt Caching による非キャッシュ入力削減、複数リージョン分散</td></tr><tr><th scope="row"><strong>トークンスループット (TTFT / 生成速度)</strong></th><td>エラーは出ないが1件あたりの完了が遅く、同時接続が詰まる</td><td>ストリーミング（<code>input_json_delta</code> によるツール引数の逐次処理を含む）、中断ストリームからの復旧設計、並列リクエスト化</td></tr><tr><th scope="row"><strong>バッチの経済性</strong></th><td>同期 API での夜間・大量処理によりコストが膨張</td><td>Message Batches API（50%割引）への移行。ただし遅延保証なし・ツール往復不可に注意</td></tr></tbody></table></div>
+<h4>マルチテナントのクォータと分離</h4>
+<p>1つのテナント（顧客）の暴走が全顧客のレート制限を食い潰す「ノイジーネイバー問題」を防ぐため、以下を実装します。</p>
+<ul><li>テナントごとの <strong>トークン／リクエストクォータ</strong> とレート制限（API ゲートウェイ層）</li><li>テナント別キューによる <strong>公平なスケジューリング</strong>（優先度付きキュー・サーキットブレーカーのテナント分離）</li><li>テナント単位のコスト配分（Chargeback / Showback）用メタデータ付与</li></ul>
+<h3>2-3 本番環境の MCP と変更管理</h3>
+<p>ローカル開発の stdio MCP から本番のリモート MCP へ移行する際は、運用・セキュリティ・互換性管理が不可欠です。</p>
+<h4>リモート MCP の本番要件</h4>
+<ul><li><strong>トランスポートと認証</strong>: リモートサーバーでは Streamable HTTP を使用し、OAuth 2.1（PKCE / トークン検証・スコープ制限）や mTLS、API ゲートウェイで認証を強制する。静的シークレットの共有やリポジトリ直書きは厳禁。</li><li><strong>ツールとスキーマのバージョン管理</strong>: ツール名や入力スキーマの必須項目追加・型変更は <strong>破壊的変更</strong> となる。バージョン付きエンドポイント（<code>/v1/mcp</code>, <code>/v2/mcp</code>）や後方互換な任意フィールド追加で移行期間を設ける。</li><li><strong>動作の破壊的変更に対する移行テスト</strong>: ツール出力フォーマットやエラー形式が変わった際、エージェントが誤動作しないか回帰テストを実行する。</li></ul>
+<h4>モデル・プロンプトの段階的ロールアウト</h4>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+  D[変更 PR&lt;br&gt;プロンプト / モデル] --&gt; E[CI/CD 評価ゲート]
+  E --&gt;|Pass| C[カナリア配信 5%]
+  C --&gt;|SLI/SLO 監視 OK| R[段階的拡大 25% → 100%]
+  C --&gt;|ドリフト / エラー増| RB[即時ロールバック]</pre></div>
+<ul><li><strong>プロンプトのバージョン管理</strong>: プロンプトをコード外にハードコードせず、Git 管理・不変バージョン ID で追跡可能にし、どのトレースがどのプロンプト版で動いたか記録する。</li><li><strong>ゲートウェイ／ルーティング層</strong>: アプリ本体を再デプロイせずに、モデル切替・重み付きカナリア配信・即時ロールバックを切り替えられる AI ゲートウェイを配置する。</li></ul>
+<h3>2-4 大規模な検索と知識グラウンディング</h3>
+<p>本番アプリケーションで外部知識を参照させる際、<strong>エージェント型検索</strong> と <strong>RAG</strong> の特性を理解して選択・統合します。</p>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-ch2-tbl-4"><table><thead><tr><th scope="col">手法</th><th scope="col">仕組み</th><th scope="col">強み</th><th scope="col">弱み</th></tr></thead><tbody><tr><th scope="row"><strong>RAG (Retrieval-Augmented Generation)</strong></th><td>事前にチャンク化・埋め込みを行い、クエリ時に検索してコンテキストへ注入</td><td>低レイテンシ・予測可能なコスト・大規模コーパスに強い</td><td>固定チャンクで文脈が切れる、複数ホップの探索に弱い</td></tr><tr><th scope="row"><strong>エージェント型検索</strong></th><td>エージェントが検索・Grep・閲覧ツールを反復呼び出しして探索</td><td>複雑な多段階推論、最新コード・文書の正確な探索に強い</td><td>ターン数が増えレイテンシ・コストが高くなる</td></tr><tr><th scope="row"><strong>ハイブリッド構成</strong></th><td>初期候補をハイブリッド検索＋リランキングで絞り、不足時のみエージェントが追加検索</td><td>速度と精度のバランスが良い</td><td>パイプラインが複雑になり各段の監視が必要</td></tr></tbody></table></div>
+<h4>検索パイプライン設計と障害診断（4段階）</h4>
+<p>検索に根拠を置くアプリで回答品質が落ちた場合、<strong>生成モデルを疑う前にどの段階で失敗したか</strong> を切り分けます。</p>
+<ol><li><strong>チャンク分断 (Chunking)</strong>: 見出し・表・文脈が途中で切れており、単独チャンクでは意味が通じない → <strong>Contextual Retrieval</strong>（各チャンクの埋め込み・BM25 インデックス作成前に、文書全体の文脈を説明する短い前置きを付与する手法）や親子チャンクを採用。</li><li><strong>取得漏れ (Retrieval Recall)</strong>: 固有名詞や型番がベクトル検索で拾えていない → <strong>ハイブリッド検索（Contextual BM25 + ベクトル）</strong> を導入。</li><li><strong>順位不備 (Ranking)</strong>: 正解チャンクがトップ20にはあるがトップ5に入っていない → <strong>リランキング（Reranker）</strong> を導入。</li><li><strong>グラウンディング失敗 (Synthesis)</strong>: 正解チャンクはコンテキストにあるのにモデルが無視／幻覚を起こす → <strong>Citations API</strong> や <code>search_result</code> ブロックを用いて文字単位の引用元を強制し、該当情報がない場合の「不明（<code>insufficient_evidence</code>）」出力を設計する。</li></ol>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 5" class="table-wrapper" id="sec-ch2-tbl-5"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">リトライ経路に <code>429</code>・<code>max_tokens</code>・<code>refusal</code> が混在</th><td>全エラーを同一のフォールバックモデルへリトライ</td><td>停止条件ごとに分岐（<code>429</code> はバックオフ、<code>max_tokens</code> は上限調整、<code>refusal</code> は安全処理経路）</td></tr><tr><th scope="row">1つの顧客の大量リクエストで他顧客も <code>429</code> になる</th><td>全テナント共有の単一キューで処理</td><td>テナント別クォータ・キュー分離・バックプレッシャーを導入</td></tr><tr><th scope="row">ツール定義の変更で既存エージェントが失敗</th><td>既存ツールをインプレースで破壊的変更</td><td>スキーマのバージョン管理と移行テスト、段階的ロールアウトを実施</td></tr><tr><th scope="row">固有名詞の検索漏れで RAG が「情報なし」と答える</th><td>プロンプトで「もっとよく探せ」と指示</td><td>ベクトル単独検索からハイブリッド検索（BM25 + ベクトル）＋リランキングへ改善</td></tr><tr><th scope="row">検索結果が不十分なときにモデルが推測で補う</th><td>そのまま回答を生成させる</td><td>出典の引用を必須化し、根拠不足時は不確実性を明示させる</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問1</h3>
+<p>本番の Claude 統合システムで、特定のリクエストに対して <code>stop_reason: &quot;max_tokens&quot;</code> が返却されました。ハーネスがこのエラーを「一時的エラー」とみなして別のリージョンの同じモデルに3回リトライした結果、入力と出力のトークンコストが4倍に膨れ上がり、ユーザーには同じ途切れた応答が返されました。根本原因と正しい修正はどれですか。</p>
+<p>A. バックオフ時間を30秒に延ばしてリトライする B. <code>stop_reason</code> に応じて分岐し、<code>max_tokens</code> はリトライせずに出力上限の調整や入力分割・継続生成で処理する C. サーキットブレーカーを開いて全トラフィックを停止する D. すべてのリクエストを Message Batches API に切り替える</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。<code>max_tokens</code> はネットワーク障害ではなく出力長上限への到達であり、同じ入力でリトライしても同じ位置で切断されます。停止理由で分岐し、上限引き上げや分割処理に切り替える必要があります。</p></div></details>
+<h3>問2</h3>
+<p>エンタープライズ向けマルチテナント環境で、ある1社が大量の文書要約ジョブを急激に投入したため、API の ITPM（1分あたり入力トークン数）上限に達し、他の全顧客のリアルタイムチャットまで <code>429</code> エラーで遅延しています。優先的に導入すべき対策はどれですか。</p>
+<p>A. リトライ回数を無制限にして全員が成功するまで待機させる B. テナント別のクォータとキュー分離、およびバックプレッシャーを導入し、バッチ処理は Message Batches API 等へ分離する C. 全顧客のモデルを最も高価な上位モデルに切り替える D. プロンプトキャッシュを無効化する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。ノイジーネイバーを防ぐには、テナントごとのクォータ・キュー分離とバックプレッシャーが必須です。さらに遅延許容できる大量要約は Batch API へ分離すると ITPM の競合を緩和できます。</p></div></details>
+<h3>問3</h3>
+<p>社内規定検索 RAG システムで、特定のエラーコード（例：<code>ERR-9042</code>）に関する質問の正答率が低いことが判明しました。検索ログを調べると、正解文書はインデックスに存在するものの、ベクトル検索の上位10件にすら入っていません。最初に取るべき対策はどれですか。</p>
+<p>A. 生成モデルの温度パラメータ（<code>temperature</code>）を下げる B. ベクトル検索にキーワード検索（BM25）を組み合わせたハイブリッド検索とリランキングを導入する C. システムプロンプトに「エラーコードを推測しないこと」と追記する D. チャンクサイズを現在の10倍に大きくする</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。固有名詞や型番・エラーコードは意味ベースのベクトル検索だけでは取りこぼしやすいため、BM25 等のレキシカル検索を組み合わせたハイブリッド検索で取得漏れを防ぎ、リランキングで順位を上げます。</p></div></details>
+<h3>問4</h3>
+<p>本番環境で稼働するリモート MCP サーバーにおいて、既存ツールのパラメータ名を <code>user_id</code> から <code>account_id</code> に変更したいと考えています。複数の本番エージェントがこの MCP サーバーを参照している場合、最も安全な変更管理手順はどれですか。</p>
+<p>A. メンテナンス時間外にいきなり <code>account_id</code> へ置換し、エラーが出たエージェントから順次修正する B. 新しいパラメータを任意項目として後方互換を保つかバージョン付きエンドポイントを用意し、移行テストと段階的ロールアウトを経て旧仕様を廃止する C. エージェントのシステムプロンプトだけで「<code>user_id</code> の代わりに <code>account_id</code> を使え」と指示する D. MCP サーバーの認証を無効化してテストを高速化する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。本番のツール・スキーマ変更は破壊的変更になり得るため、バージョニングや後方互換性の維持、移行テスト、段階的ロールアウトで安全に移行します。</p></div></details>
+<h3>問5</h3>
+<p>あるサービスはファーストパーティ API をプライマリとし、障害時のフォールバック先としてクラウドプラットフォーム（Bedrock / Vertex AI）上の Claude を設定しています。フェイルオーバー試験を行ったところ、特定のベータ機能パラメータが原因でフォールバック先が <code>400 Bad Request</code> を返しました。設計上見落とされていた点はどれですか。</p>
+<p>A. クラウドプラットフォーム間でモデル ID 形式や利用可能な API 機能・ヘッダーに差異があることを考慮したリクエスト変換・構成一貫性 B. フォールバック先では常に指数バックオフを無効にする必要がある点 C. クラウドプラットフォームでは <code>stop_reason</code> が返らない点 D. フォールバック先では JSON 出力が一切サポートされない点</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>A</strong>。ファーストパーティ API とクラウドプラットフォームではモデル ID、利用可能なベータヘッダー、機能提供時期に差異があるため、ゲートウェイ層で差異を吸収する構成一貫性が必要です。</p></div></details>
+<h2>自分で確かめる</h2>
+<ol><li>サンプルの HTTP クライアントで <code>429</code>、<code>max_tokens</code>、<code>refusal</code> の3パターンを模擬し、それぞれ異なる分岐（バックオフ再試行・上限調整/分割・安全ハンドリング）に入ることを確認する。</li><li>ハイブリッド検索（BM25 + ベクトル）で「固有名詞・エラーコードを含むクエリ」と「抽象的な意味クエリ」の検索順位変化を比較する。</li></ol>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch1">← 第1章 高度なエージェント設計</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch3">第3章 オブザーバビリティ →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch3" role="tabpanel" aria-labelledby="tab-sec-ch3" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第3章 オブザーバビリティと本番環境のモニタリング（配点 12%）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：飛行機の「ブラックボックス」と「コックピット計器」</strong></p>
+<p>飛行機が落ちたあとに「たぶんエンジンの調子が悪かった」では原因を特定できません。各部品のセンサー（分散トレース）、燃料消費（トークンとコストのメトリクス）、計器の異常警告（SLI/SLO とアラート）が必要です。ただし、乗客の個人情報（PII）や機密会話はプライバシー規則（ZDR）に従って保護したうえで記録しなければなりません。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>エージェントループとツール呼び出しの分散トレース、コスト、キャッシュ効率を計装できる。</li><li>ゼロデータ保持（ZDR）などのプライバシー制約下で安全なコンテンツキャプチャを構成できる。</li><li>LLM サービス特有の SLI / SLO を定義し、品質ドリフト・動作回帰・異常使用を検出するアラートを設計できる。</li><li>サンプリング戦略、集計、障害コホート分析を用いて大量トレースからシステム全体の問題を定量化できる。</li></ul>
+<h2>要点3つ</h2>
+<ol><li><strong>エージェントの観測は「リクエスト単位」ではなく「トレース単位」で行う。</strong> 親エージェントからサブエージェント、各ツール呼び出し、検索結果、モデル応答までを親子スパン（Span）で紐づけ、推論とグラウンディングを追跡可能にする。</li><li><strong>デバッグ可能性とプライバシー（ZDR / PII）は設計で両立する。</strong> 機密データをそのまま平文ログに流さず、構造化イベント・メタデータ・PII リダクション・条件付きサンプリングを組み合わせる。</li><li><strong>平均値（Average）は本番の異常を隠す。</strong> パーセンタイル（p95 / p99）、キャッシュヒット率、モデル更新前後のドリフト、障害コホート分析によって局所的な悪化を炙り出す。</li></ol>
+<h2>30秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+  A[エージェント実行&lt;br&gt;親スパン] --&gt; B[LLM 呼び出しスパン&lt;br&gt;tokens / cache / TTFT]
+  A --&gt; C[ツール実行スパン&lt;br&gt;tool_name / isError / latency]
+  A --&gt; D[検索スパン&lt;br&gt;doc_ids / scores]
+  B &amp; C &amp; D --&gt; E[構造化ログ &amp; メトリクス&lt;br&gt;PII リダクション / ZDR 準拠]
+  E --&gt; F[SLI/SLO ダッシュボード&lt;br&gt;ドリフト検知]
+  E --&gt; G[テールサンプリング &amp;&lt;br&gt;障害コホート分析]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch3-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">分散トレース (Distributed Tracing)</th><td>1つのリクエストから派生する全 LLM 呼び出し・ツール・サブエージェント・検索をトレース ID とスパン階層で記録する手法</td></tr><tr><th scope="row">構造化ログ</th><td>JSON 等の機械可読な形式で、<code>trace_id</code>, <code>tenant_id</code>, <code>prompt_version</code>, <code>stop_reason</code> 等を統一スキーマで出力するログ</td></tr><tr><th scope="row">ZDR (Zero Data Retention)</th><td>API プロバイダー側でプロンプト・応答データを保持しない契約・構成要件</td></tr><tr><th scope="row">SLI (Service Level Indicator)</th><td>サービスの品質や信頼性を測る定量指標（例：TTFT p95、ツール成功率、グラウンディング率）</td></tr><tr><th scope="row">SLO (Service Level Objective)</th><td>SLI に対する目標水準（例：月間成功率 99.5% 以上、TTFT p95 が 1.5秒以内）</td></tr><tr><th scope="row">品質ドリフト</th><td>モデル更新、入力データ分布の変化、外部データ劣化により、エラーは出ないのに回答品質が徐々に悪化する現象</td></tr><tr><th scope="row">ヘッドサンプリング</th><td>トレース開始時に一律確率（例：5%）で記録有無を決める方式。稀な障害を取りこぼしやすい</td></tr><tr><th scope="row">テールサンプリング</th><td>トレース完了後に結果を見て保存を決める方式（エラー・高レイテンシ・低評価は 100% 保存等）</td></tr><tr><th scope="row">障害コホート分析</th><td>エラーや低品質が発生したトレース群を、モデル版・プロンプト版・ツール種別・テナント等の属性でグルーピングし偏りを定量化する分析</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>3-1 テレメトリと計装</h3>
+<p>本番の Claude システムでは、単なる HTTP ステータスコードだけでなく、エージェント内部の振る舞いを計装します。</p>
+<h4>記録すべき必須テレメトリ</h4>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch3-tbl-2"><table><thead><tr><th scope="col">カテゴリ</th><th scope="col">計装する主な属性</th><th scope="col">診断できる問題</th></tr></thead><tbody><tr><th scope="row"><strong>エージェントループ</strong></th><td><code>trace_id</code>, <code>parent_span_id</code>, <code>turn_index</code>, <code>stop_reason</code>, <code>max_turns_reached</code></td><td>無限ループ、途中打ち切り、<code>max_tokens</code> 切断</td></tr><tr><th scope="row"><strong>ツール呼び出し</strong></th><td><code>tool_name</code>, <code>duration_ms</code>, <code>isError</code>, <code>errorCategory</code>, <code>retry_count</code></td><td>特定ツールの遅延・タイムアウト、誤ったツール選択</td></tr><tr><th scope="row"><strong>トークンとコスト</strong></th><td><code>input_tokens</code>, <code>output_tokens</code>, <code>model</code>, <code>tenant_id</code>, <code>estimated_cost_usd</code></td><td>コスト急増、テナント別原価、トークン肥大化</td></tr><tr><th scope="row"><strong>キャッシュパフォーマンス</strong></th><td><code>cache_creation_input_tokens</code>, <code>cache_read_input_tokens</code>, キャッシュヒット率</td><td>プレフィックス破壊によるキャッシュミス、TTL 切れ</td></tr><tr><th scope="row"><strong>グラウンディングと推論</strong></th><td><code>retrieval_doc_ids</code>, <code>rerank_scores</code>, <code>cited_ids</code>, <code>prompt_version</code></td><td>検索漏れか生成無視かの切り分け、プロンプト版ごとの品質比較</td></tr></tbody></table></div>
+<h4>ZDR（ゼロデータ保持）およびプライバシー制約下のログ設計</h4>
+<p>医療・金融・エンタープライズ環境では、本番ログに生プロンプトや顧客の PII（個人識別情報）を残せないケースが多くあります。</p>
+<ul><li><strong>常に記録可能（メタデータ）</strong>: トークン数、レイテンシ、モデル名、プロンプトバージョン、<code>stop_reason</code>、ツール名、エラー種別、ハッシュ化されたセッション ID。</li><li><strong>PII リダクション後に記録</strong>: 入力・出力・ツール引数をログパイプラインへ送る前に、正規表現や NER で氏名・メール・カード番号等をマスキングする。</li><li><strong>ZDR 環境でのコンテンツキャプチャ</strong>: プロバイダー側にログが残らないため、障害調査に必要な最小限のデータ（サンプリングされたトレースやエラー時のみ）を自社管理の暗号化・アクセス制御付きストアに一時保持する（またはコンテンツ記録自体をオプトイン／環境変数で制御する）。</li></ul>
+<h3>3-2 本番環境のモニタリングとアラート</h3>
+<p>従来の Web サービス（CPU・メモリ・HTTP 500 率）だけでは、LLM システムのサイレント障害（<strong>HTTP 200 だが回答がデタラメ</strong>）を検知できません。</p>
+<h4>LLM システムの主要な SLI とアラート設計</h4>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch3-tbl-3"><table><thead><tr><th scope="col">指標 (SLI)</th><th scope="col">監視すべき対象</th><th scope="col">検知できる異常</th></tr></thead><tbody><tr><th scope="row"><strong>レイテンシ</strong></th><td>TTFT（最初のトークンまで）と E2E 全体時間（p50 / p95 / p99）</td><td>ストリーミング詰まり、思考トークン肥大化、ツール遅延</td></tr><tr><th scope="row"><strong>信頼性・停止理由分布</strong></th><td>HTTP 429/5xx 率、<code>stop_reason</code> の割合（<code>end_turn</code>, <code>max_tokens</code>, <code>refusal</code>）</td><td>レート制限逼迫、予期しない拒否率の上昇、出力切断の急増</td></tr><tr><th scope="row"><strong>トークン・コスト効率</strong></th><td>1リクエストあたりの平均コスト、入力/出力トークン比率、キャッシュヒット率</td><td>ループ暴走、キャッシュ無効化デプロイ、異常なユーザー利用（濫用）</td></tr><tr><th scope="row"><strong>品質・ドリフト指標</strong></th><td>オンライン評価スコア、フォーマット検証失敗率、ユーザー低評価率、ツール再試行率</td><td><strong>モデル更新後のドリフト</strong>、プロンプト劣化、知識ベース陳腐化</td></tr></tbody></table></div>
+<div class="alert alert-warning"><div class="alert-title">⚠️ 注意</div><p><strong>モデル更新後のドリフトに注意</strong>：モデルのスナップショット更新やクラウド側のマイナー変更後、エラー率は 0% のまま「出力フォーマットの揺れ」「拒否率の微増」「ツール呼び出し回数の増加」が起きることがあります。デプロイ時刻・モデル ID ごとに指標をスライスして監視します。</p></div>
+<h3>3-3 大規模なトレース分析</h3>
+<p>本番で1日何百万件もリクエストが流れる場合、全トレースの生テキストを保存・目視することは不可能です。</p>
+<h4>サンプリング戦略の選択</h4>
+<ul><li><strong>ヘッドサンプリング（一律 1% など）</strong>: コストは低いが、発生率 0.1% の重大なエッジケース障害を取りこぼす。</li><li><strong>テールサンプリング（推奨）</strong>: 正常かつ低レイテンシなトレースは 1〜5% に間引き、<strong>エラー発生・高レイテンシ（p99超）・<code>refusal</code>・再試行発生・ユーザー低評価</strong> のトレースは <strong>100% 保存</strong> する。</li></ul>
+<h4>障害コホート分析 (Failure Cohort Analysis)</h4>
+<p>個々のトレースを1件ずつ眺めるだけでは「全体で何が一番効いているか」が見えません。トレースを集計し、属性別のコホート（集団）で比較します。</p>
+<ul><li>例：全体のエラー率は 2% だが、コホート分析すると「特定の <code>mcp_server_version=v2</code> × <code>language=ja</code> の組み合わせ」だけでエラー率が 35% に跳ね上がっていることを定量的に特定できる。</li></ul>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-ch3-tbl-4"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">マルチエージェントのどこで遅いか分からない</th><td>アプリの最終応答時間だけを記録する</td><td>親・子・LLM・ツール・検索ごとにスパンを分けた分散トレースを計装する</td></tr><tr><th scope="row">ZDR / プライバシー要件で生テキストを保存できない</th><td>ログを完全に無効化する</td><td>PII リダクションと、メタデータ（トークン・<code>stop_reason</code>・版数・ツール名）の構造化ログを残す</td></tr><tr><th scope="row">キャッシュコストが突然倍増した</th><td>モデル料金のせいだと推測する</td><td><code>cache_creation_input_tokens</code> と <code>cache_read_input_tokens</code> の推移でヒット率を診断する</td></tr><tr><th scope="row">稀に起きる本番障害を再現・調査したい</th><td>低確率のヘッドサンプリングのみに頼る</td><td>エラー・高レイテンシ・異常停止を 100% 残すテールサンプリングを採用する</td></tr><tr><th scope="row">モデル更新後に品質クレームが増えた</th><td>HTTP エラー率が 0% なので正常と判断</td><td>モデル ID 別・停止理由別・オンライン評価スコア別のドリフトを監視する</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問1</h3>
+<p>本番環境で稼働中のエージェントシステムにおいて、週末にトークンコストが通常の3倍に跳ね上がりました。HTTP エラー率は変化していません。原因を最も素早く特定するためにダッシュボードで確認すべきメトリクスの組み合わせはどれですか。</p>
+<p>A. サーバーの CPU 使用率とディスク I/O B. <code>cache_read_input_tokens</code> / <code>cache_creation_input_tokens</code>（キャッシュヒット率）、1トレースあたりのターン数、<code>tenant_id</code> 別の使用量 C. データベースのコネクションプール数 D. ユーザーのブラウザ種別と OS バージョン</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。HTTP エラーなしでコストが急増する場合、キャッシュ無効化（ヒット率低下）、エージェントのループ回数増加（ターン数増）、特定テナントの異常利用が主な原因です。</p></div></details>
+<h3>問2</h3>
+<p>金融機関の Claude アプリケーションで、コンプライアンス要件により ZDR（Zero Data Retention）が適用されており、本番の顧客プロンプト平文を一般的なログ基盤に保存できません。しかし、障害発生時の切り分け能力は維持したいと考えています。最も適切な計装方針はどれですか。</p>
+<p>A. すべてのロギングとトレースを完全に停止する B. トークン数、レイテンシ、<code>stop_reason</code>、ツール名、エラー種別、プロンプト版数などの構造化メタデータを常時記録し、コンテンツは PII リダクションと厳格なアクセス制御下でエラー時のみ限定キャプチャする C. ZDR を解除して全顧客の生プロンプトを平文で外部 SaaS に送信する D. 開発者のローカル端末に本番トラフィックを複製して表示する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。プライバシー制約下でも、構造化メタデータによってループ・コスト・ツール障害の大半は診断可能です。コンテンツが必要な場合もリダクションと最小権限のサンプリングで制限します。</p></div></details>
+<h3>問3</h3>
+<p>1日500万件のリクエストを処理するシステムで、全トレースの保存コストが高すぎるため、一律 1% のヘッドサンプリングを導入しました。しかし、発生率 0.2% の「特定条件でのみ発生するツール引数の破損」が調査できなくなりました。適切な改善策はどれですか。</p>
+<p>A. サンプリング率を 0.1% にさらに下げる B. 正常リクエストは低率でサンプリングしつつ、エラー・<code>max_tokens</code>・異常レイテンシ・低評価のトレースを 100% 保存するテールサンプリングへ切り替える C. ログの出力先を標準出力からテキストファイルに変える D. 問題が起きるまで本番環境でデバッグプリントを有効にする</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。ヘッドサンプリングは稀な障害を取りこぼします。結果に基づいて保存対象を選ぶテールサンプリングなら、コストを抑えつつ異常トレースを確実に捕捉できます。</p></div></details>
+<h3>問4</h3>
+<p>個々の失敗トレースをいくつか確認したところ、すべてツールタイムアウトや出力形式エラーなど別々の症状に見えました。システム全体の根本的な偏りを定量化するために行うべき分析はどれですか。</p>
+<p>A. 最も遅かった1件のトレースだけを徹底的に書き直す B. 失敗トレースをモデル版・プロンプト版・ツール名・入力カテゴリなどの属性で集計する障害コホート分析を行う C. すべてのエラーを無視して SLO を緩和する D. ランダムに選んだ成功トレースを10件読む</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。障害コホート分析により、一見バラバラに見える障害が特定のプロンプト版やツール・入力カテゴリに集中していることを定量的に発見できます。</p></div></details>
+<h2>自分で確かめる</h2>
+<ol><li>自身のエージェント呼び出しで <code>trace_id</code>, <code>turn_index</code>, <code>stop_reason</code>, <code>cache_read_input_tokens</code>, <code>tool_name</code>, <code>isError</code> を構造化 JSON ログとして出力するラッパーを書いてみる。</li><li>正常応答とエラー応答を混ぜたログに対し、「エラーのみ 100% 抽出」と「<code>prompt_version</code> 別の失敗率集計」を行う簡易スクリプトを試す。</li></ol>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch2">← 第2章 本番統合・信頼性・検索</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch4">第4章 デバッグ・インシデント →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch4" role="tabpanel" aria-labelledby="tab-sec-ch4" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第4章 高度なデバッグとインシデント対応（配点 10%）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：救急外来の「トリアージ」と「原因究明カンファレンス」</strong></p>
+<p>患者（本番システム）が急変したとき、いきなり手術（プロンプトの当てずっぽうな修正）を始める前に、まず止血（緩和・ロールバック）を行います。次に、症状が「脳（モデル出力）」「神経伝達（エージェントハーネス）」「手足（ツール）」「カルテ（データ／検索）」のどこから来ているかを証拠に基づいて切り分け、再発防止を検査項目（回帰評価）に組み込みます。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>マルチターン、マルチエージェント、非決定的な本番障害の証拠を分析し、発生源（モデル・ハーネス・ツール・データ）を正確に切り分けられる。</li><li>モデルの拒否（<code>refusal</code>）や検索グラウンディング障害を、システム障害の一種として診断・処理できる。</li><li>システム停止や品質回帰時のトリアージ、緩和、ロールバック、ステークホルダーへのコミュニケーションを選択できる。</li><li>インシデントの知見を回帰テスト、モニタリングカバレッジ、ポストモーテムへ確実にフィードバックできる。</li></ul>
+<h2>要点3つ</h2>
+<ol><li><strong>非決定的な障害は「4つの発生源」で切り分ける。</strong> モデルの出力（推論・拒否）、エージェントハーネス（ループ・履歴管理・状態）、ツール（スキーマ・タイムアウト・戻り値）、データ（検索漏れ・陳腐化）を証拠（トレース）で特定する。</li><li><strong>インシデント中の最優先は「原因究明」ではなく「止血（緩和・ロールバック）」である。</strong> 最新の変更を即座にロールバックするか、トラフィックを安定版・縮退運転へ逃がしてから根本原因を調査する。</li><li><strong>同じインシデントを二度と起こさない「学習ループ」を閉じる。</strong> ポストモーテムで終わらせず、再現ケースを CI/CD の回帰評価スイートに追加し、検知できなかった理由をアラート・SLI に反映する。</li></ol>
+<h2>30秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  I[インシデント発生] --&gt; T[トリアージ &amp; 影響範囲特定]
+  T --&gt; M[即時緩和 / ロールバック / 縮退]
+  M --&gt; D{証拠分析: 発生源の切り分け}
+  D --&gt;|モデル| D1[拒否 / 推論ドリフト / 形式崩れ]
+  D --&gt;|ハーネス| D2[履歴欠落 / 状態不整合 / 無限ループ]
+  D --&gt;|ツール| D3[API 障害 / 引数エラー / タイムアウト]
+  D --&gt;|データ| D4[検索漏れ / 古いドキュメント / コンテキスト汚染]
+  D1 &amp; D2 &amp; D3 &amp; D4 --&gt; L[学習ループ: 回帰評価 &amp; 監視追加 &amp; ポストモーテム]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch4-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">非決定的な障害</th><td>同じような入力でも毎回再現せず、特定のターン順・検索結果・サンプリングゆらぎで発生する障害</td></tr><tr><th scope="row">発生源の切り分け</th><td>トレース上の入出力を追い、モデル・ハーネス・ツール・データのどの層に原因があるか特定すること</td></tr><tr><th scope="row">モデル拒否 (<code>refusal</code>)</th><td>安全性フィルタや境界条件により、モデルがタスク実行を断る状態。正常応答と混同するとサイレント障害になる</td></tr><tr><th scope="row">トリアージ</th><td>影響範囲（全テナントか一部か）、重大度、緊急度を素早く判定し、対応優先度を決めること</td></tr><tr><th scope="row">緩和 (Mitigation)</th><td>根本修正を待たず、ロールバック・機能フラグ OFF・レート制限・フォールバック等でユーザー影響を止める処置</td></tr><tr><th scope="row">ポストモーテム</th><td>インシデントのタイムライン・根本原因・対応の振り返り・恒久対策（Blameless Postmortem）をまとめた記録</td></tr><tr><th scope="row">回帰評価 (Regression Eval)</th><td>インシデントを引き起こした入力やシナリオをテストスイートに追加し、将来の変更で再発しないことを自動検証する仕組み</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>4-1 複雑な障害の診断（4層の切り分け）</h3>
+<p>マルチターンやマルチエージェントの障害は、「モデルのせい」と決めつけると原因を見誤ります。トレースを上から順に追い、<strong>入力と出力の境界</strong> で責任を切り分けます。</p>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch4-tbl-2"><table><thead><tr><th scope="col">発生源</th><th scope="col">典型的な証拠（トレース上の兆候）</th><th scope="col">具体的な障害例</th></tr></thead><tbody><tr><th scope="row"><strong>1. モデル出力</strong></th><td>正しいツール結果とプロンプトが渡っているのに、誤った判断や形式違反を返す</td><td>突然の <code>refusal</code> 増加、指示無視、長いコンテキスト中間部の見落とし（Lost in the Middle）</td></tr><tr><th scope="row"><strong>2. エージェントハーネス</strong></th><td>モデルの宣言は正しいが、次ターンの入力履歴や状態が壊れている</td><td>ツール結果を履歴に戻し忘れ、サブエージェントへの委任時に必須 ID が欠落、<code>max_turns</code> 到達後の必須処理漏れ</td></tr><tr><th scope="row"><strong>3. ツール</strong></th><td>モデルの引数は妥当だが、ツール側が異常を返す（または誤解を招く表現）</td><td>タイムアウト時に空配列 <code>[]</code> を返して「該当なし」と誤認させる、<code>isError: true</code> 未設定、5xx 障害</td></tr><tr><th scope="row"><strong>4. データ / 検索</strong></th><td>ハーネスもツールも正常だが、渡された情報自体が誤り・不足・古い</td><td>古い社内規定が上位にヒット、チャンク分断による数値欠落、信頼できない外部文書からの間接インジェクション</td></tr></tbody></table></div>
+<h4>障害の一種としての「モデルの拒否」</h4>
+<p>モデルが <code>stop_reason: &quot;refusal&quot;</code>（または拒否文言）を返したとき、ハーネスがそれを検知できないと、ユーザーに「申し訳ありませんが対応できません」がそのまま返るか、後続パーサーがクラッシュします。</p>
+<ul><li>正当な安全拒否なのか、無害な入力に対する <strong>過剰拒否（False Refusal）</strong> なのかを分類し、過剰拒否であればシステムプロンプトの表現調整や誤検知ルールの見直しを行います。</li></ul>
+<h3>4-2 インシデント対応と学習ループ</h3>
+<p>本番で品質回帰やシステム停止が起きた際、エンジニアは以下の順序で動きます。</p>
+<h4>インシデント対応の4ステップ</h4>
+<ol><li><strong>トリアージ (Triage)</strong>: 影響を受けているテナント、機能、モデル版、プロンプト版を特定し、重大度を確定する。</li><li><strong>緩和とロールバック (Mitigate & Rollback)</strong>: 原因デプロイ（プロンプト更新・モデル変更・MCP 改修）が直近にあるなら <strong>即座にロールバック</strong> する。外部障害ならサーキットブレーカーや縮退運転（軽量機能・人間エスカレーション）へ切り替える。</li><li><strong>コミュニケーション (Communicate)</strong>: 影響範囲・暫定回避策・復旧見込みを関係者と顧客へタイムリーに共有する。</li><li><strong>学習ループへの反映 (Close the Loop)</strong>:<br>• <strong>回帰評価の追加</strong>: インシデントを再現するケースをゴールデンセット／CI 評価ゲートへ必ず追加する。<br>• <strong>モニタリングの拡張</strong>: 今回アラートが遅れた、あるいは鳴らなかった理由（例：<code>refusal</code> 率を監視していなかった等）を特定し、SLI/アラートを追加する。<br>• <strong>ポストモーテム</strong>: 個人を責めず（Blameless）、システムとプロセスの改善アクション（担当・期限付き）を確定する。</li></ol>
+<div class="alert alert-important"><div class="alert-title">📌 重要</div><p>本番障害の最中に「プロンプトを少しずつ書き換えて様子を見る」のは厳禁です。変更履歴が錯綜してロールバック不能になり、復旧を遅らせます。まずは既知の安定バージョンへ戻すことが最優先です。</p></div>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch4-tbl-3"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">マルチエージェントが同じ質問を3回繰り返す</th><td>プロンプトに「繰り返すな」と追記する</td><td>トレースでハーネスがツール結果を履歴に戻しているか確認する</td></tr><tr><th scope="row">モデル更新直後からユーザー不満が急増した</th><td>本番環境でプロンプトを直接書き換えて調整する</td><td>即座に前のモデル版・プロンプト版へロールバックし、安定後にオフライン評価で検証する</td></tr><tr><th scope="row">RAG が誤った回答をした</th><td>まず LLM のモデルサイズを上げる</td><td>検索スパンを確認し、取得漏れ・順位・データ鮮度・生成無視のどこが原因か切り分ける</td></tr><tr><th scope="row">重大インシデントが復旧した</th><td>報告書を書いて対応完了とする</td><td>再現ケースを CI の回帰テストスイートに追加し、検知用の SLI/アラートを補強する</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問1</h3>
+<p>本番のマルチエージェント調査システムで、ワーカーが正しい数値をツールから取得したにもかかわらず、最終レポートにその数値が反映されない障害が散発しています。トレースを確認すると、ワーカーの最終応答テキストには数値が書かれていませんでした。問題の発生源と最初に確認すべき箇所はどれですか。</p>
+<p>A. モデルが計算能力を失っているため、より大きいモデルに変更する B. ハーネスおよび委任プロンプト設計の問題であり、親が受け取れるのは子の最終メッセージのみであるため、ワーカーへの指示で必須数値を含めるよう指定されているか確認する C. ツールがタイムアウトしているため、タイムアウト値を10倍に延ばす D. 検索データベースのインデックスが破損しているため、再構築する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。ツール結果自体はワーカー内にあり、親に届くのはワーカーの最終メッセージだけです。出力指示やハーネス側の構造化出力契約を見直すべきです。</p></div></details>
+<h3>問2</h3>
+<p>プロンプトの軽微な修正を本番リリースした30分後、一部の顧客カテゴリから「エージェントが正当な問い合わせをすべて拒否する」というクレームが急増しました。インシデント対応として最初に取るべき行動はどれですか。</p>
+<p>A. 問題の顧客カテゴリの入力例を収集し、数時間かけて新しいプロンプトを設計・テストする B. まずプロンプトを直前の安定バージョンへ即時ロールバックして顧客影響を止め、その後に拒否された入力のトレースを分析する C. すべての安全ガードレールを無効化する D. モデルの <code>temperature</code> を 1.0 に上げて回答の多様性を増やす</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。インシデント対応の基本は「まず止血（ロールバック）」です。原因分析と修正は影響を止めたあとに行います。</p></div></details>
+<h3>問3</h3>
+<p>あるエージェントが非決定的な障害（10回に1回だけ不正な JSON 引数でツールを呼び出し失敗する）を起こしています。再現と原因切り分けに最も有効なアプローチはどれですか。</p>
+<p>A. 本番ログから失敗した1件だけの最後の応答文を読む B. 失敗トレースの全ターン履歴（モデル宣言・ツール定義・<code>stop_reason</code>・コンテキスト長）と成功トレースを比較し、発生条件のコホート（特定の長さ・ツール順序・<code>max_tokens</code> 切断など）を特定する C. 再現しないため仕様として放置する D. ユーザーに「失敗したらページをリロードしてください」と案内する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。非決定的な障害は単発の応答文だけでは分からず、成功例と失敗例のトレース比較（特に <code>max_tokens</code> や特定履歴パターン）で条件を特定します。</p></div></details>
+<h3>問4</h3>
+<p>先月発生した「特定の外部 API エラー時にエージェントが無限ループに陥り、高額課金が発生した」インシデントについて、再発防止の学習ループとして最も不十分な対応はどれですか。</p>
+<p>A. 該当 API エラーを模擬したケースを CI/CD の回帰評価スイートに追加する B. 1リクエストあたりのターン数とトークン上限のアラートをモニタリングに追加する C. エンジニア全員に「今後このようなコードを書かないように」とメールで注意喚起して終了する D. ポストモーテムでハーネスの <code>max_turns</code> とエラー分類の欠陥を特定し、修正タスクを起票する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>C</strong>。精神論の注意喚起だけではシステム的な再発防止になりません。回帰テストとモニタリングへの反映が不可欠です。</p></div></details>
+<h2>自分で確かめる</h2>
+<ol><li>サンプルのエージェントで「意図的にツール結果を履歴に戻し忘れるバグ」「<code>max_tokens</code> を極端に小さくするバグ」をそれぞれ入れ、トレース上での見え方の違いを確認する。</li><li>仮想のインシデント（例：モデル更新による JSON 形式崩れ）を想定し、15分で書ける簡易ポストモーテム（タイムライン・緩和策・回帰テスト追加案）を作成してみる。</li></ol>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch3">← 第3章 オブザーバビリティ</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch5">第5章 評価エンジニアリング →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch5" role="tabpanel" aria-labelledby="tab-sec-ch5" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第5章 評価エンジニアリングと品質保証（配点 12%）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：自動車の「衝突安全テスト場」と「計測器の校正」</strong></p>
+<p>新しいエンジン（プロンプトやモデル）を公道（本番環境）に出す前に、テストコース（CI/CD 評価ゲート）で合格させなければなりません。しかし、計測器（LLM-as-judge）自体が狂っていれば、危険な車が合格し続けます。まずは人間のプロの評価（ラベル付きデータ）で計測器をキャリブレーションし、コースが古びて暗記されないよう定期的にテストコースも刷新します。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>ゴールデンセット、回帰テスト、CI/CD 評価ゲートを含むオフライン評価システムを設計し、長期的な妥当性（汚染・飽和・カバレッジ不足対策）を維持できる。</li><li>人間ラベルと照合して LLM-as-judge をキャリブレーションし、位置バイアス等の歪みを排除して信頼できるジャッジを構築できる。</li><li>本番ライブトラフィックでのサンプリング、A/B テスト、フィードバックループ、タスク種別に応じたオンライン評価指標を選択できる。</li></ul>
+<h2>要点3つ</h2>
+<ol><li><strong>キャリブレーションされていない LLM-as-judge にリリースゲートを任せてはならない。</strong> 位置バイアス（先に出た方を好む等）をランダム化で抑え、人間のラベルとの一致度（Cohen's kappa 等）が許容水準に達するまでゲート権限を与えない。</li><li><strong>評価スイートは「作って終わり」にすると腐敗する。</strong> テストデータの汚染（Contamination）、全問正解による飽和（Saturation）、本番分布との乖離（カバレッジ不足）を防ぐため継続的に更新する。</li><li><strong>オフライン評価とオンライン評価は車の両輪。</strong> リリース前はゴールデンセットと CI ゲートで守り、リリース後はライブトラフィックのサンプリング・A/B テスト・タスク別指標（抽出・生成・エージェント・検索）で実品質を測る。</li></ol>
+<h2>30秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+  P[プロンプト / モデル変更] --&gt; CI[CI/CD 評価ゲート&lt;br&gt;ゴールデンセット &amp; 回帰テスト]
+  H[人間ラベルデータ] --&gt; CAL[LLM-as-judge&lt;br&gt;キャリブレーション]
+  CAL --&gt;|一致度 OK| CI
+  CI --&gt;|Pass| AB[本番 A/B テスト / カナリア]
+  AB --&gt; ON[オンライン品質測定&lt;br&gt;サンプリング &amp; フィードバック]
+  ON --&gt;|新規エッジケース| CI</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch5-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">ゴールデンセット (Golden Set)</th><td>期待出力や判定基準が確定している厳選されたテストデータセット</td></tr><tr><th scope="row">CI/CD 評価ゲート</th><td>プルリクエストやデプロイ時に自動評価を実行し、基準未満の変更をブロックする関門</td></tr><tr><th scope="row">評価スイートの飽和 (Saturation)</th><td>モデルの進歩等で既存テストの正答率が 99% に達し、改善と劣化の差を識別できなくなる状態</td></tr><tr><th scope="row">汚染 (Contamination)</th><td>テストデータがモデルの学習データに含まれたり、開発者がテストケースに特化しすぎて汎化性能を測れなくなること</td></tr><tr><th scope="row">LLM-as-judge</th><td>別の LLM（または評価用プロンプト）を使って出力品質を自動採点する手法</td></tr><tr><th scope="row">位置バイアス (Position Bias)</th><td>ペア比較において、内容ではなく「最初（または最後）に提示された回答」を好んで選んでしまう LLM ジャッジの偏り</td></tr><tr><th scope="row">評価者間信頼性 (Inter-rater Reliability)</th><td>人間同士、または人間と LLM-as-judge の判定がどれだけ一致しているかの指標（Cohen's κ など）</td></tr><tr><th scope="row">キャリブレーション (Calibration)</th><td>ジャッジのスコアや判定基準が、人間の専門家ラベルの判断と一致するように調整・検証すること</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>5-1 評価システムの設計と長期維持</h3>
+<p>本番運用では「変更したら悪化した（リグレッション）」をリリース前に防ぐため、オフライン評価システムを構築します。</p>
+<h4>評価スイートの構成要素</h4>
+<ol><li><strong>動作チェック (Behavioral Checks)</strong>: 決定論的な単体テスト（JSON スキーマ準拠、禁止語不使用、期待ツールの呼び出し有無）。高速・低コスト。</li><li><strong>検索・グラウンディング指標</strong>: 検索の適合率（Retrieval Precision）と再現率（Recall）、回答が根拠文書に基づいているか（Groundedness / Faithfulness）。</li><li><strong>回帰テストスイート</strong>: 過去のインシデントや既知の難しいエッジケースを集めたテスト群。</li><li><strong>非決定的なエージェントの評価（<code>pass@k</code> vs <code>pass^k</code>）</strong>: エージェントは試行ごとに経路が変わるため、単一実行だけでなく複数試行で評価する。「k回中1回でも成功すればよい」探索タスクには <strong><code>pass@k</code></strong> を、本番の信頼性（k回連続で成功すべきタスク）には <strong><code>pass^k</code></strong> を用いる。また、最終結果だけでなく <strong>トランスクリプト（ツール呼び出し軌跡）</strong> も採点し、インフラノイズ（コンテナ・ネットワーク揺らぎ）を分離する。</li><li><strong>ゴールデンセットとリリース基準</strong>: 本番分布を反映した代表ケース。プロンプト・モデル・エージェント変更時に「必須テスト 100% 合格＋品質スコア劣化なし」等のゲート基準を設定する。</li></ol>
+<h4>スイートの妥当性を長期に維持する3つの脅威と対策</h4>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch5-tbl-2"><table><thead><tr><th scope="col">脅威</th><th scope="col">症状</th><th scope="col">対策</th></tr></thead><tbody><tr><th scope="row"><strong>飽和 (Saturation)</strong></th><td>新旧どちらのプロンプトも 98% を取り、違いが見えない</td><td>より高難度なエッジケースや本番の失敗トレースを継続追加する</td></tr><tr><th scope="row"><strong>汚染 (Contamination)</strong></th><td>評価データに合わせた過剰チューニングで、未知の本番入力に弱い</td><td>開発者に見せない非公開ホールドアウトセット（Holdout Set）を保持する</td></tr><tr><th scope="row"><strong>カバレッジ不足</strong></th><td>新機能や季節変動など、本番の入力分布とテストが乖離</td><td>本番ライブトラフィックから定期的に新規ケースをサンプリングして補充する</td></tr></tbody></table></div>
+<h3>5-2 LLM-as-judge のエンジニアリング</h3>
+<p>自然言語の品質や複雑な推論をすべてコードで採点することは困難なため、LLM-as-judge を用いますが、<strong>設計と校正を誤ると偽の安心感を生みます</strong>。</p>
+<h4>よくあるバイアスと対策</h4>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch5-tbl-3"><table><thead><tr><th scope="col">バイアス／問題</th><th scope="col">内容</th><th scope="col">対策</th></tr></thead><tbody><tr><th scope="row"><strong>位置バイアス</strong></th><td>ペア比較で A（先頭）を無意識に多く選ぶ</td><td><strong>提示順序をランダム化（または A/B 入れ替えて両方評価）</strong> し、一貫しない場合は引き分け・無効とする</td></tr><tr><th scope="row"><strong>冗長性バイアス</strong></th><td>中身が薄くても長い回答を高評価する</td><td>ルーブリックに簡潔性・過剰情報の減点基準を明記し、事実単位（Factuality）で採点させる</td></tr><tr><th scope="row"><strong>自己選好バイアス</strong></th><td>同じモデルファミリーの出力を高く評価しがち</td><td>評価対象と異なる観点・厳格な参照解答（Reference-based）を与える</td></tr><tr><th scope="row"><strong>ジャッジのドリフト</strong></th><td>ジャッジ用モデルのバージョン更新で採点基準がズレる</td><td>ジャッジモデルのバージョンを固定し、更新時は人間ラベルセットで再キャリブレーションする</td></tr></tbody></table></div>
+<h4>キャリブレーションの鉄則</h4>
+<ol><li>まず人間がラベル付けした代表サンプル（例：100〜200件）を用意する。</li><li>明確なルーブリック（1〜5点の具体例付き、または Pass/Fail の二値基準）を設計する。</li><li>LLM-as-judge の判定と人間ラベルの一致度（一致率や Cohen's kappa）を測定する。</li><li><strong>一致度が許容水準に達するまで、CI/CD のリリースゲートとしての権限を与えない。</strong></li></ol>
+<h3>5-3 オンラインでの品質測定</h3>
+<p>オフラインテストをすべて通過しても、本番のリアルなユーザー行動は予測を超えます。</p>
+<ul><li><strong>ライブトラフィックのサンプリング</strong>: 本番トラフィックの一部を継続的に抽出し、オフラインと同じジャッジや人間レビューにかけて品質推移を監視する。</li><li><strong>A/B テスト</strong>: 新旧のプロンプトやモデルをトラフィック分割して比較し、ユーザー行動（解決率、再質問率、離脱率、Thumbs Up/Down）で統計的有意差を検証する。</li><li><strong>タスク種別に合った指標の選択</strong>:</li></ul>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-ch5-tbl-4"><table><thead><tr><th scope="col">タスク種別</th><th scope="col">適切な指標</th></tr></thead><tbody><tr><th scope="row"><strong>構造化抽出</strong></th><td>フィールド単位の完全一致（Exact Match）、F1 スコア、スキーマ準拠率</td></tr><tr><th scope="row"><strong>自由生成（要約・文章作成）</strong></th><td>ルーブリックに基づく LLM-as-judge、人間評価、ユーザー修正率</td></tr><tr><th scope="row"><strong>エージェント型</strong></th><td>タスク完了率（Pass@1）、ターン数・ツール呼び出し効率、ポリシー違反ゼロ率</td></tr><tr><th scope="row"><strong>検索に根拠を置くもの (RAG)</strong></th><td>検索適合率／再現率、引用の正確性（Citation Precision）、幻覚率（Hallucination Rate）</td></tr></tbody></table></div>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 5" class="table-wrapper" id="sec-ch5-tbl-5"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">ペア比較ジャッジが先頭の回答ばかり選び、人間と一致しない</th><td>そのまま合格しきい値を下げたりモデルだけ変える</td><td>順序のランダム化（または入れ替え）でバイアスを抑え、人間ラベルで再校正するまでゲート権限を外す</td></tr><tr><th scope="row">評価スイートで全モデルが 99% を記録している</th><td>「品質が完璧になった」と判断する</td><td>飽和を疑い、本番の失敗ケースや高難度ケースを追加して識別力を回復する</td></tr><tr><th scope="row">モデル更新後にジャッジのスコアだけ急に上がった</th><td>製品品質が向上したとみなす</td><td>ジャッジモデルのドリフトを疑い、固定の人間ラベルセットでキャリブレーションをやり直す</td></tr><tr><th scope="row">構造化抽出タスクのオンライン品質を測りたい</th><td>文章の流暢さ（Fluency）を LLM に採点させる</td><td>フィールド単位の正確性、検証エラー率、人間修正率などタスク適合指標を選ぶ</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問1</h3>
+<p>あるチームはペア比較型の LLM-as-judge でプロンプト変更をゲートしていますが、人間評価者との一致率が約 52% しかなく、ジャッジが「1番目に表示された応答」を圧倒的に多く選んでいることが判明しました。最初に取るべき対応はどれですか。</p>
+<p>A. ジャッジの合格しきい値を緩めてリリース速度を上げる B. 応答の提示順序をランダム化（または入れ替え比較）し、人間がラベル付けしたデータセットで再キャリブレーションを行い、一致度が基準を満たすまでゲート権限を一時停止する C. 出力形式をペア比較から 100点満点の自由採点に変えてそのまま運用を続ける D. 人間の評価者を増やして本番リリースごとに全件目視する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。公式試験ガイドのサンプル問題でも問われている最重要ポイントです。位置バイアスを除去したうえで人間ラベルと照合し、信頼できる一致度が確認できるまで自動ゲートとして使ってはいけません。</p></div></details>
+<h3>問2</h3>
+<p>半年前から運用しているゴールデンセット（200問）に対して、新しいプロンプトと現行プロンプトのどちらも正答率 98.5% を記録しました。しかし本番ユーザーからは「複雑な例外処理の失敗が増えた」という報告が上がっています。評価システムに起きている問題はどれですか。</p>
+<p>A. 評価スイートの飽和（Saturation）および本番分布とのカバレッジ不足 B. 位置バイアスによる過小評価 C. トークン上限による <code>max_tokens</code> エラー D. プロンプトキャッシュの TTL 切れ</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>A</strong>。テストが簡単すぎる・古すぎることで差異が出なくなる「飽和」と、本番の新しいユースケースを反映できていない「カバレッジ不足」が起きています。</p></div></details>
+<h3>問3</h3>
+<p>CI/CD パイプラインに評価ゲートを組み込む際、実行コストとフィードバック速度を最適化しつつ品質を担保する設計として最も適切なものはどれですか。</p>
+<p>A. すべてのプルリクエストごとに、1万件の複雑なエージェントタスクを最高価な LLM-as-judge で全件評価する B. 高速・決定論的な動作チェック（スキーマ検証・単体テスト）と厳選された回帰セットを PR ごとに実行し、大規模なゴールデンセット評価はマージ前や夜間バッチで実行する階層化ゲートにする C. CI/CD には評価を入れず、本番デプロイ後 1週間に1回だけ人間が抜粋確認する D. テストケースをすべてシステムプロンプトの例題として埋め込む</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。高速な決定論的チェックと厳選回帰セットで開発サイクルを回し、重い包括評価はリリース前ゲートとして階層化するのが実務標準です。</p></div></details>
+<h3>問4</h3>
+<p>RAG を用いた社内問い合わせエージェントのオンライン評価において、タスクの性質に最も適した指標の組み合わせはどれですか。</p>
+<p>A. 1秒あたりの出力文字数のみ B. 検索適合率（必要な社内文書が上位に取れているか）、グラウンディング率（回答が取得文書に基づいているか）、およびユーザー解決率 C. 回答の平均文字数（長いほど良いとする） D. API の HTTP 200 応答率のみ</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。検索に根拠を置くエージェントでは、「正しく検索できたか」「検索結果に忠実に答えたか」「ユーザーの課題を解決できたか」を組み合わせて測定します。</p></div></details>
+<h2>自分で確かめる</h2>
+<ol><li>同じ2つの回答 A・B を使い、提示順を <code>(A, B)</code> と <code>(B, A)</code> に入れ替えて LLM-as-judge に評価させ、位置バイアスが起きるか実験してみる。</li><li>自分のプロジェクトで、決定論的チェック（JSON 検証等）3件と、人間ラベル付きの小規模回帰セット（10件）を作り、CI スクリプトで自動判定する流れを組んでみる。</li></ol>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch4">← 第4章 デバッグ・インシデント</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch6">第6章 コストとレイテンシ最適化 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch6" role="tabpanel" aria-labelledby="tab-sec-ch6" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第6章 大規模環境でのコストとレイテンシの最適化（配点 8%）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：物流ネットワークの「配車最適化」と「高速道路の優先レーン」</strong></p>
+<p>すべての荷物を大型トラック1台（最上位モデル）で運べば確実ですが、燃料代（コスト）が破綻します。軽トラック（Haiku）で運べる荷物は振り分け、同じルートは定期便（Prompt Caching）を使い、急がない荷物は深夜便（Message Batches API）に回します。急ぐ荷物には、積荷を全部降ろす前に渡し始める工夫（ストリーミング）と、複数スタッフの同時作業（ツール並列実行）を使います。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>使用量とコストのデータに基づき、コストモデリング・モデルルーティング／カスケード・キャッシング・Batch 経済性・テナント予算を設計できる。</li><li>TTFT（初回トークンまでの時間）と全体レイテンシ（E2E）を区別し、ストリーミング、ツール並列実行、キャッシュチェックポイント、<code>output_config.effort</code> を適切に適用できる。</li></ul>
+<h2>要点3つ</h2>
+<ol><li><strong>モデルルーティングとカスケードでフリート全体の単価を下げる。</strong> 簡単な分類・抽出は小型モデル（Haiku 等）へルーティングし、確信度が低い・失敗したケースだけ上位モデル（Sonnet / Opus）へカスケードする。</li><li><strong>Prompt Caching は「構造の安定性」が命。</strong> 長いシステムプロンプト、ツール定義、共通文書をプレフィックスに固定し、<code>cache_read_input_tokens</code> を最大化して入力コストと TTFT を劇的に下げる。</li><li><strong>レイテンシは「TTFT」と「全体時間」を切り分けて最適化する。</strong> 体感速度（TTFT）にはストリーミングとキャッシュが効き、全体完了時間には並列ツール実行、<code>effort</code> レベル調整、出力トークン抑制が効く。</li></ol>
+<h2>30秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+  IN[リクエスト] --&gt; RT{ルーター&lt;br&gt;複雑度 / テナント予算}
+  RT --&gt;|単純| H[Haiku&lt;br&gt;低コスト・高速]
+  RT --&gt;|中〜高| S[Sonnet / Opus]
+  H --&gt;|低確信 / 失敗| S
+  IN --&gt;|遅延許容・非対話| B[Message Batches API&lt;br&gt;50% コスト削減]
+  S --&gt; OPT[最適化: Prompt Caching +&lt;br&gt;ストリーミング + 並列ツール + effort 調整]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch6-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">モデルルーティング</th><td>入力の難易度やタスク種別を事前判定し、最適なモデル（Haiku / Sonnet / Opus）へ振り分ける手法</td></tr><tr><th scope="row">モデルカスケード</th><td>まず安価・高速なモデルで処理し、検証失敗や低確信の場合のみ上位モデルへフォールバックする二段階手法</td></tr><tr><th scope="row">Prompt Caching</th><td>リクエスト先頭の不変プレフィックスをサーバー側にキャッシュし、再利用時の入力コストと TTFT を削減する仕組み</td></tr><tr><th scope="row">TTFT (Time To First Token)</th><td>リクエスト送信から最初の 1トークンが返ってくるまでの時間。ユーザーの体感応答速度に直結する</td></tr><tr><th scope="row">全体レイテンシ (E2E Latency)</th><td>リクエスト送信から最終トークンおよび全ツール実行が完了するまでの総時間</td></tr><tr><th scope="row"><code>output_config.effort</code></th><td>Claude API のパラメータ（<code>low</code>, <code>medium</code>, <code>high</code>, <code>xhigh</code>, <code>max</code> 等）。推論・応答に費やすトークン量と深さを調整する</td></tr><tr><th scope="row">テナントごとの予算 (Per-tenant Budget)</th><td>マルチテナント環境で顧客単位のコスト上限・アラート・縮退ルールを適用する制御</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>6-1 大規模環境でのコストアーキテクチャ</h3>
+<p>フリート規模（数千〜数百万リクエスト/日）になると、1リクエストあたり数円の差が月間数百万円の差になります。</p>
+<h4>1. コストのモデリングと予測</h4>
+<p>コストは <code>入力トークン単価 × 入力量 + 出力トークン単価 × 出力量 + キャッシュ書込/読込費</code> で決まります。</p>
+<ul><li><strong>落とし穴</strong>: エージェントループでは、<strong>ターンが進むたびに過去の履歴全体が入力トークンとして再課金される</strong> ため、ターン数が 2倍になると総入力トークンは 4倍近く膨らみます。Prompt Caching と Context Editing が不可欠な理由です。</li></ul>
+<h4>2. モデルルーティングとカスケード</h4>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch6-tbl-2"><table><thead><tr><th scope="col">戦略</th><th scope="col">仕組み</th><th scope="col">メリット・使いどころ</th></tr></thead><tbody><tr><th scope="row"><strong>ルーティング</strong></th><td>軽量分類器やルールでタスク複雑度を判定し、最初から適切なモデルへ送る</td><td>ルーティング自体の遅延が小さければ最初から最適コストになる</td></tr><tr><th scope="row"><strong>カスケード</strong></th><td>まず Haiku で試行し、スキーマ検証失敗や低確信時のみ Sonnet/Opus へ送る</td><td>80% が Haiku で解ける場合、全体コストを劇的に削減。ただしエスカレーション時は2回分の遅延がかかる</td></tr></tbody></table></div>
+<h4>3. キャッシング戦略と診断</h4>
+<ul><li><strong>チェックポイント設定</strong>: 変更されない長い要素（<code>system</code> プロンプト、ツール定義、共通マニュアル）を先頭にまとめ、キャッシュブレークポイント（<code>cache_control</code>）を配置する。</li><li><strong>診断</strong>: <code>cache_read_input_tokens</code> が想定より低い場合、直前にタイムスタンプや動的 ID、ユーザー別の変数を混入させて <strong>プレフィックスを壊していないか</strong> を確認する。また、リクエスト間隔がキャッシュ TTL（通常 5分、拡張キャッシュは 1時間）を超えて失効していないかも確認する。</li></ul>
+<h4>4. Batch API とリアルタイムの経済性</h4>
+<ul><li><strong>Message Batches API</strong>: 同期 API 比 <strong>50% 割引</strong>。夜間バッチ、大規模データ抽出、オフライン評価の大量実行に最適。</li><li><strong>使えない場面</strong>: ユーザーが待機している対話 UI、24時間以内の厳格な短時間 SLA が必要な処理、途中で外部ツール往復が必要なエージェントループ。</li></ul>
+<h4>5. テナントごとの予算適用</h4>
+<ul><li>ハードリミット到達時：完全拒否（<code>429</code>）するか、自動的に安価なモデル／低 <code>effort</code> モードへグレースフルデグラデーションさせるかを契約プランに応じて設計する。</li></ul>
+<h3>6-2 レイテンシエンジニアリング</h3>
+<p>「遅い」と言われたとき、<strong>TTFT が遅いのか、E2E 全体が遅いのか</strong> を区別して処方箋を出します。</p>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch6-tbl-3"><table><thead><tr><th scope="col">最適化手法</th><th scope="col">効く指標</th><th scope="col">内容とポイント</th></tr></thead><tbody><tr><th scope="row"><strong>ストリーミング (SSE)</strong></th><td><strong>TTFT / 体感速度</strong></td><td>全文生成を待たず、生成されたトークンから逐次 UI に描画する</td></tr><tr><th scope="row"><strong>Prompt Caching</strong></th><td><strong>TTFT</strong></td><td>長い入力プレフィックスの再計算（Prefill）をスキップし、初回トークンまでの待ち時間を短縮</td></tr><tr><th scope="row"><strong>ツールの並列実行</strong></th><td><strong>E2E 全体</strong></td><td>独立した複数のツール呼び出しを 1回のモデル応答で並列宣言させ、ハーネス側で非同期並列実行（<code>Promise.all</code> / <code>asyncio.gather</code>）する</td></tr><tr><th scope="row"><strong><code>output_config.effort</code> の調整</strong></th><td><strong>E2E 全体 & コスト</strong></td><td>単純な処理や高速サブエージェントでは <code>effort: &quot;low&quot;</code> や <code>&quot;medium&quot;</code> に下げ、過剰な思考トークンと長いツール呼び出しを抑制する</td></tr><tr><th scope="row"><strong>出力の簡潔化・構造化</strong></th><td><strong>E2E 全体 & コスト</strong></td><td>出力トークンは入力トークンより生成時間がかかる（逐次生成）。不要な前置きや解説を省き、簡潔な JSON のみに絞る</td></tr></tbody></table></div>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>レイテンシの計算感覚</strong>：出力トークン生成（Decode）は 1トークンずつ順番に生成されるため、E2E レイテンシの大半は「出力トークン数」と「直列のツール往復回数」で決まります。並列化と <code>effort</code> 調整が最も効きます。</p></div>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-ch6-tbl-4"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">単純な分類と複雑な推論が混在し、コストが高い</th><td>全リクエストに最上位モデル（Opus 等）を使う</td><td>モデルルーティングまたはカスケード（Haiku → Sonnet/Opus）を導入する</td></tr><tr><th scope="row">チャットボットの体感待ち時間（TTFT）が長い</th><td>応答全文を待ってから一括表示する</td><td>ストリーミングと Prompt Caching を有効化する</td></tr><tr><th scope="row">3つの独立した API を順に呼んで E2E が 15秒かかっている</th><td>1ターン1ツールで直列実行する</td><td>モデルに並列ツール呼び出しを許可し、ハーネスで非同期並列実行する</td></tr><tr><th scope="row">簡単なサブエージェントが思考トークンを使いすぎて遅い</th><td>モデルを変更せずに <code>max_tokens</code> だけ削る</td><td><code>output_config.effort</code> を <code>low</code> または <code>medium</code> に下げる</td></tr><tr><th scope="row">夜間の10万件ドキュメント分類コストを半分にしたい</th><td>同期 API を並列で叩き続ける</td><td>ツール往復が不要な非同期処理として Message Batches API を使う</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問1</h3>
+<p>あるマルチステップの検索エージェントで、E2E レイテンシ（全体完了時間）が 12秒かかっており、目標の 5秒を超えています。トレースを見ると、1回の処理で互いに依存しない4つの社内 DB 検索ツールを 4ターンに分けて1つずつ直列実行していました。E2E レイテンシを短縮する最も効果的な変更はどれですか。</p>
+<p>A. ストリーミングを有効化する B. 4つの独立したツール呼び出しを1回のモデル応答で並列宣言させ、ハーネス側で非同期に並列実行する C. システムプロンプトを短くする D. Message Batches API に切り替える</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。独立したツール呼び出しを並列化することで、4回分のネットワーク往復とツール待ち時間を1回分に圧縮でき、E2E レイテンシを大幅に削減できます。ストリーミング（A）は TTFT（体感）には効きますが、ツール実行を含む全体の完了時間は短縮しません。</p></div></details>
+<h3>問2</h3>
+<p>長いシステムプロンプト（15,000トークン）に Prompt Caching を設定しているにもかかわらず、メトリクスを見るとキャッシュヒット率が 5% 未満で、ほぼ毎回 <code>cache_creation_input_tokens</code> が課金されています。最も可能性の高い原因はどれですか。</p>
+<p>A. 出力トークン数が多すぎるため B. システムプロンプトの先頭付近に「現在時刻（秒単位）」や「リクエストごとの一意な ID」を埋め込んでおり、プレフィックスが毎回変化しているため C. ストリーミングを使用しているため D. モデルの <code>effort</code> を <code>high</code> にしているため</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。Prompt Caching は先頭からの完全一致が条件です。先頭付近に動的な値（現在時刻、ランダム ID、ユーザー固有情報）があるとキャッシュが毎回ミスします。動的情報は末尾の <code>user</code> メッセージに置くべきです。</p></div></details>
+<h3>問3</h3>
+<p>ある開発チームは、定型的なコードスタイルチェックや簡単なデータ抽出を行うサブエージェントでも、デフォルトの <code>high</code> effort を使用しているため、不要に長い思考プロセスと遅延が発生しています。モデルファミリーを変えずにレイテンシと出力トークンコストを抑える最も適切な設定はどれですか。</p>
+<p>A. <code>output_config.effort</code> を <code>low</code>（または <code>medium</code>）に調整する B. <code>stop_reason</code> を無視して 2秒で接続を切る C. リトライ回数を増やす D. <code>max_tokens</code> を 10 に設定する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>A</strong>。<code>effort</code> パラメータを下げることで、同一モデルのまま思考トークンや出力の冗長さを抑え、レイテンシとコストを最適化できます。</p></div></details>
+<h3>問4</h3>
+<p>以下の4つのワークロードのうち、Message Batches API の利用が最も不適切なものはどれですか。</p>
+<p>A. 毎晩深夜に実行する 5万件のサポートチケットの感情分析・タグ付け B. オフライン評価スイート（3,000問）のモデル回答一括生成 C. ユーザーが画面の前で結果を待っており、途中で 3〜4回の外部 API ツール往復が必要な対話型トラブルシューティングエージェント D. 週次の法務文書アーカイブからのメタデータ抽出</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>C</strong>。Message Batches API は最大24時間の非同期処理（即時性保証なし）であり、途中のツール往復を伴うリアルタイム対話には使えません。</p></div></details>
+<h2>自分で確かめる</h2>
+<ol><li>同じプロンプトで <code>output_config.effort</code> を <code>low</code> と <code>high</code> に変えて実行し、出力トークン数（思考トークン含む）と応答時間の違いを計測する。</li><li><code>system</code> プロンプトの末尾に動的タイムスタンプを入れた場合と、<code>user</code> メッセージ末尾に移動した場合で、<code>cache_read_input_tokens</code> の変化を比較する。</li></ol>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch5">← 第5章 評価エンジニアリング</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch7">第7章 ガードレール・セキュリティ →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch7" role="tabpanel" aria-labelledby="tab-sec-ch7" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第7章 ランタイムガードレールと本番環境のセキュリティ（配点 11%）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：銀行の「多層金庫」と「警備システム」</strong></p>
+<p>窓口係（プロンプト）に「強盗にお金を渡さないで」とお願いするだけでは、巧みな話術（プロンプトインジェクション）で騙される可能性があります。本番セキュリティでは、入口の金属探知機（入力フィルタ）、金庫の物理ロックと二段階承認（決定論的ゲート・フック・承認）、隔離された応接室（サンドボックス）、そして持ち出し先のホワイトリスト（最小権限・宛先許可リスト）という <strong>モデルの外部の強制力</strong> を何重にも重ねます。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>エージェントのリスクプロファイルに応じて、入出力フィルタ、PII リダクション、フック、サンドボックス、承認ゲートを含む多層ガードレールを設計できる。</li><li>ツールを使用するエージェントの攻撃対象領域（プロンプトインジェクション、ツール／メモリポイズニング、データ流出、高リスクな3要素の組み合わせ）を分析し、OWASP Top 10 for LLM Applications や NIST AI RMF に基づく緩和策とレッドチーム演習を設計できる。</li><li>ワークロード ID フェデレーション、シークレット管理、最小権限、監査ログを含むエンタープライズ向け ID・セキュリティ基盤を適用できる。</li></ul>
+<h2>要点3つ</h2>
+<ol><li><strong>不可逆なアクションとデータ流出をプロンプトだけで防いではならない。</strong> システムプロンプトの警告は強制力のない「お願い」に過ぎない。宛先許可リスト、承認ゲート、フック（<code>PreToolUse</code>）、最小権限という <strong>モデル外部の決定論的制御</strong> で遮断する。</li><li><strong>「プライベートデータ ＋ 信頼できない入力 ＋ 外部通信」の3要素が揃う構成が最も危険。</strong> どれか1つでも遮断するか、外部通信前に人間の承認や許可リストを強制する（多層防御）。</li><li><strong>静的 API キーを廃し、ワークロード ID フェデレーションと最小権限を徹底する。</strong> エージェント自身の ID と権限をスコープ化し、セキュリティ上重要なアクションは改ざん不能な監査ログに残す。</li></ol>
+<h2>30秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+  IN[信頼できない外部入力] --&gt; F1[入力ガードレール&lt;br&gt;インジェクション検知 / PII マスク]
+  F1 --&gt; M[Claude エージェント&lt;br&gt;最小権限のツールのみ]
+  M --&gt; SB[サンドボックス実行環境]
+  SB --&gt; HK{PreToolUse フック /&lt;br&gt;決定論的ポリシー}
+  HK --&gt;|破壊的・未許可外部送信| DENY[遮断 / 承認ゲート HITL]
+  HK --&gt;|許可| OUT[出力フィルタ &amp; 監査ログ]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch7-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">決定論的強制 (Deterministic Enforcement)</th><td>モデルの確率的判断に頼らず、コード・フック・API ゲートウェイ・権限設定で確実に禁止・許可を行う制御</td></tr><tr><th scope="row">サンドボックス (Sandboxing)</th><td>エージェントのコード実行や Web アクセスを本番ネットワーク・ホスト OS から隔離されたコンテナ等で動かす仕組み</td></tr><tr><th scope="row">間接プロンプトインジェクション</th><td>顧客チケット、Web ページ、RAG 文書、メールなど「信頼できない外部データ」に悪意ある指示を埋め込み、エージェントを乗っ取る攻撃</td></tr><tr><th scope="row">ツール／メモリポイズニング</th><td>MCP ツール定義の説明文や永続メモリに悪意ある指示を混入させ、エージェントの振る舞いを継続的に汚染する攻撃</td></tr><tr><th scope="row">高リスクな3要素の組み合わせ</th><td><strong>①プライベートデータへのアクセス、②信頼できない入力の処理、③外部との通信経路</strong> の3つを同時に持つ状態（Lethal Trifecta）</td></tr><tr><th scope="row">偽陽性 (FP) / 偽陰性 (FN)</th><td>FP＝無害な入力を誤ってブロックすること。FN＝攻撃や危険な出力を見逃すこと。業務リスクに応じてチューニングする</td></tr><tr><th scope="row">ワークロード ID フェデレーション</th><td>静的な長期 API キーやシークレットを置かず、OIDC / IAM 等で短期認証トークンを動的に発行・交換する認証方式</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>7-1 ランタイムガードレールシステム</h3>
+<p>本番エージェントには、単一のフィルタではなく <strong>多層的なランタイムガードレール</strong> を配置します。</p>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch7-tbl-2"><table><thead><tr><th scope="col">レイヤー</th><th scope="col">主な仕組み</th><th scope="col">防げるリスク</th></tr></thead><tbody><tr><th scope="row"><strong>入力フィルタリング</strong></th><td>PII リダクション、既知のインジェクションパターン検知、入力長制限</td><td>機密情報の外部送信、明白な攻撃入力</td></tr><tr><th scope="row"><strong>サンドボックス</strong></th><td>隔離コンテナ、ネットワークエグレス制限、読み取り専用マウント、<strong>プロキシ経由のクレデンシャル注入（コンテナ内に生シークレットを置かない）</strong></td><td>本番 DB や内部メタデータサービス（<code>169.254.169.254</code> 等）への不正アクセス、プロンプトインジェクションによるシークレット窃取</td></tr><tr><th scope="row"><strong>フック／ポリシー適用</strong></th><td><code>PreToolUse</code> フックによるパラメータ検査、権限モード（Permission modes）の使い分け、<strong>宛先許可リスト</strong>、破壊的コマンド（<code>DROP</code>, <code>rm -rf</code>）の遮断</td><td>データ流出、不可逆な破壊的操作</td></tr><tr><th scope="row"><strong>承認ゲート (HITL)</strong></th><td>外部メール送信、資金移動、権限変更などの不可逆アクション前に人間承認を要求</td><td>自律暴走、間接インジェクションによる不正実行</td></tr><tr><th scope="row"><strong>出力フィルタリング</strong></th><td>機密パターン（API キー・PII）のマスキング、スキーマ検証、安全フォールバック</td><td>情報漏洩、フォーマット破壊</td></tr></tbody></table></div>
+<h4>偽陽性 (FP) と偽陰性 (FN) のチューニング</h4>
+<ul><li><strong>高リスク操作（医療処方・送金・削除）</strong>: 偽陰性（見逃し）を極小化するため厳格にし、ブロック時は人間エスカレーションや安全なフォールバック応答を返す。</li><li><strong>低リスク操作（社内ドキュメント要約）</strong>: 偽陽性（過剰ブロック）が多すぎると利用者が使わなくなるため、人間のフィードバックをもとにしきい値を調整する。</li><li><strong>注意</strong>: 「ロギング（記録）」は事後の <strong>検知（Detection）</strong> であり、流出の <strong>防止（Prevention）</strong> にはならない。</li></ul>
+<h3>7-2 エージェント型システムの脅威対策と敵対的テスト</h3>
+<p>信頼できないコンテンツ（外部 Web、ユーザー投稿、顧客チケット、メール）を処理し、かつツールを使うエージェントは攻撃対象領域が広がります。</p>
+<h4>最も危険な「3要素の組み合わせ」への対処</h4>
+<p>エージェントが以下の3つを同時に持つと、間接プロンプトインジェクションによる <strong>データ流出（Data Exfiltration）</strong> が成立します。</p>
+<ol><li><strong>プライベートデータへのアクセス</strong>（CRM、社内 DB、メール履歴）</li><li><strong>信頼できない入力</strong>（外部チケット、Web ページ、添付ファイル）</li><li><strong>外部との通信経路</strong>（メール送信ツール、外部 Webhook、任意の URL への HTTP リクエスト、画像 URL 埋め込み）</li></ol>
+<p><strong>塞ぎ方（決定論的制御）</strong>:</p>
+<ul><li>外部通信ツールに <strong>宛先許可リスト（Allowlist）</strong> または <strong>承認ゲート</strong> を設ける。</li><li>CRM アクセスを「そのチケット自身の顧客アカウント」だけに <strong>最小権限でスコープ限定</strong> する。</li><li><strong>やってはいけない対策</strong>: 「チケット内の指示を無視せよ」とシステムプロンプトを強く書き直すだけ、またはモデルの <code>effort</code> を下げるだけ。</li></ul>
+<h4>フレームワークと安全な MCP 構成</h4>
+<ul><li><strong>OWASP Top 10 for LLM Applications</strong>: プロンプトインジェクション（LLM01）、機密情報漏洩（LLM02）、サプライチェーン／MCP 脆弱性（LLM03）、過剰な自律性（Excessive Agency, LLM06）などを体系的に点検する。</li><li><strong>NIST AI Risk Management Framework (AI RMF) & GenAI Profile</strong>: Govern / Map / Measure / Manage の 4機能に沿ってリスク評価とレッドチーム演習を継続的に実施する。</li><li><strong>安全な MCP 構成</strong>: 信頼できる署名済み・許可リスト登録済みの MCP サーバーのみ接続し、ツール説明の改ざん（Rug Pull / ツールポイズニング）を監視する。</li></ul>
+<h3>7-3 大規模環境での ID、シークレット、監査</h3>
+<p>エンタープライズの本番デプロイでは、エージェントを「1人の特権サービスアカウント」として動かしてはなりません。</p>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch7-tbl-3"><table><thead><tr><th scope="col">項目</th><th scope="col">推奨プラクティス</th><th scope="col">避けるべきプラクティス</th></tr></thead><tbody><tr><th scope="row"><strong>ID と認証</strong></th><td>ワークロード ID フェデレーション（OIDC / IAM ロール）で短期クレデンシャルを使用</td><td>長期有効な静的 API キーを環境変数や設定ファイルに埋め込む</td></tr><tr><th scope="row"><strong>シークレット管理</strong></th><td>Vault / KMS / Secrets Manager から実行時に取得し、モデルのコンテキストには渡さない</td><td>API キーや DB パスワードをツール結果やプロンプトに含める</td></tr><tr><th scope="row"><strong>権限設定</strong></th><td>ツール単位・操作単位（Read vs Write）の最小権限、ユーザー権限の委任（OBO: On-Behalf-Of）</td><td>エージェントに全社管理者権限のサービスアカウントを付与する</td></tr><tr><th scope="row"><strong>監査ログ</strong></th><td>「どのユーザーが」「どのエージェント経由で」「いつ・どのツールを・どの引数で実行し・誰が承認したか」を改ざん耐性のある形で記録</td><td>匿名でツールを実行し、誰の指示か追えない状態にする</td></tr></tbody></table></div>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-ch7-tbl-4"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">顧客チケット経由の間接インジェクションで別顧客データが外部メール送信された</th><td>システムプロンプトに「外部指示を無視せよ」と強い警告を追記する</td><td>メール宛先の許可リスト／承認ゲートを強制し、CRM アクセスを当該チケットの顧客 ID に限定する</td></tr><tr><th scope="row">本番 DB を扱うエージェントにコード実行ツールを持たせたい</th><td>本番ネットワーク上で直接実行させる</td><td>ネットワーク分離されたサンドボックスで動かし、本番 DB への破壊的アクセスを遮断する</td></tr><tr><th scope="row">本番環境で Claude API やクラウドの認証を行う</th><td>固定の長期 API キーを全コンテナに配布する</td><td>ワークロード ID フェデレーションで短期トークンを動的取得する</td></tr><tr><th scope="row">データ流出が起きていないか心配なとき</th><td>送信ログだけ記録して防いだつもりになる</td><td>ログは事後検知。流出経路そのものを決定論的制御（許可リスト・承認・最小権限）で塞ぐ</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問1</h3>
+<p>社内サポートエージェントが、顧客チケットの本文を読み、CRM からアカウント情報を取得して、ツール経由で外部メールを送信できます。レッドチーム演習で、チケット本文に隠された指示によって別顧客のレコードを検索し、攻撃者の外部アドレスへメール送信されてしまいました。チームは既に「チケット内の指示を無視せよ」というシステムプロンプトを追加しています。この悪用経路を最も直接的に塞ぐ追加対策はどれですか。</p>
+<p>A. より強い言葉で「顧客データの流出は禁止」とシステムプロンプトに追記する B. メール送信ツールに宛先の許可リストまたは人間による承認ゲートを適用し、CRM へのアクセス権限をそのチケット自体のアカウントのみに限定する C. モデルの <code>effort</code> レベルを <code>low</code> に下げる D. 送信された全メールの宛先と本文を事後調査用にログ記録する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。公式試験ガイドのサンプル問題です。「プライベートデータ ＋ 信頼できない入力 ＋ 外部通信」が揃っているため、プロンプトレベルの指示では防げません。モデル外部の決定論的制御（許可リスト・承認ゲート・最小権限スコープ）で経路を物理的に塞ぎます。</p></div></details>
+<h3>問2</h3>
+<p>組織で複数のサードパーティ製 MCP サーバーを本番エージェントに導入する際、ある MCP サーバーがアップデート後にツールの <code>description</code> を書き換え、エージェントに秘密ファイルを外部へ送信させようとする「ツールポイズニング（Rug Pull）」のリスクが懸念されています。最も適切な緩和策はどれですか。</p>
+<p>A. MCP サーバーのツール定義をモデルの推論で毎回チェックさせる B. MCP サーバーをバージョン固定＋許可リスト管理し、ツール定義のスキーマ・説明の変更検知（CI/CD 審査）と、外部通信・ファイルアクセスに対する最小権限・エグレス制御を強制する C. すべての MCP ツールに <code>allowedTools</code> を設定して自動承認する D. 開発者に口頭で気をつけるよう周知する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。サプライチェーン／ツールポイズニング対策には、MCP の許可リスト化・バージョン固定・変更監査と、サンドボックス／最小権限による多層防御が必要です。</p></div></details>
+<h3>問3</h3>
+<p>クラウド上の Kubernetes クラスタで稼働する多数のエージェントから、外部 SaaS や Claude プラットフォームへ認証する際、セキュリティ監査で「静的 API キーの長期保管」が指摘されました。エンタープライズのベストプラクティスとして置き換えるべき仕組みはどれですか。</p>
+<p>A. API キーを Base64 エンコードして Git リポジトリに保存する B. ワークロード ID フェデレーション（OIDC 等）を導入し、短期有効な認証トークンを動的に発行・交換する C. 全エージェントで1つの共通マスターキーを使い回す D. 認証自体を無効化して IP 制限のみにする</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。静的シークレットの漏洩・ローテーション漏れを防ぐため、クラウド環境ではワークロード ID フェデレーションによる短期トークン認証が標準です。</p></div></details>
+<h3>問4</h3>
+<p>本番のエージェントが「顧客のクレジットカード番号をそのまま出力に含めてしまう」インシデントを防ぐため、最も確実なランタイムガードレールの配置はどれですか。</p>
+<p>A. 出力後のユーザー画面で CSS を使って文字色を白にする B. モデルのプロンプトに「カード番号は書くな」と記載するだけにする C. モデルの入力前・出力後の両方に決定論的な PII リダクション／マスキングフィルタを配置し、そもそもツール戻り値から不要なカード番号フィールドを除外する D. <code>temperature</code> を 0 に設定する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>C</strong>。ツール戻り値からの事前除外（最小権限データ）と、入出力での決定論的 PII リダクションを組み合わせることで、モデルの気まぐれに依存しない確実な防御になります。</p></div></details>
+<h2>自分で確かめる</h2>
+<ol><li>自身が運用・設計中のエージェントについて、「プライベートデータ」「信頼できない入力」「外部通信」の3要素が揃っていないか棚卸しし、揃っている場合はどこに決定論的制御を入れるか図示してみる。</li><li><code>PreToolUse</code> フックで、特定の禁止パラメータ（例：外部ドメイン宛メール、許可されていないディレクトリの削除）を終了コード <code>2</code> でブロックする小さなテストを書いてみる。</li></ol>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch6">← 第6章 コストとレイテンシ最適化</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch8">第8章 フリート運用 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch8" role="tabpanel" aria-labelledby="tab-sec-ch8" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第8章 ソフトウェア提供のためのエージェントフリート運用（配点 10%）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：複数ラインの「自動工場」と「品質管理ライン長」</strong></p>
+<p>1人の職人（単一エージェント）ではなく、何十台ものロボット（コーディングエージェント群＝フリート）を同時に動かしてソフトウェアを作る時代です。同じ作業台を共有させると部品がぶつかるため、作業台を分け（<code>git worktree</code>）、製造スピードが人間の検査を上回るなら自動検査機（AI コードレビュー）を「まずは試運転（シャドーモード）」から始め、工場全体のルール（管理設定・MCP 許可リスト・ガバナンス）を統一します。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>分離されたワークツリー（<code>git worktree</code>）、タスク分解、マージ／コンフリクト戦略を含む並列ファンアウトを設計し、フリートレベルの障害を診断できる。</li><li>生成速度が人間レビューを上回る環境で、シャドーモード導入・人間レビューとのキャリブレーション・監督設計を伴う AI コードレビューを運用できる。</li><li>目標駆動・スケジュール駆動・イベント駆動の無人エージェント（ヘッドレス運用）を、チェックポイント・通知・エスカレーション付きで設計できる。</li><li>管理設定（Managed Settings）、MCP 許可リスト、ゲートウェイ、Skills／プロンプト／MCP 共有のガバナンスを組織全体に適用できる。</li></ul>
+<h2>要点3つ</h2>
+<ol><li><strong>並列コーディングエージェントは「ワークツリーの分離」と「共有ファイル回避の分解」が前提。</strong> 同一ディレクトリで並列編集させると競合と上書きが起きるため、<code>git worktree</code> で作業空間を分け、インターフェース境界に沿ってタスクを分解する。</li><li><strong>AI コードレビューはいきなりマージゲートにしない。</strong> まずシャドーモードで導入し、人間のレビュー指摘とキャリブレーションして精度（偽陽性・見逃し）を確認してからブロッキング権限を与える。</li><li><strong>組織導入は「管理設定・許可リスト・ガバナンス」で統制する。</strong> 開発者個人の判断任せにせず、エンタープライズ管理設定、MCP 許可リスト、統一テレメトリ、ゲートウェイルーティング、共有 Skills／MCP の品質・安全審査を敷く。</li></ol>
+<h2>30秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  T[大規模タスク / CI イベント] --&gt; D[タスク分解&lt;br&gt;コンフリクト最小化]
+  D --&gt; W1[Agent 1&lt;br&gt;git worktree A]
+  D --&gt; W2[Agent 2&lt;br&gt;git worktree B]
+  W1 &amp; W2 --&gt; MR[マージ &amp; 統合テスト]
+  MR --&gt; RV[AI コードレビュー&lt;br&gt;シャドー → 校正 → ゲート]
+  RV --&gt;|承認| H[人間による監督 / マージ]
+  RV --&gt;|要エスカレーション| ESC[通知 &amp; 人間引継]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch8-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">並列ファンアウト</th><td>大規模な開発タスクを複数の独立サブタスクに分割し、多数のエージェントへ同時にディスパッチするパターン</td></tr><tr><th scope="row">分離されたワークツリー (<code>git worktree</code>)</th><td>同一リポジトリの異なるブランチを別々のディレクトリにチェックアウトし、並列エージェント間のファイル衝突を防ぐ仕組み</td></tr><tr><th scope="row">フリートレベル障害モード</th><td>単一エージェントではなく、フリート全体で同時に起きる障害（共通レート制限枯渇、同一マイグレーションの競合、連鎖 CI 失敗など）</td></tr><tr><th scope="row">シャドーモード (Shadow Mode)</th><td>AI レビューを実行して結果を記録・比較するが、まだ PR のマージをブロックしない試験導入段階</td></tr><tr><th scope="row">無人実行 (Headless / Unattended Execution)</th><td>人間の対話入力なしで、<code>claude -p</code> やスケジューラ、CI イベントから自律的にタスクを完遂する運用形態</td></tr><tr><th scope="row">管理設定 (Managed Settings)</th><td>組織管理者がエンドポイントやデバイス全体に強制適用するポリシー設定（個人の設定で上書き不可）</td></tr><tr><th scope="row">ガバナンス</th><td>チーム間でプロンプト、Skills、MCP サーバーを共有する際の品質基準・セキュリティ審査・バージョン管理の枠組み</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>8-1 エンジニアリング作業のための並列エージェントオーケストレーション</h3>
+<p>複数のコーディングエージェントを並列で走らせる「フリート運用」では、単体とは異なる問題が起きます。</p>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch8-tbl-2"><table><thead><tr><th scope="col">設計要素</th><th scope="col">ベストプラクティス</th><th scope="col">避けるべき失敗</th></tr></thead><tbody><tr><th scope="row"><strong>作業空間の分離</strong></th><td>エージェントごとに <strong><code>git worktree</code></strong>（例：<code>--worktree</code>）と専用ブランチを割り当てる</td><td>同じ作業ディレクトリで複数エージェントに同時編集させる</td></tr><tr><th scope="row"><strong>タスクの分解</strong></th><td>変更対象ファイルやモジュール境界が重複しないよう分解し、共有インターフェースを先に確定する</td><td>同じコアファイル（<code>routes.ts</code> 等）を全エージェントが触る形で分割する</td></tr><tr><th scope="row"><strong>マージとコンフリクト戦略</strong></th><td>専任の統合エージェントまたは CI パイプラインでリベース・テスト・コンフリクト解消を行う</td><td>コンフリクトを放置し、後勝ちで他エージェントの変更を上書きする</td></tr><tr><th scope="row"><strong>フリートテレメトリ診断</strong></th><td>フリート全体の成功率、マージ競合率、CI 再実行率、レート制限消費を横断監視する</td><td>個別エージェントのログだけを見て「全体の詰まり」を見落とす</td></tr></tbody></table></div>
+<h3>8-2 検証と AI コードレビューの運用</h3>
+<p>コーディングエージェントが大量の PR を生成するようになると、<strong>人間のコードレビューがボトルネック</strong> になります。かといって検証を緩めると本番障害が増えます。</p>
+<h4>AI コードレビュー導入の3段階</h4>
+<ol><li><strong>シャドーモード導入</strong>: 本番の PR に対して AI レビューを実行するが、結果は開発者や管理用ダッシュボードに記録するのみで <strong>マージはブロックしない</strong>。</li><li><strong>人間レビューとのキャリブレーション</strong>: 人間のシニアエンジニアの指摘と AI の指摘を比較し、重大なバグの見逃し（偽陰性）と、ノイズになる些細な指摘（偽陽性）を調整する。</li><li><strong>ゲート昇格と人間による監督</strong>: 一致度が基準を満たした領域（セキュリティ・型不整合・回帰テスト欠如など）からマージゲートへ昇格させ、設計判断や高リスク変更は <strong>人間による最終承認</strong> を残す。</li></ol>
+<div class="alert alert-important"><div class="alert-title">📌 重要</div><p>コードを生成したエージェントと <strong>同じセッション・同じ推論文脈</strong> で自己レビューさせてはなりません。生成時のバイアスを引き継ぐため、差分と規約のみを渡した独立したレビュープロセスを使います。</p></div>
+<h3>8-3 無人実行とイベント駆動のエージェント運用</h3>
+<p>コーディングエージェントは、人間が画面を見ているときだけでなく、バックグラウンドで自律稼働します。</p>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch8-tbl-3"><table><thead><tr><th scope="col">駆動タイプ</th><th scope="col">例</th><th scope="col">必須の安全設計</th></tr></thead><tbody><tr><th scope="row"><strong>目標駆動 (Goal-driven)</strong></th><td>テストカバレッジ 80% 達成、特定ライブラリの移行完了まで反復</td><td>明確な終了条件（テスト通過）、<code>max_turns</code>・コスト上限、チェックポイント保存。長時間タスクはローカル占有を避ける <strong>Cloud session</strong>（クラウドサンドボックス）と手元環境を使う <strong>Remote Control</strong> を使い分ける</td></tr><tr><th scope="row"><strong>スケジュール駆動 (Scheduled)</strong></th><td>毎晩の依存関係脆弱性パッチ PR 作成、デッドコード整理</td><td>変更範囲の制限、自動テスト通過後の Draft PR 作成（自動マージしない）</td></tr><tr><th scope="row"><strong>イベント駆動 (Event-driven)</strong></th><td>CI/CD 失敗・本番アラート発生時の一次調査（トリアージ・原因 PR 特定・修正案提示）</td><td>冪等な再実行制御、一定時間／失敗回数での <strong>人間への通知とエスカレーション</strong></td></tr></tbody></table></div>
+<h3>8-4 組織全体でのコーディングエージェントの構成</h3>
+<p>全社規模で Claude Code 等を展開する場合、ガバナンスと標準化が不可欠です。</p>
+<ul><li><strong>管理設定とポリシー (Managed Settings)</strong>・<strong>Claude Tag 管理者ガイド</strong>: 危険なシェルコマンドの禁止、組織外へのデータ送信制限、ZDR の強制などを管理ポリシーとして配布し、個人設定での無効化を禁止する。また、トリガーやタグ機能を通じた自律実行の権限範囲を組織レベルで統制する。</li><li><strong>MCP の許可リスト</strong>: 承認済み・セキュリティ審査済みの社内 MCP サーバーのみ接続を許可し、未検証の野良 MCP の追加をブロックする。</li><li><strong>テレメトリとゲートウェイルーティング</strong>: すべてのエージェント通信を組織の AI ゲートウェイ経由にし、利用量・コスト・エラー率・監査ログを一元収集する。</li><li><strong>プロンプト・Skills・MCP サーバーの共有ガバナンス</strong>: チーム間で再利用する Skills や MCP は中央リポジトリでコードレビュー・自動テスト・セキュリティスキャンを通過したものだけを配布する。</li></ul>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-ch8-tbl-4"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">5つの機能実装を5台のコーディングエージェントに並列実行させたい</th><td>同じリポジトリフォルダで同時にファイルを編集させる</td><td>エージェントごとに <code>git worktree</code> を分離し、ファイル重複を避けた分解と統合戦略をとる</td></tr><tr><th scope="row">AI コードレビューを導入したいが、誤検知で開発が止まるのが怖い</th><td>初日から必須マージゲートとして全 PR をブロックする</td><td>シャドーモードで導入し、人間レビューとキャリブレーションしてからゲート化する</td></tr><tr><th scope="row">CI 失敗時に無人エージェントが自動で原因調査・修正案を出す</th><td>修正を main ブランチへ直接プッシュさせる</td><td>テスト実行・チェックポイント記録のうえ PR 作成にとどめ、解決不能時は人間にエスカレーションする</td></tr><tr><th scope="row">各チームが勝手に外部 MCP サーバーや独自プロンプトを導入している</th><td>各チームのローカル設定に一任する</td><td>管理設定・MCP 許可リスト・ゲートウェイルーティングと共有 Skills の審査プロセスを導入する</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問1</h3>
+<p>大規模なモノレポで、10台の並列コーディングエージェントを同時に動かしてマイグレーション作業を行っています。フリート全体のテレメトリを確認したところ、個別エージェントの実装成功率は高いにもかかわらず、最終的な統合成功率（マージ成功）が 30% に落ちています。最も可能性の高いフリートレベルの障害原因と対策はどれですか。</p>
+<p>A. モデルが非協力的であるため <code>temperature</code> を上げる B. エージェント間のワークツリー分離やファイル境界に沿ったタスク分解が不十分で、共通ファイルでのマージコンフリクトと相互上書きが多発しているため、<code>git worktree</code> 分離と依存関係を考慮したタスク分解・統合ステップを導入する C. 各エージェントの <code>max_tokens</code> を増やす D. 並列実行をやめて、常に1人のエンジニアが手動でコードを書く</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。個別タスクが成功しても統合で失敗する場合、並列ファンアウトにおけるタスク分解の境界重複とワークスペース分離不備が典型的な原因です。</p></div></details>
+<h3>問2</h3>
+<p>コーディングエージェントの導入により PR の作成速度が3倍になりましたが、人間のレビュアーが追いつかず滞留しています。開発チームは AI コードレビューを導入しようとしています。品質を維持しつつ開発を止めない導入手順として最も適切なものはどれですか。</p>
+<p>A. 初日から AI が「承認」すれば人間のレビューなしで自動マージする B. まずシャドーモードで AI レビューを動かし、人間のレビュー結果と照合してキャリブレーションを行ったうえで、信頼できる検査項目から段階的にゲート・補助へ組み込む C. レビュー工程そのものを廃止し、本番監視だけで対応する D. コードを生成したエージェントに同じ会話内で「自分のコードを厳しくレビューして」と頼む</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。AI レビューはシャドーモードでの計測と人間レビューとのキャリブレーションを経てからゲート権限を与えるのが安全です。D は自己レビューバイアスがあるため不適切です。</p></div></details>
+<h3>問3</h3>
+<p>CI/CD パイプラインの夜間ビルドが失敗した際、イベント駆動の無人エージェントを起動して一次対応（原因コミットの特定と修正 PR の作成）を行わせたいと考えています。本番環境への安全性を確保するための必須設計はどれですか。</p>
+<p>A. エージェントに本番デプロイ権限と <code>main</code> ブランチへの強制プッシュ権限を与える B. サンドボックス環境でテストを実行させ、修正は人間レビュー用の Draft PR にとどめ、一定ターン数で解決しない場合はログと調査結果を添えて人間へエスカレーション・通知する C. 無人実行ではタイムアウトやターン上限を一切設定しない D. 失敗時はすべてのテストを削除してビルドを通す</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。無人運用では、変更の自動反映を避け（PR＋テスト検証）、コスト・ループ暴走を防ぐ上限と人間へのエスカレーション経路を設計します。</p></div></details>
+<h3>問4</h3>
+<p>あるエンタープライズ企業が、全社数百名のエンジニアにコーディングエージェント（Claude Code 等）を展開します。セキュリティと品質のガバナンスを保つため、組織レベルで適用すべき構成の組み合わせはどれですか。</p>
+<p>A. 各エンジニアの個人の裁量で任意の外部 MCP サーバーをインストールさせる B. 管理設定（Managed Settings）によるポリシー強制、承認済み MCP の許可リスト、ゲートウェイ経由の統一テレメトリ、および共有 Skills・プロンプトの審査基準を適用する C. 全員に共通の個人用 API キーをテキストファイルで配布する D. 監査ログをオフにしてディスク容量を節約する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。エンタープライズ展開では、管理ポリシー・MCP 許可リスト・統一テレメトリ／ゲートウェイ・共有資産の品質・安全ガバナンスの4点が柱になります。</p></div></details>
+<h2>自分で確かめる</h2>
+<ol><li>自身の Git リポジトリで <code>git worktree add</code> を使い、2つの異なる作業ディレクトリで同時に別ブランチの修正・テストが干渉せず実行できることを確認する。</li><li><code>claude -p</code>（ヘッドレスモード）＋ <code>--output-format json</code> を使い、PR の差分を入力としてレビュー結果を JSON で出力するスクリプトをローカルで試す。</li></ol>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch7">← 第7章 ガードレール・セキュリティ</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-glossary">用語集 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-glossary" role="tabpanel" aria-labelledby="tab-sec-glossary" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>用語集</h1>
+<p>CCDV-P（Claude Certified Developer – Professional）の試験範囲で頻出する専門用語を分野別に整理しました。「ひとことで」で意味を掴み、「まちがえやすい点」で本番試験のひっかけ選択肢を見抜くポイントを確認してください。</p>
+<h2>第1章 高度なエージェントアーキテクチャとオーケストレーション</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-glossary-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">ひとことで</th><th scope="col">まちがえやすい点</th></tr></thead><tbody><tr><th scope="row">スーパーバイザー／ワーカー階層</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">親が分解・委任・集約を担い、子が個別タスクを実行する構成</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ワーカーは親の会話履歴を自動共有しない。必要な前提は親が明示する</span></td></tr><tr><th scope="row">コンテキスト分離</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">サブエージェントごとに独立した会話を持たせる境界</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">長大なツール生ログを親に返すと、親のコンテキストまで汚染される</span></td></tr><tr><th scope="row">Human-in-the-Loop (HITL)</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">不可逆・高リスク操作の前に人間の承認を挟む制御</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">プロンプトで「確認してから実行」と書くだけでは決定論的に止まらない</span></td></tr><tr><th scope="row">チェックポイント</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">実行途中の状態・完了ステップを外部ストアに記録する仕組み</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">会話履歴やメモリだけに依存するとプロセス再起動やモデル更新で失われる</span></td></tr><tr><th scope="row">べき等性キー (Idempotency Key)</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">再開・再試行時に同じ副作用が二重実行されるのを防ぐ一意識別子</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">チェックポイント再開とセットで使わないと二重課金・二重送信が起きる</span></td></tr><tr><th scope="row">ワークフロー型 vs エージェント型</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">事前定義の決定論的経路 vs モデルが動的に手を選ぶ自律ループ</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">定型比率が高い業務を自律エージェントのままにするとコストと失敗率が増える</span></td></tr><tr><th scope="row">Claude Managed Agents</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">Anthropic がホストするサンドボックス・状態管理・セッション永続化基盤</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">セルフホストサンドボックスも選択可能。自前ハーネス構築の手間を省く</span></td></tr><tr><th scope="row">Context Compaction</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">古い会話をモデルの要約に置き換えて継続する機能（<code>compact_20260112</code> 等）</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">要約から漏れた数値・ID は消えるため、重要事実は外部メモリに逃がす</span></td></tr><tr><th scope="row">Context Editing</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">古い <code>tool_result</code> や <code>thinking</code> をルールで削除する API 機能</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">キャッシュ参照後に API 側で処理されるため、キャッシュプレフィックスを壊しにくい</span></td></tr><tr><th scope="row"><code>tool_search</code> / <code>defer_loading</code></th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">大規模ツールカタログを初期コンテキスト外に置き、必要時に検索・読込する手法</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">100個のツールを毎回全定義すると TTFT 悪化・コスト増・選択精度低下を招く</span></td></tr></tbody></table></div>
+<h2>第2章 本番環境の統合・信頼性・知識グラウンディング</h2>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-glossary-tbl-2"><table><thead><tr><th scope="col">用語</th><th scope="col">ひとことで</th><th scope="col">まちがえやすい点</th></tr></thead><tbody><tr><th scope="row">指数バックオフ＋ジッター</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">再試行間隔を指数的に延ばし乱数を足す手法</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）"><code>429</code> / <code>529</code> に有効。<code>max_tokens</code> や <code>refusal</code> に無差別適用してはいけない</span></td></tr><tr><th scope="row">サーキットブレーカー</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">下流障害時に回路を開いて呼び出しを止め、即フォールバックする仕組み</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">障害中にリトライを増やし続けると連鎖障害を悪化させる</span></td></tr><tr><th scope="row"><code>stop_reason: &quot;max_tokens&quot;</code></th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">出力トークン上限到達による切断</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">同じ入力でリトライしても同じ場所で切れる。上限引き上げや分割で対処する</span></td></tr><tr><th scope="row"><code>stop_reason: &quot;refusal&quot;</code></th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">安全性ポリシーによる応答拒否</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">別モデルへ無差別リトライせず、安全性の専用処理経路へ回す</span></td></tr><tr><th scope="row">バックプレッシャー</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">下流能力を超えた流入をキュー制限や <code>429</code> で上流へ押し返す制御</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">無制限キューはメモリ枯渇とタイムアウト連鎖を招く</span></td></tr><tr><th scope="row">Message Batches API</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">同期比 50% 割引の非同期一括処理 API（最大24時間）</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">遅延保証がなく途中のツール往復も不可。リアルタイム対話には使えない</span></td></tr><tr><th scope="row">Streamable HTTP</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">リモート MCP で推奨される HTTP ベース通信方式</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ローカル stdio と違い、OAuth 2.1 等の認証とゲートウェイ統制が必須</span></td></tr><tr><th scope="row">ハイブリッド検索</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">BM25（キーワード）＋ベクトル検索の組み合わせ</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">固有名詞・エラーコードの取得漏れはベクトル単独では防げない</span></td></tr><tr><th scope="row">リランキング (Reranking)</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">検索候補をクロスエンコーダ等で精査して上位に並べ替える処理</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">検索結果がトップ20にあるのにトップ5に入らない（順位不備）に効く</span></td></tr></tbody></table></div>
+<h2>第3章 オブザーバビリティと本番環境のモニタリング</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-glossary-tbl-3"><table><thead><tr><th scope="col">用語</th><th scope="col">ひとことで</th><th scope="col">まちがえやすい点</th></tr></thead><tbody><tr><th scope="row">分散トレース</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">親・子・LLM・ツール・検索を親子スパンで紐づける記録</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">アプリ全体の応答時間だけでは、どのターン・どのツールが遅いか分からない</span></td></tr><tr><th scope="row">ZDR (Zero Data Retention)</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">プロバイダー側にプロンプト・応答を残さないデータ保持制限</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ZDR 下でもトークン数・<code>stop_reason</code>・版数等のメタデータは記録可能</span></td></tr><tr><th scope="row">SLI / SLO</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">サービスの定量指標（TTFT、成功率、拒否率等）とその目標値</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">HTTP 200 率だけでは「回答がデタラメ」な品質障害を見逃す</span></td></tr><tr><th scope="row">品質ドリフト</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">モデル更新や入力分布変化により、エラーなしで品質が徐々に悪化すること</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">モデル ID・プロンプト版数ごとに指標をスライスして検知する</span></td></tr><tr><th scope="row">テールサンプリング</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">完了後の結果を見て保存を決める方式（エラー・異常は 100% 保存）</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">一律低率のヘッドサンプリングは稀な重大障害を取りこぼす</span></td></tr><tr><th scope="row">障害コホート分析</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">失敗トレースを属性（版数・ツール・テナント等）で集計し偏りを特定する分析</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">個別トレースの目視だけではシステム全体の支配的な原因が見えない</span></td></tr></tbody></table></div>
+<h2>第4章 高度なデバッグとインシデント対応</h2>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-glossary-tbl-4"><table><thead><tr><th scope="col">用語</th><th scope="col">ひとことで</th><th scope="col">まちがえやすい点</th></tr></thead><tbody><tr><th scope="row">4層の切り分け</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">障害を「モデル出力」「ハーネス」「ツール」「データ」のどこかに特定すること</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ツールの空配列やハーネスの履歴戻し忘れを「モデルのせい」にしない</span></td></tr><tr><th scope="row">トリアージ</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">影響範囲・重大度・緊急度を素早く判定すること</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">原因の完全特定より先に、影響拡大を止める緩和・ロールバックを優先する</span></td></tr><tr><th scope="row">ポストモーテム</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">障害のタイムライン・原因・恒久対策をまとめる振り返り（Blameless）</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">書いて終わりにせず、回帰評価テストと監視アラートへ必ず反映する</span></td></tr></tbody></table></div>
+<h2>第5章 評価エンジニアリングと品質保証</h2>
+<div tabindex="0" role="region" aria-label="表 5" class="table-wrapper" id="sec-glossary-tbl-5"><table><thead><tr><th scope="col">用語</th><th scope="col">ひとことで</th><th scope="col">まちがえやすい点</th></tr></thead><tbody><tr><th scope="row">ゴールデンセット</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">期待出力や基準が確定した厳選テストセット</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">同じセットを使い続けると「飽和」や「汚染」が起き、識別力を失う</span></td></tr><tr><th scope="row">LLM-as-judge</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">LLM を使って出力品質を自動採点する手法</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">人間ラベルでキャリブレーションするまでリリースゲート権限を与えない</span></td></tr><tr><th scope="row">位置バイアス (Position Bias)</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ペア比較で先頭（または末尾）の回答を無意識に選好する偏り</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">提示順序のランダム化（または入れ替え比較）で抑える</span></td></tr><tr><th scope="row">評価者間信頼性</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">人間とジャッジ（または人間同士）の判定一致度（Cohen's κ 等）</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">一致度が低いまましきい値を下げると、不良プロンプトが素通りする</span></td></tr><tr><th scope="row">ジャッジのドリフト</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ジャッジ用モデルの更新等により採点基準がズレること</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ジャッジモデル版数を固定し、更新時は人間ラベルで再校正する</span></td></tr></tbody></table></div>
+<h2>第6章 大規模環境でのコストとレイテンシの最適化</h2>
+<div tabindex="0" role="region" aria-label="表 6" class="table-wrapper" id="sec-glossary-tbl-6"><table><thead><tr><th scope="col">用語</th><th scope="col">ひとことで</th><th scope="col">まちがえやすい点</th></tr></thead><tbody><tr><th scope="row">モデルルーティング / カスケード</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">難易度に応じた事前振分 / 小型モデルから上位モデルへの段階的昇格</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">すべてを最上位モデルで処理するとコストが破綻する</span></td></tr><tr><th scope="row">Prompt Caching</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">先頭プレフィックスの一致による入力トークン再利用</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">先頭付近に動的値（時刻・ID）を入れるとキャッシュが毎回無効化される</span></td></tr><tr><th scope="row">TTFT vs E2E レイテンシ</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">初回トークンまでの時間 vs 全処理完了までの時間</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ストリーミングは TTFT に効くが、直列ツール待ちを含む E2E は並列化が効く</span></td></tr><tr><th scope="row"><code>output_config.effort</code></th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">推論の深さと出力トークン量を制御するパラメータ（<code>low</code>〜<code>max</code>）</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">簡単なサブエージェントにデフォルト <code>high</code> を使うと過剰な思考で遅延する</span></td></tr></tbody></table></div>
+<h2>第7章 ランタイムガードレールと本番環境のセキュリティ</h2>
+<div tabindex="0" role="region" aria-label="表 7" class="table-wrapper" id="sec-glossary-tbl-7"><table><thead><tr><th scope="col">用語</th><th scope="col">ひとことで</th><th scope="col">まちがえやすい点</th></tr></thead><tbody><tr><th scope="row">決定論的強制</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">モデルの外部（フック・許可リスト・ゲート）で確実に遮断する制御</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">強いシステムプロンプトや <code>effort</code> 低下は強制力のある境界ではない</span></td></tr><tr><th scope="row">高リスクな3要素</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">プライベートデータ ＋ 信頼できない入力 ＋ 外部通信経路の同時保有</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">1つでも遮断するか、外部通信に許可リスト／承認ゲートを強制する</span></td></tr><tr><th scope="row">間接プロンプトインジェクション</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">チケット・Web・RAG 文書などの外部データに悪意ある指示を混ぜる攻撃</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">「外部指示を無視せよ」というプロンプトだけでは防げない</span></td></tr><tr><th scope="row">ツール／メモリポイズニング</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ツール説明文や永続メモリに悪意ある指示を潜ませる攻撃</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">署名・許可リスト・変更検知でサプライチェーンを守る</span></td></tr><tr><th scope="row">ワークロード ID フェデレーション</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">静的 API キーの代わりに OIDC 等で短期トークンを動的発行する仕組み</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">長期固定キーをコンテナや Git に置かない</span></td></tr></tbody></table></div>
+<h2>第8章 ソフトウェア提供のためのエージェントフリート運用</h2>
+<div tabindex="0" role="region" aria-label="表 8" class="table-wrapper" id="sec-glossary-tbl-8"><table><thead><tr><th scope="col">用語</th><th scope="col">ひとことで</th><th scope="col">まちがえやすい点</th></tr></thead><tbody><tr><th scope="row"><code>git worktree</code> 分離</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">並列エージェントごとに独立した作業ディレクトリとブランチを与える構成</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">会話のフォーク（<code>fork_session</code>）はファイルシステムを分離しない</span></td></tr><tr><th scope="row">シャドーモード</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">AI レビューを実行・計測するが、マージはブロックしない試験運用段階</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">人間レビューとのキャリブレーション前に必須ゲートにしてはいけない</span></td></tr><tr><th scope="row">無人実行 (Headless)</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">CI やスケジュールで <code>claude -p</code> 等を使い非対話で実行する形態</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ターン上限・コスト上限・Draft PR 制限・人間エスカレーションが必須</span></td></tr><tr><th scope="row">管理設定 (Managed Settings)</th><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">組織管理者が強制適用し、個人設定で上書きできないポリシー</span></td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">個人設定任せにすると MCP 許可リストや ZDR 要件が守られない</span></td></tr></tbody></table></div>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch8">← 第8章 フリート運用</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-check">直前チェック →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-check" role="tabpanel" aria-labelledby="tab-sec-check" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>直前チェック</h1>
+<p>8つの試験分野の判断を1枚で見直すための最終チェックシートです。各行は「✕ 選ばない（ひっかけ）」と「○ 選ぶ（本番の正解パターン）」の二択になっています。</p>
+<h2>1. 高度なエージェントアーキテクチャとオーケストレーション（<a href="#sec-ch1" class="internal-link" data-jump="sec-ch1">第1章</a> · 17%）</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-check-tbl-1"><table><thead><tr><th scope="col">場面</th><th scope="col">✕ 選ばない</th><th scope="col">○ 選ぶ</th></tr></thead><tbody><tr><th scope="row">サブエージェントの連携</th><td>親の会話履歴を全部コピーする</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">コンテキスト分離し、必要な前提・ID・出力形式だけ渡す</span></td></tr><tr><th scope="row">高リスク・不可逆な操作</th><td>プロンプトに「確認してから実行」と書く</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">実行前に一時停止する Human-in-the-Loop 承認ゲートを置く</span></td></tr><tr><th scope="row">長時間エージェントの中断・再起動</th><td>インメモリ変数だけに状態を保持し最初からやり直す</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">チェックポイント＋セッション永続化＋べき等性キーで未完了から再開</span></td></tr><tr><th scope="row">定型処理が9割のエージェント</th><td>モデルサイズを上げて自律のままにする</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">トレース分析に基づき定型部分をワークフロー型へ切り出す</span></td></tr><tr><th scope="row">コンテキスト上限・コスト逼迫</th><td>クライアント側で <code>system</code> を毎ターン書き換える</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）"><code>system</code> 固定でキャッシュ維持＋Context Editing / Compaction / 永続メモリ</span></td></tr><tr><th scope="row">100個以上の大規模ツールカタログ</th><td>全ツール定義を毎回リクエストに載せる</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）"><code>tool_search</code>（遅延ロード）で必要ツールのみ動的に読み込む</span></td></tr></tbody></table></div>
+<h2>2. 本番環境の統合・信頼性・知識グラウンディング（<a href="#sec-ch2" class="internal-link" data-jump="sec-ch2">第2章</a> · 20%）</h2>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-check-tbl-2"><table><thead><tr><th scope="col">場面</th><th scope="col">✕ 選ばない</th><th scope="col">○ 選ぶ</th></tr></thead><tbody><tr><th scope="row">停止条件が混在するエラー処理</th><td>全失敗を同じフォールバックモデルへリトライ</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）"><code>429/529</code> は指数バックオフ＋ジッター、<code>max_tokens</code> は上限調整/分割、<code>refusal</code> は安全経路へ分岐</span></td></tr><tr><th scope="row">マルチテナントのレート制限競合</th><td>全顧客共有の単一キューで処理</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">テナント別クォータ・キュー分離・バックプレッシャーを導入</span></td></tr><tr><th scope="row">クラウド間フォールバック</th><td>リクエストをそのまま別プラットフォームへ転送</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">モデル ID・機能差異・リージョン制約を吸収するゲートウェイ変換</span></td></tr><tr><th scope="row">本番リモート MCP の認証・変更</th><td>静的トークン直書き、破壊的スキーマ変更を即適用</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">Streamable HTTP + OAuth 2.1、バージョン管理・移行テスト・段階的ロールアウト</span></td></tr><tr><th scope="row">固有名詞・型番の検索漏れ</th><td>ベクトル検索のみ、またはプロンプト修正</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ハイブリッド検索（BM25 + ベクトル）＋リランキング＋4段階障害診断</span></td></tr></tbody></table></div>
+<h2>3. オブザーバビリティと本番環境のモニタリング（<a href="#sec-ch3" class="internal-link" data-jump="sec-ch3">第3章</a> · 12%）</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-check-tbl-3"><table><thead><tr><th scope="col">場面</th><th scope="col">✕ 選ばない</th><th scope="col">○ 選ぶ</th></tr></thead><tbody><tr><th scope="row">マルチエージェントの遅延調査</th><td>最終応答時間だけを記録</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">親・子・LLM・ツール・検索のスパンを分けた分散トレース</span></td></tr><tr><th scope="row">ZDR / プライバシー制約下のログ</th><td>ログを完全に無効化する、または平文をそのまま保存</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">メタデータ構造化ログ（トークン・<code>stop_reason</code>・版数）＋PII リダクション</span></td></tr><tr><th scope="row">大規模トラフィックの障害捕捉</th><td>低確率の一律ヘッドサンプリングのみ</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">エラー・高レイテンシ・<code>refusal</code> を 100% 残すテールサンプリング</span></td></tr><tr><th scope="row">全体で効いている障害の特定</th><td>数件のトレースを目視して推測する</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">属性別（版数・ツール・言語等）の障害コホート分析で定量化</span></td></tr><tr><th scope="row">モデル更新後の品質監視</th><td>HTTP エラー率 0% を見て正常と判断</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">モデル ID 別・停止理由別・オンライン品質スコアでドリフト検知</span></td></tr></tbody></table></div>
+<h2>4. 高度なデバッグとインシデント対応（<a href="#sec-ch4" class="internal-link" data-jump="sec-ch4">第4章</a> · 10%）</h2>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-check-tbl-4"><table><thead><tr><th scope="col">場面</th><th scope="col">✕ 選ばない</th><th scope="col">○ 選ぶ</th></tr></thead><tbody><tr><th scope="row">非決定的な障害の原因特定</th><td>失敗した1件の最終文だけを見る</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">モデル・ハーネス・ツール・データの4層でトレース比較し切り分け</span></td></tr><tr><th scope="row">本番での品質回帰インシデント</th><td>障害中に本番プロンプトを少しずつ書き換える</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">即座に安定版へロールバック・緩和して止血してから原因調査</span></td></tr><tr><th scope="row">インシデント復旧後の対応</th><td>ポストモーテムを書いて完了とする</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">再現ケースを CI 回帰評価に追加し、監視・アラートの盲点を補強</span></td></tr></tbody></table></div>
+<h2>5. 評価エンジニアリングと品質保証（<a href="#sec-ch5" class="internal-link" data-jump="sec-ch5">第5章</a> · 12%）</h2>
+<div tabindex="0" role="region" aria-label="表 5" class="table-wrapper" id="sec-check-tbl-5"><table><thead><tr><th scope="col">場面</th><th scope="col">✕ 選ばない</th><th scope="col">○ 選ぶ</th></tr></thead><tbody><tr><th scope="row">位置バイアスがある LLM-as-judge</th><td>しきい値を下げる、またはそのままゲート運用</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">提示順序をランダム化し、人間ラベルとの一致度を測り直すまでゲート権限を与えない</span></td></tr><tr><th scope="row">評価スイートが 99% で頭打ち</th><td>「完璧になった」とみなして放置</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">飽和・汚染を疑い、非公開ホールドアウトや本番失敗ケースを追加</span></td></tr><tr><th scope="row">オンライン品質指標の選択</th><td>タスクを問わず「文字数」や「流暢さ」だけ測る</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">抽出＝完全一致/F1、RAG＝適合率＋グラウンディング、エージェント＝完了率＋効率</span></td></tr></tbody></table></div>
+<h2>6. 大規模環境でのコストとレイテンシの最適化（<a href="#sec-ch6" class="internal-link" data-jump="sec-ch6">第6章</a> · 8%）</h2>
+<div tabindex="0" role="region" aria-label="表 6" class="table-wrapper" id="sec-check-tbl-6"><table><thead><tr><th scope="col">場面</th><th scope="col">✕ 選ばない</th><th scope="col">○ 選ぶ</th></tr></thead><tbody><tr><th scope="row">難易度が混在する大量リクエスト</th><td>全件に最上位モデルを使う</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">モデルルーティングまたはカスケード（Haiku → Sonnet/Opus）</span></td></tr><tr><th scope="row">Prompt Caching がヒットしない</th><td>モデル料金のせいにする</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">先頭プレフィックスへの動的値（時刻・ID）混入や TTL 切れを診断</span></td></tr><tr><th scope="row">E2E レイテンシの短縮</th><td>1ターン1ツールで直列実行</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">独立ツールの並列実行＋<code>output_config.effort</code> の引き下げ</span></td></tr><tr><th scope="row">夜間の大量非同期分類</th><td>リアルタイム同期 API で処理</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">Message Batches API（50% 割引・ツール往復不要・遅延許容）</span></td></tr></tbody></table></div>
+<h2>7. ランタイムガードレールと本番環境のセキュリティ（<a href="#sec-ch7" class="internal-link" data-jump="sec-ch7">第7章</a> · 11%）</h2>
+<div tabindex="0" role="region" aria-label="表 7" class="table-wrapper" id="sec-check-tbl-7"><table><thead><tr><th scope="col">場面</th><th scope="col">✕ 選ばない</th><th scope="col">○ 選ぶ</th></tr></thead><tbody><tr><th scope="row">間接インジェクションによるデータ流出</th><td>システムプロンプトに禁止文を追記、または <code>effort</code> を下げる</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">宛先許可リスト・承認ゲート・最小権限スコープという決定論的制御で塞ぐ</span></td></tr><tr><th scope="row">本番 DB と外部通信を扱うコード実行</th><td>本番ネットワーク上で直接実行</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">分離サンドボックス＋エグレス制限＋<code>PreToolUse</code> フックで遮断</span></td></tr><tr><th scope="row">クラウド／API 認証</th><td>静的 API キーを環境変数に長期保管</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ワークロード ID フェデレーションで短期トークンを動的発行</span></td></tr><tr><th scope="row">流出の有無を確認したい</th><td>ログ記録だけで「防止した」とみなす</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">ログは事後検知。防止には決定論的ガードレールが必須</span></td></tr></tbody></table></div>
+<h2>8. ソフトウェア提供のためのエージェントフリート運用（<a href="#sec-ch8" class="internal-link" data-jump="sec-ch8">第8章</a> · 10%）</h2>
+<div tabindex="0" role="region" aria-label="表 8" class="table-wrapper" id="sec-check-tbl-8"><table><thead><tr><th scope="col">場面</th><th scope="col">✕ 選ばない</th><th scope="col">○ 選ぶ</th></tr></thead><tbody><tr><th scope="row">並列コーディングエージェント</th><td>同一ディレクトリで同時編集させる</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）"><code>git worktree</code> で作業ツリーを分離し、ファイル重複のないタスク分解</span></td></tr><tr><th scope="row">AI コードレビューの導入</th><td>初日からマージ必須ゲートにする、または自己レビューさせる</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">シャドーモードで開始し、人間レビューとキャリブレーションしてからゲート化</span></td></tr><tr><th scope="row">CI 失敗時の無人一次対応</th><td><code>main</code> へ直接プッシュさせる</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">テスト検証済みの Draft PR にとどめ、解決不能時は人間へエスカレーション</span></td></tr><tr><th scope="row">全社展開のガバナンス</th><td>各エンジニアの個人設定に任せる</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）">管理設定（Managed Settings）・MCP 許可リスト・統一テレメトリ・共有資産審査</span></td></tr></tbody></table></div>
+<hr>
+<h2>公式サンプル問題3問の最終確認</h2>
+<p>試験ガイド（セクション7）に掲載されている公式サンプル問題の判断ロジックを、そのまま復習できます。</p>
+<div tabindex="0" role="region" aria-label="表 9" class="table-wrapper" id="sec-check-tbl-9"><table><thead><tr><th scope="col">問題</th><th scope="col">問われた核心</th><th scope="col">正解の理由</th></tr></thead><tbody><tr><th scope="row"><strong>サンプル1（分野2）</strong></th><td><code>429</code>・<code>max_tokens</code>・モデル拒否が同じリトライ経路に混在し、コスト急増と短い応答が発生</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）"><strong>停止条件に応じて分岐する</strong>。レート制限はバックオフ再試行、長さ超過は出力上限引き上げ、拒否は安全処理経路へ回す</span></td></tr><tr><th scope="row"><strong>サンプル2（分野5）</strong></th><td>ペア比較ジャッジが人間と約半分しか一致せず、先に表示された応答ばかり選んでいる</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）"><strong>順序をランダム化し、人間ラベルとの一致度を測り直し、許容水準になるまでゲート権限を与えない</strong></span></td></tr><tr><th scope="row"><strong>サンプル3（分野7）</strong></th><td>チケット内の隠された指示で別顧客の CRM 情報を外部メール送信された（プロンプト対策は実施済み）</td><td><span class="kw-mask" tabindex="0" role="button" aria-label="暗記マスク（タップで表示）"><strong>メール宛先許可リストまたは人間承認、CRM アクセスを当該チケットのアカウントに限定する</strong>（モデル外部の決定論的制御）</span></td></tr></tbody></table></div>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-glossary">← 用語集</button>
+            <span></span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <button type="button" class="fab-top" id="fabTop" aria-label="ページ上部へ戻る" title="ページ上部へ戻る">↑</button>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    const isDark = document.querySelector('meta[name="color-scheme"]').content === "dark" ||
+      (document.querySelector('meta[name="color-scheme"]').content === "light dark" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    mermaid.initialize({
+      startOnLoad: false,
+      flowchart: {
+        useMaxWidth: false,
+        htmlLabels: false,
+        padding: 18,
+        nodeSpacing: 40,
+        rankSpacing: 45
+      },
+      themeVariables: {
+        fontFamily: '"BIZ UDPGothic", "Yu Gothic UI", "Meiryo", -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif',
+        fontSize: "14px"
+      },
+      theme: document.documentElement.getAttribute("data-theme") === "bw" ? "neutral" : (isDark ? "dark" : "default")
+    });
+    window.__renderMermaidIn = async (rootEl) => {
+      const nodes = rootEl.querySelectorAll(".mermaid:not([data-processed])");
+      if (nodes.length > 0) {
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
+        await mermaid.run({ nodes: Array.from(nodes) });
+      }
+    };
+    const firstPanel = document.querySelector(".chapter-panel:not([hidden])");
+    if (firstPanel) window.__renderMermaidIn(firstPanel);
+  </script>
+
+  <script>
+    const panels = Array.from(document.querySelectorAll(".chapter-panel"));
+    const tabBtns = Array.from(document.querySelectorAll(".tab-btn"));
+    const navLinks = Array.from(document.querySelectorAll(".nav-link[data-sec]"));
+    const searchInput = document.getElementById("searchInput");
+    const searchStatus = document.getElementById("searchStatus");
+
+    function showSection(secId, pushHash = true) {
+      panels.forEach(p => {
+        const active = p.id === secId;
+        if (active) {
+          p.removeAttribute("hidden");
+          p.setAttribute("tabindex", "0");
+        } else {
+          p.setAttribute("hidden", "until-found");
+          p.removeAttribute("tabindex");
+        }
+      });
+      tabBtns.forEach(t => {
+        const active = t.getAttribute("data-sec") === secId;
+        t.setAttribute("aria-selected", active ? "true" : "false");
+        if (active) {
+          t.setAttribute("focusgroupstart", "");
+          t.scrollIntoView({ block: "nearest", inline: "nearest" });
+        } else {
+          t.removeAttribute("focusgroupstart");
+        }
+      });
+      navLinks.forEach(a => {
+        a.classList.toggle("active", a.getAttribute("data-sec") === secId);
+      });
+      const targetPanel = document.getElementById(secId);
+      if (targetPanel && window.__renderMermaidIn) {
+        window.__renderMermaidIn(targetPanel);
+      }
+      if (pushHash) {
+        history.replaceState(null, "", "#" + secId);
+      }
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    tabBtns.forEach(btn => btn.addEventListener("click", () => showSection(btn.dataset.sec)));
+    navLinks.forEach(a => a.addEventListener("click", e => {
+      e.preventDefault();
+      showSection(a.dataset.sec);
+      if (window.innerWidth <= 960) closeDrawer();
+    }));
+    document.querySelectorAll("[data-jump]").forEach(el => {
+      el.addEventListener("click", e => {
+        e.preventDefault();
+        showSection(el.dataset.jump);
+      });
+    });
+
+    panels.forEach(p => {
+      p.addEventListener("beforematch", () => showSection(p.id, false));
+    });
+
+    const initHash = location.hash.replace("#", "");
+    if (initHash && document.getElementById(initHash)) {
+      showSection(initHash, false);
+    }
+
+    document.querySelectorAll(".qa-toggle-all").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const body = btn.closest(".md-body");
+        const detailsList = body.querySelectorAll("details.qa-details");
+        const expand = btn.getAttribute("aria-expanded") !== "true";
+        detailsList.forEach(d => { d.open = expand; });
+        btn.setAttribute("aria-expanded", expand ? "true" : "false");
+        btn.textContent = expand ? "すべて閉じる" : "すべて開く";
+      });
+    });
+
+    const btnMemorize = document.getElementById("btnMemorize");
+    btnMemorize.addEventListener("click", () => {
+      document.body.classList.toggle("memorize-mode");
+      btnMemorize.classList.toggle("active");
+      if (!document.body.classList.contains("memorize-mode")) {
+        document.querySelectorAll(".kw-mask.revealed").forEach(el => el.classList.remove("revealed"));
+      }
+    });
+    document.querySelectorAll(".kw-mask").forEach(mask => {
+      mask.addEventListener("click", () => {
+        if (document.body.classList.contains("memorize-mode")) {
+          mask.classList.toggle("revealed");
+        }
+      });
+    });
+
+    const btnTheme = document.getElementById("btnTheme");
+    const btnBW = document.getElementById("btnBW");
+    const metaCS = document.querySelector('meta[name="color-scheme"]');
+
+    function updateThemeUI() {
+      const isBW = document.documentElement.getAttribute("data-theme") === "bw";
+      btnBW.classList.toggle("active", isBW);
+      const cs = metaCS.content;
+      const isDark = !isBW && (cs === "dark" || (cs === "light dark" && window.matchMedia("(prefers-color-scheme: dark)").matches));
+      btnTheme.textContent = isDark ? "☀️ ライト" : "🌙 ダーク";
+    }
+    updateThemeUI();
+
+    btnTheme.addEventListener("click", () => {
+      document.documentElement.removeAttribute("data-theme");
+      const cs = metaCS.content;
+      const currentlyDark = cs === "dark" || (cs === "light dark" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      const next = currentlyDark ? "light" : "dark";
+      metaCS.content = next;
+      try { localStorage.setItem("ccdvp_theme", next); } catch (e) {}
+      updateThemeUI();
+    });
+
+    btnBW.addEventListener("click", () => {
+      const isBW = document.documentElement.getAttribute("data-theme") === "bw";
+      if (isBW) {
+        document.documentElement.removeAttribute("data-theme");
+        metaCS.content = "light dark";
+        try { localStorage.removeItem("ccdvp_theme"); } catch (e) {}
+      } else {
+        document.documentElement.setAttribute("data-theme", "bw");
+        metaCS.content = "light";
+        try { localStorage.setItem("ccdvp_theme", "bw"); } catch (e) {}
+      }
+      updateThemeUI();
+    });
+
+    function clearSearchHighlights() {
+      document.querySelectorAll("mark.search-hit").forEach(m => {
+        const p = m.parentNode;
+        p.replaceChild(document.createTextNode(m.textContent), m);
+        p.normalize();
+      });
+    }
+
+    function highlightInPanel(panel, rawQuery) {
+      clearSearchHighlights();
+      if (!panel || !rawQuery) return null;
+      const body = panel.querySelector(".md-body");
+      if (!body) return null;
+      const qLower = rawQuery.toLowerCase();
+      const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
+        acceptNode: node => {
+          if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          const p = node.parentElement;
+          if (!p || p.closest(".mermaid, script, style")) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      const nodes = [];
+      let n;
+      while ((n = walker.nextNode())) nodes.push(n);
+      let firstMark = null;
+      nodes.forEach(node => {
+        const text = node.nodeValue;
+        const lower = text.toLowerCase();
+        if (!lower.includes(qLower)) return;
+        const frag = document.createDocumentFragment();
+        let last = 0;
+        let idx = lower.indexOf(qLower);
+        while (idx !== -1) {
+          if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+          const mark = document.createElement("mark");
+          mark.className = "search-hit";
+          mark.textContent = text.slice(idx, idx + rawQuery.length);
+          if (!firstMark) firstMark = mark;
+          frag.appendChild(mark);
+          last = idx + rawQuery.length;
+          idx = lower.indexOf(qLower, last);
+        }
+        if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+        node.parentNode.replaceChild(frag, node);
+      });
+      if (firstMark) {
+        const det = firstMark.closest("details.qa-details");
+        if (det) det.open = true;
+      }
+      return firstMark;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    searchInput.addEventListener("input", () => {
+      const rawQ = searchInput.value.trim();
+      const q = rawQ.toLowerCase();
+      if (!q) {
+        clearSearchHighlights();
+        searchStatus.classList.remove("visible");
+        searchStatus.textContent = "";
+        return;
+      }
+      const hits = [];
+      panels.forEach(p => {
+        const body = p.querySelector(".md-body");
+        const txt = (body ? body.textContent : p.textContent).toLowerCase();
+        if (txt.includes(q)) {
+          let count = 0;
+          let pos = txt.indexOf(q);
+          while (pos !== -1) {
+            count++;
+            pos = txt.indexOf(q, pos + q.length);
+          }
+          const title = document.querySelector(`.nav-link[data-sec="${p.id}"]`)?.textContent || p.id;
+          hits.push(`<a href="#${p.id}" data-search-jump="${p.id}" style="font-weight:700;margin-right:0.75rem;">${escapeHtml(title)} (${count}件)</a>`);
+        }
+      });
+      searchStatus.innerHTML = hits.length
+        ? `🔍 「${escapeHtml(rawQ)}」に一致した章 (${hits.length}件): ` + hits.join("")
+        : `🔍 「${escapeHtml(rawQ)}」に一致する章は見つかりませんでした。`;
+      searchStatus.classList.add("visible");
+
+      const currentPanel = document.querySelector(".chapter-panel:not([hidden])");
+      highlightInPanel(currentPanel, rawQ);
+
+      searchStatus.querySelectorAll("[data-search-jump]").forEach(a => {
+        a.addEventListener("click", e => {
+          e.preventDefault();
+          const targetId = a.dataset.searchJump;
+          showSection(targetId);
+          const targetEl = document.getElementById(targetId);
+          const firstHit = highlightInPanel(targetEl, rawQ);
+          if (firstHit) {
+            firstHit.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        });
+      });
+    });
+
+    const sidebar = document.getElementById("sidebar");
+    const backdrop = document.getElementById("sidebarBackdrop");
+    const fabTop = document.getElementById("fabTop");
+
+    function closeDrawer() {
+      sidebar.classList.remove("open");
+      backdrop.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+    document.getElementById("btnMenu").addEventListener("click", () => {
+      sidebar.classList.add("open");
+      backdrop.classList.add("open");
+      document.body.style.overflow = "hidden";
+    });
+    document.getElementById("btnCloseMenu").addEventListener("click", closeDrawer);
+    backdrop.addEventListener("click", closeDrawer);
+
+    window.addEventListener("scroll", () => {
+      fabTop.classList.toggle("visible", window.scrollY > 360);
+    }, { passive: true });
+    fabTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  </script>
+</body>
+</html>
