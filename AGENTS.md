@@ -2,6 +2,9 @@
 
 このリポジトリで作業する際は、以下のルールに従ってください。
 
+## 0. スキルの初期セットアップ
+- 作業開始時に `.agents/skills/`（`modern-web-guidance` / `yomiyasu`）が存在しない場合は、まずリポジトリルートで `npx skills experimental_install` を実行し、`skills-lock.json` からスキルを復元してください。
+
 ## 1. HTML / Web UI の作成・編集
 - HTML・CSS・クライアントサイド JavaScript を作成または更新するときは、必ず最初に `modern-web-guidance` スキル（`.agents/skills/modern-web-guidance/SKILL.md`）を参照・実行してください。
 - PC（Windows / macOS）および iPhone・iPad での閲覧・学習を考慮して設計してください。
