@@ -449,7 +449,7 @@
 <h2>教材の構成</h2>
 <div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-readme-tbl-3"><table><thead><tr><th scope="col">種類</th><th scope="col">中身</th><th scope="col">使いどころ</th></tr></thead><tbody><tr><th scope="row">第1章〜第8章</th><td>各分野の本編。たとえ・図解・比較表・実装判断・確認問題</td><td>分野別の体系的な学習</td></tr><tr><th scope="row"><a href="#sec-glossary" class="internal-link" data-jump="sec-glossary">用語集</a></th><td>試験で頻出する専門用語の意味と、混同しやすいポイント</td><td>曖昧な用語の確認</td></tr><tr><th scope="row"><a href="#sec-check" class="internal-link" data-jump="sec-check">直前チェック</a></th><td>8分野の二択判断表と、公式サンプル問題3問の完全解説</td><td>試験直前の総仕上げ</td></tr></tbody></table></div>
 <h2>学び方</h2>
-<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
   A[① たとえ・要点3つ・用語を読む] --&gt; B[② 本編を節ごとに読む]
   B --&gt; C[③ まとめ判断表を自分の言葉で説明する]
   C --&gt; D[④ 確認問題を解く]
@@ -479,7 +479,7 @@
 <h2>要点3つ</h2>
 <ol><li><strong>エージェント間の委任はコンテキスト分離の境界になる。</strong> サブエージェントは親の会話履歴を自動共有しないため、必要な前提・出典・出力形式を明示して渡し、障害もサブエージェント単位で封じ込める。</li><li><strong>長時間稼働エージェントの命綱は「外出しした状態」である。</strong> メモリや会話履歴だけに状態を置かず、チェックポイント・構造化状態・セッション永続化によって、中断やモデル更新後も安全に再開できるようにする。</li><li><strong>コンテキストは「要約・削除・外出し・キャッシュ維持」の4手で守る。</strong> Context Compaction（要約）、Context Editing（古いツール結果・思考ブロックの除去）、永続メモリ（ファイル／DB）、<code>tool_search</code>（大規模ツールの遅延ロード）を使い分け、途中の指示変更でキャッシュプレフィックスを壊さない。</li></ol>
 <h2>30秒で全体像</h2>
-<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
   U[利用者 / イベント] --&gt; S[スーパーバイザー&lt;br&gt;分解・承認・集約]
   S --&gt;|分離された委任| W1[ワーカーA&lt;br&gt;並列ディスパッチ]
   S --&gt;|分離された委任| W2[ワーカーB&lt;br&gt;並列ディスパッチ]
@@ -639,7 +639,7 @@ D. テスト実行と修正の逐次パイプラインを別々のサブエー�
 <h4>リモート MCP の本番要件</h4>
 <ul><li><strong>トランスポートと認証</strong>: リモートサーバーでは Streamable HTTP を使用し、OAuth 2.1（PKCE / トークン検証・スコープ制限）や mTLS、API ゲートウェイで認証を強制する。静的シークレットの共有やリポジトリ直書きは厳禁。</li><li><strong>ツールとスキーマのバージョン管理</strong>: ツール名や入力スキーマの必須項目追加・型変更は <strong>破壊的変更</strong> となる。バージョン付きエンドポイント（<code>/v1/mcp</code>, <code>/v2/mcp</code>）や後方互換な任意フィールド追加で移行期間を設ける。</li><li><strong>動作の破壊的変更に対する移行テスト</strong>: ツール出力フォーマットやエラー形式が変わった際、エージェントが誤動作しないか回帰テストを実行する。</li></ul>
 <h4>モデル・プロンプトの段階的ロールアウト</h4>
-<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
   D[変更 PR&lt;br&gt;プロンプト / モデル] --&gt; E[CI/CD 評価ゲート]
   E --&gt;|Pass| C[カナリア配信 5%]
   C --&gt;|SLI/SLO 監視 OK| R[段階的拡大 25% → 100%]
@@ -729,7 +729,7 @@ D. <code>--dangerously-skip-permissions</code> を本番ジョブでも常に有
 <h2>要点3つ</h2>
 <ol><li><strong>エージェントの観測は「リクエスト単位」ではなく「トレース単位」で行う。</strong> 親エージェントからサブエージェント、各ツール呼び出し、検索結果、モデル応答までを親子スパン（Span）で紐づけ、推論とグラウンディングを追跡可能にする。</li><li><strong>デバッグ可能性とプライバシー（ZDR / PII）は設計で両立する。</strong> 機密データをそのまま平文ログに流さず、構造化イベント・メタデータ・PII リダクション・条件付きサンプリングを組み合わせる。</li><li><strong>平均値（Average）は本番の異常を隠す。</strong> パーセンタイル（p95 / p99）、キャッシュヒット率、モデル更新前後のドリフト、障害コホート分析によって局所的な悪化を炙り出す。</li></ol>
 <h2>30秒で全体像</h2>
-<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
   A[エージェント実行&lt;br&gt;親スパン] --&gt; B[LLM 呼び出しスパン&lt;br&gt;tokens / cache / TTFT]
   A --&gt; C[ツール実行スパン&lt;br&gt;tool_name / isError / latency]
   A --&gt; D[検索スパン&lt;br&gt;doc_ids / scores]
@@ -915,7 +915,7 @@ D. 顧客向けインシデントレビューに内部向けのデバッグ付�
 <h2>要点3つ</h2>
 <ol><li><strong>キャリブレーションされていない LLM-as-judge にリリースゲートを任せてはならない。</strong> 位置バイアス（先に出た方を好む等）をランダム化で抑え、人間のラベルとの一致度（Cohen&#x27;s kappa 等）が許容水準に達するまでゲート権限を与えない。</li><li><strong>評価スイートは「作って終わり」にすると腐敗する。</strong> テストデータの汚染（Contamination）、全問正解による飽和（Saturation）、本番分布との乖離（カバレッジ不足）を防ぐため継続的に更新する。</li><li><strong>オフライン評価とオンライン評価は車の両輪。</strong> リリース前はゴールデンセットと CI ゲートで守り、リリース後はライブトラフィックのサンプリング・A/B テスト・タスク別指標（抽出・生成・エージェント・検索）で実品質を測る。</li></ol>
 <h2>30秒で全体像</h2>
-<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
   P[プロンプト / モデル変更] --&gt; CI[CI/CD 評価ゲート&lt;br&gt;ゴールデンセット &amp; 回帰テスト]
   H[人間ラベルデータ] --&gt; CAL[LLM-as-judge&lt;br&gt;キャリブレーション]
   CAL --&gt;|一致度 OK| CI
@@ -1012,7 +1012,7 @@ D. すべての <code>description</code> を1単語だけにする</p>
 <h2>要点3つ</h2>
 <ol><li><strong>モデルルーティングとカスケードでフリート全体の単価を下げる。</strong> 簡単な分類・抽出は小型モデル（Haiku 等）へルーティングし、確信度が低い・失敗したケースだけ上位モデル（Sonnet / Opus）へカスケードする。</li><li><strong>Prompt Caching は「構造の安定性」が命。</strong> 長いシステムプロンプト、ツール定義、共通文書をプレフィックスに固定し、<code>cache_read_input_tokens</code> を最大化して入力コストと TTFT を劇的に下げる。</li><li><strong>レイテンシは「TTFT」と「全体時間」を切り分けて最適化する。</strong> 体感速度（TTFT）にはストリーミングとキャッシュが効き、全体完了時間には並列ツール実行、<code>effort</code> レベル調整、出力トークン抑制が効く。</li></ol>
 <h2>30秒で全体像</h2>
-<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
   IN[リクエスト] --&gt; RT{ルーター&lt;br&gt;複雑度 / テナント予算}
   RT --&gt;|単純| H[Haiku&lt;br&gt;低コスト・高速]
   RT --&gt;|中〜高| S[Sonnet / Opus]
@@ -1107,7 +1107,7 @@ D. 単純な分類タスクでも常に <code>effort: &quot;max&quot;</code> と
 <h2>要点3つ</h2>
 <ol><li><strong>不可逆なアクションとデータ流出をプロンプトだけで防いではならない。</strong> システムプロンプトの警告は強制力のない「お願い」に過ぎない。宛先許可リスト、承認ゲート、フック（<code>PreToolUse</code>）、最小権限という <strong>モデル外部の決定論的制御</strong> で遮断する。</li><li><strong>「プライベートデータ ＋ 信頼できない入力 ＋ 外部通信」の3要素が揃う構成が最も危険。</strong> どれか1つでも遮断するか、外部通信前に人間の承認や許可リストを強制する（多層防御）。</li><li><strong>静的 API キーを廃し、ワークロード ID フェデレーションと最小権限を徹底する。</strong> エージェント自身の ID と権限をスコープ化し、セキュリティ上重要なアクションは改ざん不能な監査ログに残す。</li></ol>
 <h2>30秒で全体像</h2>
-<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart LR
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
   IN[信頼できない外部入力] --&gt; F1[入力ガードレール&lt;br&gt;インジェクション検知 / PII マスク]
   F1 --&gt; M[Claude エージェント&lt;br&gt;最小権限のツールのみ]
   M --&gt; SB[サンドボックス実行環境]

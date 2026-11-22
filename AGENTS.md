@@ -12,7 +12,7 @@
   - **テーマ切替**: ライト／ダークモード、および白黒印刷用の **白黒（モノクロ）モード**
   - **印刷対応**: **印刷ボタン**の設置、および `@page` / `@media print` による A4 印刷最適化（表の折り返し、改ページ制御、白黒印刷対応）
   - **フォント設定**: Google Fonts（`BIZ UDPGothic` とソースコード用の `M PLUS 1 Code`）を読み込み、本文は日本語・英語を問わずプロポーショナルフォント `BIZ UDPGothic` に統一し、ソースコード表示（`code`, `pre`）には `M PLUS 1 Code` を使用すること（オフライン時はシステムフォントへフォールバック）
-  - **Mermaid 図**: Windows での文字途切れを防ぐため、`flowchart` は `htmlLabels: false` とし、`themeVariables.fontFamily` に本文と同じフォント設定を指定したうえで、`await document.fonts.ready;` 後に描画すること
+  - **Mermaid 図**: Windows での文字途切れを防ぐため、`flowchart` は `htmlLabels: false` とし、`themeVariables.fontFamily` に本文と同じフォント設定を指定したうえで、`await document.fonts.ready;` 後に描画すること。フローチャートの流れは原則として縦方向（`flowchart TD`）にすること
 
 ## 2. 日本語文章の作成・推敲
 - 日本語の解説・ノート・ドキュメントを作成または編集するときは、必ず `yomiyasu` スキル（`.agents/skills/yomiyasu/SKILL.md`）を使用して検査・推敲してください。

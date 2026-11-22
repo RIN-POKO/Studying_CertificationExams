@@ -53,7 +53,7 @@ Claude Certified Developer – Professional (CCDV-P) の対策教材です。単
 ## 学び方
 
 ```mermaid
-flowchart LR
+flowchart TD
   A[① たとえ・要点3つ・用語を読む] --> B[② 本編を節ごとに読む]
   B --> C[③ まとめ判断表を自分の言葉で説明する]
   C --> D[④ 確認問題を解く]
