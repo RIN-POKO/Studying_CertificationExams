@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    try {
+      var saved = localStorage.getItem("cs_theme");
+      if (saved === "light" || saved === "dark") {
+        document.querySelector('meta[name="color-scheme"]').content = saved;
+      } else if (saved === "bw") {
+        document.querySelector('meta[name="color-scheme"]').content = "light";
+        document.documentElement.setAttribute("data-theme", "bw");
+      }
+    } catch (e) {}
+  </script>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Claude Sales (C-S) 対策ノート</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=M+PLUS+1+Code:wght@100..700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --target-size: 24px;
+      --bg-primary: light-dark(#f8fafc, #0b1120);
+      --bg-surface: light-dark(#ffffff, #1e293b);
+      --bg-subtle: light-dark(#f1f5f9, #0f172a);
+      --text-primary: light-dark(#0f172a, #f1f5f9);
+      --text-secondary: light-dark(#475569, #cbd5e1);
+      --text-muted: light-dark(#64748b, #94a3b8);
+      --border-color: light-dark(#e2e8f0, #334155);
+      --accent: light-dark(#6d28d9, #a78bfa);
+      --accent-soft: light-dark(#f5f3ff, rgba(139, 92, 246, 0.16));
+      --accent-border: light-dark(#ddd6fe, rgba(167, 139, 250, 0.35));
+      --emerald: light-dark(#059669, #34d399);
+      --emerald-soft: light-dark(#ecfdf5, rgba(16, 185, 129, 0.15));
+      --amber: light-dark(#d97706, #fbbf24);
+      --amber-soft: light-dark(#fffbeb, rgba(245, 158, 11, 0.15));
+      --rose: light-dark(#e11d48, #fb7185);
+      --rose-soft: light-dark(#fff1f2, rgba(244, 63, 94, 0.15));
+      --blue: light-dark(#2563eb, #60a5fa);
+      --blue-soft: light-dark(#eff6ff, rgba(59, 130, 246, 0.15));
+      --code-bg: light-dark(#f1f5f9, #0f172a);
+      --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 10px -2px rgba(15, 23, 42, 0.1);
+      --radius: 12px;
+    }
+
+    :root:has(> head > meta[name="color-scheme"][content="dark"]) {
+      color-scheme: dark;
+    }
+    :root:has(> head > meta[name="color-scheme"][content="light"]) {
+      color-scheme: light;
+    }
+
+    @media (pointer: coarse) {
+      :root {
+        --target-size: 44px;
+      }
+    }
+
+    [data-theme="bw"] {
+      color-scheme: light !important;
+      --bg-primary: #ffffff;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f3f4f6;
+      --text-primary: #111827;
+      --text-secondary: #374151;
+      --text-muted: #4b5563;
+      --border-color: #9ca3af;
+      --accent: #111827;
+      --accent-soft: #f3f4f6;
+      --accent-border: #4b5563;
+      --emerald: #111827;
+      --emerald-soft: #e5e7eb;
+      --amber: #111827;
+      --amber-soft: #e5e7eb;
+      --rose: #111827;
+      --rose-soft: #f3f4f6;
+      --blue: #111827;
+      --blue-soft: #f3f4f6;
+      --code-bg: #f3f4f6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));
+    }
+
+    body {
+      font-family: "BIZ UDPGothic", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.75;
+      font-size: 15.5px;
+      overflow-wrap: break-word;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+      padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+    }
+
+    :where(a, code) {
+      overflow-wrap: anywhere;
+    }
+
+    :where(button, select, textarea, input:not([type="checkbox"], [type="radio"]), [role="button"], nav a) {
+      min-block-size: var(--target-size);
+      min-inline-size: var(--target-size);
+    }
+
+    /* Top Header */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 0.65rem 1.25rem;
+      padding-top: max(0.65rem, env(safe-area-inset-top, 0px));
+      padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+      padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+    }
+
+    .header-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-width: 0;
+    }
+
+    .menu-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      font-size: 1.15rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      touch-action: manipulation;
+    }
+
+    .brand-badge {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.76rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      position: relative;
+      min-inline-size: 0;
+    }
+
+    .search-box input {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      width: 210px;
+      outline: none;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      touch-action: manipulation;
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: var(--accent-border);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      color: #fff;
+      opacity: 0.92;
+    }
+
+    .btn-sm {
+      font-size: 0.78rem;
+      padding: 0.3rem 0.65rem;
+    }
+
+    /* Tablist Bar (Mobile/Tablet quick switcher) */
+    .tablist-bar {
+      max-width: 1360px;
+      margin: 0.75rem auto 0;
+      padding: 0 1.25rem;
+      display: none;
+    }
+
+    .tablist-scroll {
+      display: flex;
+      gap: 0.35rem;
+      overflow-x: auto;
+      scroll-snap-type: inline proximity;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .tablist-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      flex: none;
+      scroll-snap-align: start;
+      position: relative;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 0.5rem 0.85rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      touch-action: manipulation;
+    }
+
+    .tab-btn[aria-selected="true"] {
+      color: var(--accent);
+    }
+
+    .tab-btn[aria-selected="true"]::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      border-block-end: 3px solid var(--accent);
+    }
+
+    /* Layout */
+    .layout {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem;
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 4.75rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
+      max-height: calc(100vh - 6rem);
+      overflow-y: auto;
+    }
+
+    .sidebar-header-mobile {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+    }
+
+    .sidebar-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      font-weight: 700;
+      padding: 0 0.5rem;
+    }
+
+    .sidebar-close {
+      display: none;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      border-radius: 6px;
+      padding: 0.3rem 0.65rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 0.45rem 0.65rem;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+
+    .nav-link:hover {
+      background: var(--bg-subtle);
+      color: var(--accent);
+    }
+
+    .nav-link.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 190;
+      backdrop-filter: blur(2px);
+    }
+    .sidebar-backdrop.open {
+      display: block;
+    }
+
+    /* Main Content & Panels */
+    .main-content {
+      min-width: 0;
+    }
+
+    .panel-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1.75rem 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Typography inside Markdown body */
+    .md-body h1 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--border-color);
+      text-wrap: balance;
+    }
+
+    .md-body h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin: 2rem 0 0.85rem;
+      padding-left: 0.65rem;
+      border-left: 4px solid var(--accent);
+      text-wrap: balance;
+    }
+
+    .md-body h3 {
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin: 1.5rem 0 0.6rem;
+      color: var(--text-primary);
+      text-wrap: balance;
+    }
+
+    .md-body h4 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      margin: 1.1rem 0 0.45rem;
+    }
+
+    .md-body p {
+      margin-bottom: 0.85rem;
+      text-wrap: pretty;
+    }
+
+    .md-body li {
+      margin-bottom: 0.4rem;
+      text-wrap: pretty;
+    }
+
+    .md-body ul, .md-body ol {
+      margin: 0.5rem 0 1rem 1.5rem;
+    }
+
+    .md-body hr {
+      border: none;
+      border-top: 1px solid var(--border-color);
+      margin: 1.75rem 0;
+    }
+
+    .md-body a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .md-body code {
+      background: var(--code-bg);
+      padding: 0.12rem 0.35rem;
+      border-radius: 5px;
+      font-family: "M PLUS 1 Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88em;
+      border: 1px solid var(--border-color);
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.95rem 1.1rem;
+      overflow-x: auto;
+      margin: 0.85rem 0 1.1rem;
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+
+    .code-block code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    .audio-ref {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.86em;
+      color: var(--text-secondary);
+    }
+
+    /* Alerts */
+    .alert {
+      border-radius: 10px;
+      padding: 0.95rem 1.15rem;
+      margin: 1rem 0;
+      border: 1px solid var(--border-color);
+      border-left-width: 4px;
+    }
+    .alert p:last-child { margin-bottom: 0; }
+    .alert-title {
+      font-weight: 800;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+    }
+    .alert-tip { background: var(--emerald-soft); border-color: var(--emerald); }
+    .alert-tip .alert-title { color: var(--emerald); }
+    .alert-note { background: var(--blue-soft); border-color: var(--blue); }
+    .alert-note .alert-title { color: var(--blue); }
+    .alert-important { background: var(--accent-soft); border-color: var(--accent); }
+    .alert-important .alert-title { color: var(--accent); }
+    .alert-warning { background: var(--amber-soft); border-color: var(--amber); }
+    .alert-warning .alert-title { color: var(--amber); }
+    .alert-caution { background: var(--rose-soft); border-color: var(--rose); }
+    .alert-caution .alert-title { color: var(--rose); }
+
+    blockquote {
+      border-left: 4px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      margin: 0.85rem 0;
+      color: var(--text-secondary);
+      background: var(--bg-subtle);
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* Mermaid Wrapper */
+    .mermaid-wrap {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0 1.25rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      text-align: center;
+    }
+    .mermaid-wrap svg {
+      height: auto;
+      max-width: none;
+      overflow: visible;
+    }
+    .mermaid foreignObject {
+      overflow: visible;
+    }
+    .mermaid .nodeLabel,
+    .mermaid .edgeLabel {
+      line-height: 1.4;
+    }
+
+    /* Responsive Table (modern-web-guidance: responsive-table) */
+    .table-wrapper {
+      overflow: auto;
+      max-inline-size: 100%;
+      margin: 1rem 0 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      container-type: inline-size;
+      scrollbar-width: thin;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 0.65rem 0.9rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+
+    thead th {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 1;
+      background: var(--bg-subtle);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    tbody th {
+      font-weight: 700;
+      color: var(--text-primary);
+      background: var(--bg-surface);
+    }
+
+    tbody tr:last-child th,
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover th,
+    tbody tr:hover td {
+      background: var(--accent-soft);
+    }
+
+    /* Accordion / Details (modern-web-guidance: accordion) */
+    .qa-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin: 2rem 0 0.85rem;
+      flex-wrap: wrap;
+    }
+    .qa-header h2 {
+      margin: 0;
+    }
+
+    .qa-details {
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      margin: 0.5rem 0 1.15rem;
+      background: var(--bg-subtle);
+    }
+
+    .qa-details > summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5ch;
+      padding: 0.65rem 1rem;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--accent);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .qa-details > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .qa-details > summary::before {
+      content: "▶";
+      font-size: 0.75em;
+      display: inline-block;
+      transition: rotate 0.2s;
+    }
+
+    .qa-details[open] > summary::before {
+      rotate: 90deg;
+    }
+
+    .qa-details::details-content {
+      interpolate-size: allow-keywords;
+      overflow: clip;
+      contain: layout;
+    }
+
+    .qa-details:not([open])::details-content {
+      block-size: 0;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .qa-details::details-content {
+        transition: block-size 0.25s ease-in-out, content-visibility 0.25s ease-in-out;
+        transition-behavior: allow-discrete;
+      }
+    }
+
+    .details-body {
+      padding: 0 1rem 0.9rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 0.75rem;
+    }
+    .details-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Memorize Mode Mask */
+    .kw-mask {
+      border-radius: 4px;
+      padding: 0.05rem 0.25rem;
+      transition: all 0.15s;
+    }
+
+    body.memorize-mode .kw-mask {
+      background: var(--accent);
+      color: transparent;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      display: inline;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+
+    body.memorize-mode .kw-mask * {
+      visibility: hidden;
+    }
+
+    body.memorize-mode .kw-mask.revealed {
+      background: var(--amber-soft);
+      color: var(--amber);
+      font-weight: 700;
+    }
+
+    body.memorize-mode .kw-mask.revealed * {
+      visibility: visible;
+    }
+
+    @media (hover: hover) {
+      body.memorize-mode .kw-mask:hover {
+        background: var(--amber-soft);
+        color: var(--amber);
+        font-weight: 700;
+      }
+      body.memorize-mode .kw-mask:hover * {
+        visibility: visible;
+      }
+    }
+
+    /* Pager */
+    .chapter-pager {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+
+    /* Search Banner */
+    .search-status {
+      display: none;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      color: var(--text-primary);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    .search-status.visible {
+      display: block;
+    }
+
+    mark.search-hit {
+      background: #fde047;
+      color: #0f172a;
+      padding: 0 2px;
+      border-radius: 3px;
+    }
+
+    /* Floating Back-to-Top */
+    .fab-top {
+      position: fixed;
+      right: max(1rem, env(safe-area-inset-right, 0px));
+      bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+      z-index: 150;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      box-shadow: var(--shadow-md);
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+    }
+    .fab-top.visible {
+      display: flex;
+    }
+
+    /* Tablet & Mobile */
+    @media (max-width: 960px) {
+      .tablist-bar {
+        display: block;
+      }
+      .layout {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+      .menu-toggle {
+        display: inline-flex;
+      }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: min(300px, 84vw);
+        max-height: 100vh;
+        z-index: 200;
+        border-radius: 0 14px 14px 0;
+        padding-top: max(1rem, env(safe-area-inset-top, 0px));
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+        transform: translateX(-105%);
+        transition: transform 0.25s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-close {
+        display: inline-block;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-header {
+        padding: 0.6rem 0.85rem;
+        padding-top: max(0.6rem, env(safe-area-inset-top, 0px));
+      }
+      .brand-title {
+        font-size: 0.95rem;
+        line-height: 1.3;
+        white-space: normal;
+      }
+      .controls {
+        width: 100%;
+      }
+      .search-box {
+        flex: 1 1 100%;
+      }
+      .search-box input {
+        width: 100%;
+        font-size: 16px;
+        padding: 0.5rem 0.75rem;
+      }
+      .btn-print-hide {
+        display: none;
+      }
+      .panel-card {
+        padding: 1.15rem 1rem;
+      }
+      .md-body h1 {
+        font-size: 1.3rem;
+      }
+      .md-body h2 {
+        font-size: 1.12rem;
+      }
+      th, td {
+        padding: 0.55rem 0.65rem;
+        font-size: 0.84rem;
+      }
+    }
+
+    /* A4 Print Styles */
+    @page {
+      size: A4 portrait;
+      margin: 12mm 13mm;
+    }
+
+    @media print {
+      :root, :root:has(> head > meta[name="color-scheme"][content="dark"]) {
+        color-scheme: light !important;
+        --bg-primary: #ffffff !important;
+        --bg-surface: #ffffff !important;
+        --bg-subtle: #f8fafc !important;
+        --text-primary: #0f172a !important;
+        --text-secondary: #334155 !important;
+        --text-muted: #475569 !important;
+        --border-color: #cbd5e1 !important;
+        --code-bg: #f8fafc !important;
+      }
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      body {
+        background: #fff !important;
+        color: #0f172a !important;
+        font-size: 9.5pt !important;
+        line-height: 1.6 !important;
+        padding: 0 !important;
+      }
+      .top-header, .tablist-bar, .sidebar, .sidebar-backdrop, .chapter-pager, .fab-top, .qa-toggle-all, .search-status {
+        display: none !important;
+      }
+      .layout {
+        display: block !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+      .panel-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+      }
+      .table-wrapper {
+        overflow: visible !important;
+      }
+      table {
+        font-size: 8.3pt !important;
+      }
+      thead {
+        display: table-header-group;
+      }
+      tr, .alert, .qa-details, .mermaid-wrap {
+        break-inside: avoid;
+      }
+      h1, h2, h3, h4 {
+        break-after: avoid;
+      }
+      th, td {
+        white-space: normal !important;
+        padding: 4pt 6pt !important;
+      }
+      body.memorize-mode .kw-mask {
+        background: #f3f4f6 !important;
+        color: #111827 !important;
+        border-bottom: 1px solid #111827;
+      }
+      body.memorize-mode .kw-mask * {
+        visibility: visible !important;
+      }
+    }
+  </style>
+
+</head>
+<body>
+  <header class="top-header">
+    <div class="header-inner">
+      <div class="brand">
+        <button type="button" class="menu-toggle" id="btnMenu" aria-label="目次を開く">☰</button>
+        <span class="brand-badge">C-S</span>
+        <span class="brand-title">Claude Sales 対策ノート</span>
+      </div>
+      <div class="controls">
+        <div class="search-box">
+          <input type="search" id="searchInput" placeholder="全章キーワード検索...">
+        </div>
+        <button type="button" class="btn" id="btnMemorize" title="用語集・判断表のキーワードを隠して暗記テスト">🎯 暗記マスク</button>
+        <button type="button" class="btn" id="btnTheme" title="ダークモード切替">🌙 テーマ</button>
+        <button type="button" class="btn" id="btnBW" title="白黒印刷用モノクロモード">⬛ 白黒</button>
+        <button type="button" class="btn btn-print-hide" onclick="window.print()" title="表示中の章をA4印刷">🖨️ 印刷</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tablist-bar" aria-label="章の切り替え">
+    <div class="tablist-scroll" role="tablist" aria-label="章タブ">
+      <button type="button" class="tab-btn" id="tab-sec-readme" role="tab" aria-selected="true" data-sec="sec-readme" focusgroupstart>はじめに（全体像・学び方）</button><button type="button" class="tab-btn" id="tab-sec-ch1" role="tab" aria-selected="false" data-sec="sec-ch1">第1章 製品ラインナップ</button><button type="button" class="tab-btn" id="tab-sec-ch2" role="tab" aria-selected="false" data-sec="sec-ch2">第2章 ヒアリングと提案設計</button><button type="button" class="tab-btn" id="tab-sec-ch3" role="tab" aria-selected="false" data-sec="sec-ch3">第3章 セキュリティ反論処理</button><button type="button" class="tab-btn" id="tab-sec-ch4" role="tab" aria-selected="false" data-sec="sec-ch4">第4章 ROI設計と全社拡大</button><button type="button" class="tab-btn" id="tab-sec-glossary" role="tab" aria-selected="false" data-sec="sec-glossary">用語集</button><button type="button" class="tab-btn" id="tab-sec-check" role="tab" aria-selected="false" data-sec="sec-check">直前チェック</button>
+    </div>
+  </nav>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header-mobile">
+        <div class="sidebar-title">目次ナビゲーション</div>
+        <button type="button" class="sidebar-close" id="btnCloseMenu">✕ 閉じる</button>
+      </div>
+      <ul class="nav-list">
+        <li><a class="nav-link" href="../index.html" style="font-weight: 700; color: var(--accent);">← 資格一覧へ戻る</a></li>
+        <li><a class="nav-link active" href="#sec-readme" data-sec="sec-readme">はじめに（全体像・学び方）</a></li><li><a class="nav-link" href="#sec-ch1" data-sec="sec-ch1">第1章 製品ラインナップと全体像</a></li><li><a class="nav-link" href="#sec-ch2" data-sec="sec-ch2">第2章 顧客課題のヒアリングと提案設計</a></li><li><a class="nav-link" href="#sec-ch3" data-sec="sec-ch3">第3章 セキュリティと反論処理</a></li><li><a class="nav-link" href="#sec-ch4" data-sec="sec-ch4">第4章 ROI設計と全社拡大戦略</a></li><li><a class="nav-link" href="#sec-glossary" data-sec="sec-glossary">用語集</a></li><li><a class="nav-link" href="#sec-check" data-sec="sec-check">直前チェック</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+      <div class="search-status" id="searchStatus" role="status" aria-live="polite"></div>
+      <section class="chapter-panel" id="sec-readme" role="tabpanel" aria-labelledby="tab-sec-readme" tabindex="0">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>Claude Sales (C-S) 対策ノート</h1>
+<h2>このノートについて</h2>
+<p>このノートは Anthropic Partner Academy（Skilljar）の **Claude Sales (<code>claude-sales</code>)<strong> ラーニングパスを想定し、パートナー営業・プリセールス・アカウントマネージャーに求められる </strong>Sales 固有の知識と判断軸** をまとめた学習資料です。</p>
+<p>LLM の基礎（AI の能力と限界・4D Framework・モデル選定）や開発者向け技術（Claude Code・MCP・Agent Skills）は <a href="../C-FDE%E5%8B%89%E5%BC%B7/C-FDE%E5%8B%89%E5%BC%B7.html" target="_blank" rel="noopener">C-FDE勉強</a> や CCAR-F / CCDV-P で扱うため、本ノートでは <strong>製品ポジショニング・顧客ヒアリング・セキュリティ反論処理・ROI と拡大戦略</strong> に絞って整理しています。</p>
+<h2>全体像：Claude Sales で押さえる 4 本柱</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  S[Claude Sales 提案プロセス] --&gt; P1[第1章 製品ラインナップとポジショニング&lt;br&gt;Claude Enterprise / API / Bedrock / Vertex AI]
+  P1 --&gt; P2[第2章 顧客ヒアリングと提案設計&lt;br&gt;Discovery / 部門別ユースケース / 導入経路選定]
+  P2 --&gt; P3[第3章 セキュリティと反論処理&lt;br&gt;Zero Training / SOC 2 / HIPAA / Audit Logs]
+  P3 --&gt; P4[第4章 ROI設計と全社拡大&lt;br&gt;Baseline / First Slice / 30-Day Fade対策]</pre></div>
+<h2>学び方</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  A[① 各章の要点と用語を確認する] --&gt; B[② 本編の提案判断と反論処理を読む]
+  B --&gt; C[③ まとめの判断表を自分の言葉で説明する]
+  C --&gt; D[④ 確認問題を解き、誤答の理由を確かめる]
+  D --&gt;|迷った箇所| B</pre></div>
+<ol><li>各章の冒頭にある「この章のゴール」「要点 3 つ」「用語」で全体像をつかみます。</li><li>本編では顧客（経営層・事業部門・CISO・情報システム部門）の立場ごとの関心事と、適切な切り返しを押さえます。</li><li>各章末の確認問題（シナリオ形式）を解答を開く前に解き、誤答の選択肢がなぜ不適切なのかまで確認します。</li><li>最後に「用語集」と「直前チェック」で二択の判断軸を総復習します。</li></ol>
+<h2>収録ファイル一覧</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-readme-tbl-1"><table><thead><tr><th scope="col">章</th><th scope="col">ファイル</th><th scope="col">主なテーマ</th></tr></thead><tbody><tr><th scope="row">第 1 章</th><td><a href="#sec-ch1" class="internal-link" data-jump="sec-ch1">01-Claude製品ラインナップと提案の全体像.md</a></td><td>個人向け vs 法人向け（Team / Enterprise）、API / Cloud Marketplaces、主要機能と価値訴求</td></tr><tr><th scope="row">第 2 章</th><td><a href="#sec-ch2" class="internal-link" data-jump="sec-ch2">02-顧客課題のヒアリングと提案設計.md</a></td><td>Discovery 質問、部門別ユースケース、導入形態（SaaS vs Bedrock / Vertex AI）の選定</td></tr><tr><th scope="row">第 3 章</th><td><a href="#sec-ch3" class="internal-link" data-jump="sec-ch3">03-セキュリティとコンプライアンスの反論処理.md</a></td><td>Zero Training、SOC 2 Type II、HIPAA / BAA、SSO / SCIM / Audit Logs、5 大反論への切り返し</td></tr><tr><th scope="row">第 4 章</th><td><a href="#sec-ch4" class="internal-link" data-jump="sec-ch4">04-ROI設計と全社拡大戦略.md</a></td><td>Baseline / Success Metrics、ROI Scorecard、30-Day Fade 防止、Champion Network と横展開</td></tr><tr><th scope="row">用語集</th><td><a href="#sec-glossary" class="internal-link" data-jump="sec-glossary">用語集.md</a></td><td>Claude Sales で頻出するビジネス・セキュリティ用語</td></tr><tr><th scope="row">直前チェック</th><td><a href="#sec-check" class="internal-link" data-jump="sec-check">直前チェック.md</a></td><td>商談場面別の二択判断表と総合確認問題</td></tr></tbody></table></div>
+          </div>
+          <div class="chapter-pager">
+            <span></span>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch1">第1章 製品ラインナップ →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch1" role="tabpanel" aria-labelledby="tab-sec-ch1" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第 1 章 Claude 製品ラインナップと提案の全体像</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：同じエンジンを積んだ「個人向け乗用車」「社用車フリート」「組み込み用エンジン」</strong></p><p>Claude のモデル知能というエンジンは共通でも、個人のパソコンで使うもの（Free / Pro）、会社全体で安全に管理・統制して使う社用車（Team / Enterprise）、自社の業務アプリやクラウド基盤に直接組み込むエンジン（Anthropic API / Amazon Bedrock / Google Cloud Vertex AI）では、契約・管理・セキュリティの仕組みがまったく異なります。顧客の目的に合った形態を選ぶことが営業提案の第一歩です。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>個人向けプラン（Free / Pro）と法人向けプラン（Team / Enterprise）の決定的な違いを説明できる。</li><li>SaaS 型（Claude Enterprise）と API / クラウド基盤型（Anthropic API / Amazon Bedrock / Google Cloud Vertex AI）の使い分けを提案できる。</li><li>Claude の差別化ポイント（安全性・長文コンテキスト・Projects / Artifacts / Claude Code / Connectors）を顧客課題に結びつけて語れる。</li><li>社内の Shadow AI（個人アカウントの無断利用）を解消する価値を経営層・IT 部門へ伝えられる。</li></ul>
+<h2>要点 3 つ</h2>
+<ol><li><strong>法人顧客には原則として法人向け契約（Enterprise / Team / 商用 API）を提案する。</strong> 個人向けプランを業務利用すると IT 管理や監査ができず Shadow AI の温床になるため、統制可能な商用プランへ誘導する。</li><li><strong>「すぐ業務で使う SaaS」か「自社システムへ組み込む API / クラウド」かで提案軸を分ける。</strong> 社員が日常業務で使うなら Claude Enterprise、自社アプリ連携や閉域網統合なら API や Bedrock / Vertex AI を選ぶ。</li><li><strong>モデルの性能だけでなく「安全に企業データとつなげる力」を価値として訴求する。</strong> Projects による知識共有、Artifacts による成果物生成、Connectors / MCP による社内ツール連携、Claude Code による開発支援を一体のプラットフォームとして提案する。</li></ol>
+<h2>30 秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  C[法人顧客のニーズ] --&gt; U{主な利用目的は?}
+  U --&gt;|社員の日常業務・生産性向上| S[Claude for Work&lt;br&gt;Team / Enterprise]
+  U --&gt;|自社アプリ・業務システム組み込み| A[API / クラウド基盤&lt;br&gt;Anthropic API / Bedrock / Vertex AI]
+  S --&gt; V1[SSO / SCIM / Audit Logs / 共有 Projects]
+  A --&gt; V2[既存クラウド統制 / 閉域網 / 従量課金]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch1-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">Claude for Work</th><td>法人向けに提供される Team プランおよび Enterprise プランの総称</td></tr><tr><th scope="row">Claude Enterprise</th><td>大企業向けの最上位 SaaS プラン。SSO、SCIM、Audit Logs、Compliance API、カスタム保持期間などを備える</td></tr><tr><th scope="row">Shadow AI</th><td>従業員が会社の許可や管理外の個人向け AI アカウントへ業務データを入力してしまう状態</td></tr><tr><th scope="row">Projects / Artifacts</th><td>社内資料や指示をチームで共有できるワークスペース（Projects）と、文書・コード等を並べて編集できる出力機能（Artifacts）</td></tr><tr><th scope="row">Cloud Marketplaces</th><td>Amazon Bedrock や Google Cloud Vertex AI など、顧客の既存クラウド契約枠（EDP 等）で購入・運用できる提供形態</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>1-1 プラン・提供形態の比較とポジショニング</h3>
+<p>顧客の規模や利用形態に応じて、適切な提供形態を見極めます。</p>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch1-tbl-2"><table><thead><tr><th scope="col">区分</th><th scope="col">主な対象</th><th scope="col">主な特徴・統制機能</th><th scope="col">提案が向いている場面</th></tr></thead><tbody><tr><th scope="row"><strong>Free / Pro（個人向け）</strong></th><td>個人ユーザー</td><td>個人単位の課金。組織の SSO や監査ログ管理はない</td><td>法人提案では原則対象外（Shadow AI 化を防ぐため商用プランへ移行を促す）</td></tr><tr><th scope="row"><strong>Claude Team</strong></th><td>中小〜中堅チーム</td><td>共有 Projects、チーム管理、商用データ保護（学習利用なし）</td><td>数名〜数十名規模で、まずチーム単位の協働を始めたい場合</td></tr><tr><th scope="row"><strong>Claude Enterprise</strong></th><td>中堅・大企業</td><td>SSO、SCIM、Enterprise Audit Logs、Compliance API、カスタムデータ保持、Claude Code 統制</td><td>全社展開、CISO / 法務の監査要件、Shadow AI の一掃が必要な企業</td></tr><tr><th scope="row"><strong>Anthropic API（1st-party）</strong></th><td>開発チーム・SaaS 事業者</td><td>最新モデル・機能への最速アクセス、柔軟な API 課金</td><td>自社プロダクトや社内自動化パイプラインへ直接組み込む場合</td></tr><tr><th scope="row"><strong>Amazon Bedrock / Google Cloud Vertex AI</strong></th><td>クラウド標準を持つ大企業</td><td>既存 AWS / GCP の IAM、VPC 閉域接続、クラウド請求・EDP 消化</td><td>既存クラウドのセキュリティ審査を通過済みの環境で動かしたい場合</td></tr></tbody></table></div>
+<h3>1-2 企業顧客へ訴求する 4 つの差別化価値</h3>
+<ol><li><strong>安全性と予測可能なガバナンス</strong>: 商用プランおよび API では顧客データをモデルの事前学習に利用しない（Zero Training by Default）ことを明確に保証できます。</li><li><strong>長文コンテキストと深い読解力</strong>: 契約書、仕様書、コードベースなど大量の資料をまとめて読み込み、整合性を保ったまま分析・作成できます。</li><li><strong>業務に溶け込む機能群</strong>: Projects に社内ルールや資料を登録しておけば毎回長い前提を打つ必要がなく、Artifacts で資料やプロトタイプをその場で形にできます。</li><li><strong>ビジネスと開発の両輪（Claude Code 連携）</strong>: 事務・企画部門の支援だけでなく、Claude Enterprise 配下でエンジニア向けの Claude Code も統合管理でき、全社でプラットフォームを統一できます。</li></ol>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch1-tbl-3"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">従業員が個人の Pro アカウントで社内資料を要約している</th><td>「便利に使えているならそのまま様子を見ましょう」と放置する</td><td>Shadow AI リスクを指摘し、SSO・監査ログ・学習除外が効く Claude Enterprise への統合を提案する</td></tr><tr><th scope="row">顧客が「自社アプリにチャットボットを組み込みたい」と相談</th><td>SaaS 版の Claude Enterprise アカウントを人数分売ろうとする</td><td>Anthropic API、または顧客のクラウド環境に応じた Bedrock / Vertex AI を提案する</td></tr><tr><th scope="row">大企業の情報シスが「新規ベンダーの支払い手続きや審査に時間がかかる」と難色</th><td>1st-party の直接契約だけに固執して商談が止まる</td><td>すでに契約済みの AWS（Bedrock）や Google Cloud（Vertex AI）経由での調達・EDP 活用を提案する</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問 1</h3>
+<p>従業員 3,000 名の企業で、情報システム部門から「現場の社員が勝手に個人向け AI アカウントへ業務データを入力しており困っている。全社で安全に管理できる環境を整えたい」と相談を受けました。最初に提案すべき中心的なプランはどれですか。</p>
+<p>A. 社員全員に個人の Pro アカウントを経費精算で契約させる<br> B. SSO・SCIM・Audit Logs・学習除外を備えた Claude Enterprise を提案し、管理された環境へ移行する<br> C. 開発者向けの API キーを 1 つ発行し、全社員のブラウザに手動設定させる<br> D. AI の利用を全面禁止する以外の選択肢はないと伝える</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。Shadow AI を解消するには、IT 部門が認証（SSO / SCIM）と監査（Audit Logs）を統制でき、データが学習に使われない Claude Enterprise へ統合する提案が最適です。</p></div></details>
+<h3>問 2</h3>
+<p>顧客のエンジニアリング部門が「自社で開発している顧客向け SaaS 製品の裏側に Claude の要約機能を組み込みたい」と考えています。提案すべき提供形態として最も適切なものはどれですか。</p>
+<p>A. Claude Enterprise のユーザーシートを顧客のエンドユーザー人数分契約してもらう<br> B. Anthropic API、または顧客が利用しているクラウド基盤（Amazon Bedrock / Google Cloud Vertex AI）の API を提案する<br> C. 社員が毎日画面からコピー＆ペーストして要約を返す運用を提案する<br> D. Free プランのブラウザ画面を iframe で埋め込む</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。自社アプリケーションやサービスへの組み込み用途には、SaaS シートではなく API（Anthropic API / Bedrock / Vertex AI）が適しています。</p></div></details>
+<h3>問 3</h3>
+<p>ある大手小売企業が「すでに AWS と大型の年間利用契約（EDP）を結んでおり、新規のクラウドサービス調達には厳しい審査と数か月の稟議がかかる」と述べています。営業担当として商談を前進させる最適な提案はどれですか。</p>
+<p>A. 審査が終わるまで半年以上待つしかないと伝える<br> B. Amazon Bedrock 上で Claude を利用する構成を提案し、既存の AWS セキュリティ統制と EDP 契約枠を活用できるようにする<br> C. 審査を回避するため個人のクレジットカードで API を契約するよう勧める<br> D. 契約不要な Free プランで本番システムを動かすよう提案する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。顧客が AWS や Google Cloud の既存契約・セキュリティ統制を重視する場合、Amazon Bedrock や Google Cloud Vertex AI 経由の導入を提案することで調達と審査の障壁を大きく下げられます。</p></div></details>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-readme">← はじめに（全体像・学び方）</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch2">第2章 ヒアリングと提案設計 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch2" role="tabpanel" aria-labelledby="tab-sec-ch2" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第 2 章 顧客課題のヒアリングと提案設計（Discovery &amp; Solution Positioning）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：症状を聞く前に薬を出さない「総合診療医の問診」</strong></p><p>「AI を導入したい」という顧客の言葉は、「何か体調を良くしたい」という相談に似ています。どの業務で何分かかっているのか、誰が決裁者で、どんなセキュリティ制約があるのかを問診（Discovery）で引き出して初めて、Claude Enterprise か API か、どの部門から始めるべきかの処方箋が書けます。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>商談初期のヒアリング（Discovery）で押さえるべき 4 つの観点（業務課題・データ環境・IT 統制・意思決定構造）を説明できる。</li><li>部門別の代表的なユースケース（Engineering / Legal / Finance / Sales / Customer Support）に対して Claude の価値を具体化できる。</li><li>顧客の環境（SaaS 中心か、AWS / GCP 中心か）に応じて最適な導入経路を選定できる。</li><li>単なる「機能の売り込み」ではなく、顧客の経営課題に直結した提案ストーリーを組み立てられる。</li></ul>
+<h2>要点 3 つ</h2>
+<ol><li><strong>「AI で何ができますか？」と聞かれたら、顧客の業務ボトルネックへ質問を返す。</strong> 汎用デモを見せる前に、時間のかかっている業務・人手不足の領域・既存データの所在を聞き出す。</li><li><strong>部門ごとの「具体的な痛み」に合わせてユースケースを提示する。</strong> 開発なら Claude Code によるコード理解と修正、法務なら契約書レビュー、営業なら提案書作成や CRM 連携など、相手の言葉で価値を語る。</li><li><strong>導入経路とセキュリティ条件を初期段階で特定する。</strong> 商談の終盤で「実は AWS 閉域網が必須だった」と発覚する手戻りを防ぐため、早い段階でクラウド方針とコンプライアンス要件を確認する。</li></ol>
+<h2>30 秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  D[1. Discovery ヒアリング&lt;br&gt;業務ボトルネック / クラウド環境 / 規制要件] --&gt; M[2. 部門別ユースケース選定&lt;br&gt;高頻度・高時間コスト業務を特定]
+  M --&gt; R[3. 導入経路の決定&lt;br&gt;Claude Enterprise / API / Bedrock / Vertex AI]
+  R --&gt; P[4. 価値提案&lt;br&gt;業務インパクトと安全性の両立]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch2-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">Discovery（課題発掘）</th><td>提案前に顧客の業務プロセス、課題、数値目標、制約条件、決裁プロセスを聞き出す商談工程</td></tr><tr><th scope="row">Business Pain</th><td>顧客が時間・コスト・品質・リスクの面で実際に困っている具体的な業務課題</td></tr><tr><th scope="row">Champion（社内推進者）</th><td>顧客社内で導入の必要性を理解し、他部門や決裁者との調整を後押ししてくれる味方</td></tr><tr><th scope="row">Economic Buyer（決裁者）</th><td>予算承認と契約の最終決定権を持つ責任者（CIO、CISO、事業部長など）</td></tr><tr><th scope="row">Land and Expand</th><td>まず課題が明確な 1 部門・1 ユースケースで導入し（Land）、成果を示して他部門へ広げる（Expand）戦略</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>2-1 Discovery で必ず確認すべき 4 つの質問領域</h3>
+<ol><li><strong>業務と効果の領域</strong>: 「現在最も時間や人手がかかっており、AI で改善したい定型・知的業務は何か」「その作業に現在何時間／何人かかっているか」</li><li><strong>データと連携の領域</strong>: 「参照したい社内文書やナレッジはどこにあるか（Google Drive、SharePoint、Salesforce、GitHub 等）」「機密情報や個人情報・医療情報は含まれるか」</li><li><strong>IT・クラウド基盤の領域</strong>: 「全社標準のクラウドは AWS / Google Cloud / Microsoft のどれか」「ID 管理（SSO / SCIM）や監査ログ（SIEM）の要件はあるか」</li><li><strong>組織・調達の領域</strong>: 「パイロットの成功基準を誰と決めるか」「契約・セキュリティ審査に関わる関係部門（CISO・法務・購買）はどこか」</li></ol>
+<h3>2-2 部門別ユースケースのマッピング</h3>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch2-tbl-2"><table><thead><tr><th scope="col">部門</th><th scope="col">よくある課題（Pain）</th><th scope="col">Claude の提案ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>Engineering（開発）</strong></th><td>レガシーコードの解読、テスト不足、PR レビュー待ち</td><td>Claude Code や API による調査・実装・テスト支援、技術仕様書の自動整理</td></tr><tr><th scope="row"><strong>Legal（法務）</strong></th><td>大量の契約書チェック、社内基準との照合に時間がかかる</td><td>長文コンテキストでの契約条項比較、リスク箇所の抽出と一次レビュー支援</td></tr><tr><th scope="row"><strong>Finance（財務・経理）</strong></th><td>決算資料・稟議書・請求データの突合と要約作業</td><td>PDF や表データの読解、異常値や確認ポイントの構造化レポート生成</td></tr><tr><th scope="row"><strong>Sales（営業）</strong></th><td>顧客リサーチ、商談準備、提案書作成、CRM 更新の負担</td><td>共有 Projects での提案書ドラフト作成、商談メモの構造化とフォロー案作成</td></tr><tr><th scope="row"><strong>Customer Support（CS）</strong></th><td>複雑なマニュアル検索、一次回答作成、エスカレーション判断</td><td>社内ナレッジに基づく回答下書き生成、問い合わせ分類による処理時間短縮</td></tr></tbody></table></div>
+<h3>2-3 Land and Expand を意識した初期スコープ提案</h3>
+<p>最初の商談から「全社全業務を一気に変えましょう」と提案すると、意思決定が重くなり失注しやすくなります。</p>
+<ul><li><strong>Land（着地）</strong>: 効果が測りやすく推進意欲のある 1〜2 部門を選び、明確な成功指標を置いて小さく確実に成果を出す。</li><li><strong>Expand（拡大）</strong>: 初期部門で得た削減時間や品質データを社内事例として使い、隣接部門や全社ライセンスへ拡大する。</li></ul>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch2-tbl-3"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">顧客が「とりあえず Claude の機能デモを全部見せてほしい」と依頼</th><td>相手の業務を聞かずに全機能を 1 時間説明し続ける</td><td>最初の 10 分で対象部門・課題・クラウド方針をヒアリングし、関連するユースケースに絞って見せる</td></tr><tr><th scope="row">営業担当者との商談で盛り上がっているが、IT・セキュリティ部門の要件を確認していない</th><td>受注間際まで技術・セキュリティ要件の確認を先送りにする</td><td>初期段階でクラウド標準（AWS / GCP）や審査部門の要件を確認し、後から手戻りしない提案にする</td></tr><tr><th scope="row">顧客が複数部門での導入を検討しているが、予算稟議が通りにくい</th><td>最初から全社数千人分の大規模見積もりだけを提示する</td><td>Land and Expand に沿い、まず効果を示しやすい重点部門でのパイロット提案から入る</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問 1</h3>
+<p>ある企業の事業部長から「社内で生成 AI を使いたいので Claude のデモを見せてほしい」と依頼がありました。商談の冒頭で営業担当がまず行うべき対応として最も適切なものはどれですか。</p>
+<p>A. 質問は一切せず、用意してきた 50 枚の製品機能スライドを最初から最後まで説明する<br> B. 対象となる部門や現在時間のかかっている業務課題、社内データの所在、セキュリティ上の制約をヒアリングし、顧客の課題に即したデモへ焦点を合わせる<br> C. 契約書をその場で提示してサインを求める<br> D. 最も技術的に複雑な API コードの解説から始める</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。Discovery によって顧客の具体的な業務課題と制約条件を引き出してから関連ユースケースを示すことで、導入後の価値を自分事としてイメージしてもらいやすくなります。</p></div></details>
+<h3>問 2</h3>
+<p>法務部門の責任者に対して Claude Enterprise の価値を提案する際、最も響きやすいユースケースの説明はどれですか。</p>
+<p>A. 「Web サイトの CSS アニメーションを高速に生成できます」<br> B. 「長大な契約書や社内法務基準をコンテキストとして読み込み、リスク条項の抽出や一次レビューの所要時間を大幅に短縮できます」<br> C. 「サーバーの Kubernetes マニフェストを自動デプロイできます」<br> D. 「SNS のバズる投稿を 100 本連続で作れます」</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。相手の部門（ここでは法務）が日々抱えている契約書レビュー等の課題に直結する価値を提示することが、部門別提案の基本です。</p></div></details>
+<h3>問 3</h3>
+<p>顧客が全社導入に関心を示しているものの、全社規模の予算承認に時間がかかる見込みです。商談を前進させるアプローチとして最も適切なものはどれですか。</p>
+<p>A. 全社予算が下りるまで 1 年間営業活動を停止する<br> B. Land and Expand 戦略に基づき、課題が明確で効果を数値化しやすい 1〜2 部門からスモールスタートし、実績をもとに全社拡大を提案する<br> C. 顧客の許可なく一部社員へ個人アカウントを配布する<br> D. 機能やサポートをすべて削った無償トライアルだけを永続利用させる</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。まずは確実な成果を出せる部門に絞って着地（Land）し、定量成果を根拠に全社へ拡大（Expand）する進め方が、企業商談では最も再現性の高いアプローチです。</p></div></details>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch1">← 第1章 製品ラインナップ</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch3">第3章 セキュリティ反論処理 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch3" role="tabpanel" aria-labelledby="tab-sec-ch3" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第 3 章 セキュリティとコンプライアンスの反論処理（Objection Handling）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：銀行の金庫室を示すような「安心の根拠提示」</strong></p><p>どれほど性能が優れていても、CISO や法務部門は「社外秘データが他社の学習に混ざらないか」「監査ログを追えるか」「医療や金融の規制を満たせるか」という一点で導入を止める権限を持っています。営業が抽象的に「安全です」と言うのではなく、契約条項・第三者認証・管理機能の具体的な仕組みで不安を取り除くことが受注の鍵になります。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>商用プラン・API における <strong>Zero Training by Default</strong>（学習利用なし）とデータ分離の仕組みを正確に説明できる。</li><li><strong>SOC 2 Type II</strong>、<strong>HIPAA / BAA</strong>、<strong>GDPR / DPA</strong> など主要コンプライアンス要件への対応方針を案内できる。</li><li><strong>SSO / SCIM</strong>、<strong>Enterprise Audit Logs</strong>、<strong>Compliance API</strong>、<strong>Custom Data Retention</strong> による IT 統制を説明できる。</li><li>顧客（CISO・法務・開発責任者）からよく出る 5 つのセキュリティ反論に対して的確に切り返せる。</li></ul>
+<h2>要点 3 つ</h2>
+<ol><li><strong>商用プラン・API の入力データはモデルの学習に使われない。</strong> Team / Enterprise や商用 API では、プロンプトも出力もアップロードファイルも Anthropic の基盤モデル学習に利用されない（Zero Training by Default）。</li><li><strong>エンタープライズ向けの監査・統制機能が標準で揃っている。</strong> SSO / SCIM による ID 管理、Enterprise Audit Logs と Compliance API による SIEM 連携、カスタムデータ保持期間の設定により、CISO の監査要件を満たせる。</li><li><strong>規制要件や閉域網要件が厳しい場合は、Bedrock / Vertex AI の選択肢も即座に提示する。</strong> 医療（HIPAA / BAA）や金融など厳格な業界でも、標準コンプライアンス文書（SOC 2 Type II / DPA）やクラウド環境統合によって解決策を示せる。</li></ol>
+<h2>30 秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  O[顧客のセキュリティ懸念] --&gt; T1[学習利用への懸念&lt;br&gt;Zero Training by Default / DPA]
+  O --&gt; T2[規制・認証の懸念&lt;br&gt;SOC 2 Type II / HIPAA BAA / GDPR]
+  O --&gt; T3[可視化・統制の懸念&lt;br&gt;SSO / SCIM / Audit Logs / Compliance API]
+  O --&gt; T4[閉域網・データ滞留の懸念&lt;br&gt;Custom Retention / Bedrock / Vertex AI]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch3-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">Zero Training by Default</th><td>商用プラン（Team / Enterprise）および API に入力されたデータをモデル学習に使わない原則</td></tr><tr><th scope="row">SOC 2 Type II</th><td>セキュリティや可用性等の統制が一定期間適切に運用されていることを示す第三者監査報告書</td></tr><tr><th scope="row">HIPAA / BAA</th><td>米国の医療情報保護法（HIPAA）に準拠するため、取扱事業者の責任を定める契約（Business Associate Agreement）</td></tr><tr><th scope="row">DPA（Data Processing Addendum）</th><td>個人データ（GDPR 等）の適切な処理条件を定めるデータ処理補遺契約</td></tr><tr><th scope="row">Enterprise Audit Logs / Compliance API</th><td>管理者が組織内の利用履歴・操作ログ・チャット内容をプログラム経由で取得し SIEM 等へ連携できる機能</td></tr><tr><th scope="row">Custom Data Retention</th><td>企業ポリシーに合わせてデータ保持期間（自動削除サイクル等）を管理者が設定できる機能</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>3-1 よくある 5 大セキュリティ反論と切り返し</h3>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch3-tbl-2"><table><thead><tr><th scope="col">顧客の懸念（Objection）</th><th scope="col">相手の心理・リスク</th><th scope="col">適切な切り返し（Counter-Objection）</th></tr></thead><tbody><tr><th scope="row"><strong>1. 「入力した社内データがモデルの学習に使われませんか？」</strong></th><td>競合他社への機密漏洩リスクを恐れている</td><td>Claude Team / Enterprise および商用 API は <strong>Zero Training by Default</strong> であり、顧客データは学習に一切使われません。DPA や Trust Center の情報も提示できます</td></tr><tr><th scope="row"><strong>2. 「金融・医療など規制産業のため、SOC 2 や HIPAA 対応が必須です」</strong></th><td>社内ベンダー審査に通らない、法令違反になる</td><td><strong>SOC 2 Type II</strong> を取得済みです。医療・ライフサイエンス分野では <strong>HIPAA 対応と BAA の締結</strong>、EU 関連では <strong>GDPR 準拠の DPA</strong> に対応できます</td></tr><tr><th scope="row"><strong>3. 「社員が何を入力しているか監査・SIEM 連携できません」</strong></th><td>内部不正や情報流出の追跡・eDiscovery ができない</td><td>Claude Enterprise には <strong>Enterprise Audit Logs</strong> と <strong>Compliance API</strong> があり、活動履歴や会話内容を SIEM へ連携でき、ID 管理も <strong>SSO / SCIM</strong> で統制できます</td></tr><tr><th scope="row"><strong>4. 「開発者が Claude Code でソースコードを扱うのが心配です」</strong></th><td>社内コードの外部流出や設定統制の欠如</td><td>Enterprise 契約配下で Claude Code も統合管理でき、<code>managed-settings.json</code> 等による設定強制が可能です。さらに AWS Bedrock 等の <strong>VPC 閉域環境</strong> での運用も選べます</td></tr><tr><th scope="row"><strong>5. 「無期限にデータが残ると社内保持ポリシーに反します」</strong></th><td>不要データの長期保管による漏洩リスク増大</td><td>初期設定ではデータ消失防止のため保持されますが、Enterprise 管理者が <strong>Custom Data Retention</strong> により自動削除期間を自社規定に合わせて設定できます</td></tr></tbody></table></div>
+<h3>3-2 審査をスムーズに通す営業のコツ</h3>
+<ul><li><strong>審査資料を早期に出す</strong>: 商談が最終局面に入ってから「SOC 2 報告書が欲しい」となると数週間遅れるため、IT・セキュリティ部門が関与した時点で Trust Center や NDA 下の監査資料、DPA / BAA の案内を先回りで共有します。</li><li><strong>クラウド選択肢を「逃げ道」として持っておく</strong>: SaaS 型の審査がどうしても社内規定で厳しい顧客には、すでに承認済みの <strong>Amazon Bedrock / Google Cloud Vertex AI</strong> 経由での導入を即座に提案できるようにしておきます。</li></ul>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch3-tbl-3"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">顧客の法務部が「学習利用されない保証を契約で確認したい」と要求</th><td>「大丈夫ですので口頭で約束します」と済ませる</td><td>商用プランの Zero Training 条項と DPA（Data Processing Addendum）を提示して確認してもらう</td></tr><tr><th scope="row">医療機関から HIPAA 準拠の要件が出た</th><td>「AI サービスは医療向けには使えません」と諦める</td><td>Claude Enterprise / API での HIPAA 対応と BAA 締結、または対応クラウド経由のルートを案内する</td></tr><tr><th scope="row">CISO が「従業員の AI 利用をすべてログ監視したい」と要望</th><td>「チャット画面を目視で確認してください」と答える</td><td>Enterprise Audit Logs と Compliance API を使った SIEM 連携を説明する</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問 1</h3>
+<p>大手製薬企業の CISO から「研究データや医療関連情報を扱う可能性があるため、SOC 2 の監査証明と HIPAA 準拠の BAA 締結ができなければ導入できない」と指摘されました。営業担当として最も適切な回答はどれですか。</p>
+<p>A. 「個人向け Pro プランなら規約がシンプルなので契約不要で使えます」<br> B. 「Anthropic は SOC 2 Type II を維持しており、Claude Enterprise 等では HIPAA 対象ワークロード向けに BAA の締結に対応しています。関連資料を NDA 下で共有します」<br> C. 「AI は医療分野では一切利用できないため、別部門だけで検討してください」<br> D. 「ログを一切残さないので審査は不要です」</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。SOC 2 Type II の取得状況と、HIPAA 準拠に向けた BAA 締結の可否を正確に伝え、必要な監査資料を早期に共有するのが適切な対応です。</p></div></details>
+<h3>問 2</h3>
+<p>顧客の情報システム部門が「すでに社内で Splunk などの SIEM を運用しており、社員の AI 利用ログも一元監視できなければ許可できない」と述べています。Claude Enterprise の機能として提案すべきものはどれですか。</p>
+<p>A. 社員に毎週末 Excel で利用報告を提出させる運用<br> B. Enterprise Audit Logs および Compliance API を利用し、組織の利用履歴やアクティビティを SIEM へ自動連携する仕組み<br> C. 各社員のブラウザ履歴を情報シス担当者が毎日巡回して確認する方法<br> D. ログ監視は不可能なので諦めるよう伝える</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。Claude Enterprise は Enterprise Audit Logs と Compliance API を備えており、組織の利用状況や監査データをプログラム経由で SIEM へ取り込むことができます。</p></div></details>
+<h3>問 3</h3>
+<p>顧客のコンプライアンス担当者が「データの無期限保管は社内規程で禁止されており、一定期間で自動削除される仕組みが必要だ」と懸念しています。正しい説明はどれですか。</p>
+<p>A. データ保持期間は全社固定で変更できないため、導入は不可能である<br> B. Claude Enterprise では管理者が Custom Data Retention を設定し、自社の保持ポリシーに合わせて自動削除スケジュールを構成できる<br> C. 社員が毎日手動でチャット履歴を消せば規程違反にならない<br> D. 個人プランへ切り替えれば自動削除される</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。Claude Enterprise では管理者が自社のガバナンス方針に合わせて Custom Data Retention（カスタムデータ保持期間）を設定できます。</p></div></details>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch2">← 第2章 ヒアリングと提案設計</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch4">第4章 ROI設計と全社拡大 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch4" role="tabpanel" aria-labelledby="tab-sec-ch4" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第 4 章 ROI 設計と全社拡大戦略（Pilot ROI &amp; Enterprise Expansion）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：「契約＝ゴール」ではなく「更新・拡大＝本番」のリレー</strong></p><p>最初のパイロット契約や 100 シートの受注で営業が手を引いてしまうと、顧客社内では 30-Day Fade が起きて翌年の更新時に解約されてしまいます。契約前から投資対効果（ROI）の物差しを握り、導入後は Champion Network と職種別トレーニングで定着させ、次の部門へ価値を広げていく一連の流れが Claude Sales の勝負どころです。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>パイロット開始前に <strong>Baseline Metrics</strong>・<strong>Success Metrics</strong>・<strong>ROI Scorecard</strong> を顧客と合意する営業上の意義を説明できる。</li><li><strong>First Slice</strong> によるスモールスタートと、本契約・全社展開への橋渡しを設計できる。</li><li>導入後の <strong>30-Day Fade</strong> を防ぐ 3 フェーズ（Activation / Acceleration / Expansion）と <strong>Champion Network</strong> の役割を説明できる。</li><li>パートナー企業自身の <strong>Claude Partner Network（CPN）</strong> ティア維持・昇格と認定資格・導入実績のつながりを理解する。</li></ul>
+<h2>要点 3 つ</h2>
+<ol><li><strong>売る前から「成功の証明方法（ROI Scorecard）」を合意する。</strong> 導入前の業務時間・件数・コストを Baseline として記録し、パイロット終了時に投資対効果を経営層へ説明できる材料を最初に仕込む。</li><li><strong>受注後の 30-Day Fade を防ぐ仕組みをセットで提案する。</strong> ライセンス販売だけでなく、Champion Network 構築や職種別トレーニング（Role-Based Training）を組み込むことで、継続利用とアップセルにつながる。</li><li><strong>Activation → Acceleration → Expansion の 3 段階で全社へ広げる。</strong> 初期部門の定量成果を社内事例化し、Engineering・Legal・Finance・CS などの隣接ワークロードへ計画的に拡大する。</li></ol>
+<h2>30 秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  B[商談・Pilot 設計&lt;br&gt;Baseline / Success Metrics / ROI Scorecard] --&gt; A[1. Activation 立ち上げ&lt;br&gt;SSO・環境構築 / First Slice 開始]
+  A --&gt; C[2. Acceleration 定着&lt;br&gt;Champion Network / 職種別トレーニング / 30-Day Fade 防止]
+  C --&gt; E[3. Expansion 全社拡大&lt;br&gt;定量ROI報告 / 他部門ワークロード展開]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch4-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">ROI Scorecard</th><td>導入コスト（ライセンス・API・構築費）と定量効果（削減時間・品質向上・売上貢献）を対比する評価資料</td></tr><tr><th scope="row">Baseline / Success Metrics</th><td>導入前の現状値と、パイロット成功を判定するための事前合意目標値</td></tr><tr><th scope="row">Activation / Acceleration / Expansion</th><td>エンタープライズ導入を「立ち上げ」「定着加速」「全社拡大」の 3 段階で推進するフレームワーク</td></tr><tr><th scope="row">30-Day Fade</th><td>導入後 2〜3 週間で初期の興味が薄れ、1 か月前後で利用率が急落する企業導入の典型的な失敗パターン</td></tr><tr><th scope="row">Claude Partner Network (CPN)</th><td>Anthropic のパートナープログラム。認定資格保有者数や導入実績に応じて Select / Preferred / Global Premier 等のティアが設定される</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>4-1 決裁者を納得させる ROI Scorecard の作り方</h3>
+<p>経営層（CIO / CFO / 事業部長）は「AI が賢いかどうか」ではなく「投資に見合うリターンがあるか」で予算を決めます。</p>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch4-tbl-2"><table><thead><tr><th scope="col">項目</th><th scope="col">具体的に押さえる数値</th><th scope="col">営業上の効果</th></tr></thead><tbody><tr><th scope="row"><strong>現状コスト（Baseline）</strong></th><td>対象業務の月間件数 × 1 件あたりの平均作業時間 × 人件費単価</td><td>「放置している現在の見えないコスト」を可視化できる</td></tr><tr><th scope="row"><strong>改善目標（Success Metrics）</strong></th><td>処理時間の短縮率（例：40% 削減）、一次回答精度、レビュー待ち時間</td><td>パイロット終了時の「合格・本番移行」の判断基準がぶれない</td></tr><tr><th scope="row"><strong>投資コスト（Investment）</strong></th><td>ライセンス費用（シート単価 × 人数）または API 利用料 ＋ 初期導入支援費</td><td>費用対効果（回収期間・ROI 倍率）を明確に算出できる</td></tr></tbody></table></div>
+<h3>4-2 導入後の定着と拡大（Activation → Acceleration → Expansion）</h3>
+<ol><li><strong>Activation（立ち上げ期）</strong>: SSO / SCIM 連携、カスタム保持期間の設定、利用ポリシーの周知を完了し、First Slice の対象チームが迷わず使い始められる状態を作ります。</li><li><strong>Acceleration（定着加速期）</strong>: 30-Day Fade を防ぐため、各部門に <strong>Champion</strong> を立てて専用チャットチャネルで質問を受け付け、<strong>Role-Based Training</strong> で実務直結の成功体験を広げます。</li><li><strong>Expansion（全社拡大期）</strong>: 初期部門で達成した ROI Scorecard の実績をもとに経営報告を行い、次の高価値部門（開発・法務・財務・営業・CS）へのシート追加・API 連携を提案します。</li></ol>
+<h3>4-3 パートナー企業としての CPN 連携</h3>
+<p>パートナー企業の営業・コンサルタントにとって、顧客の成功は自社のパートナー地位向上にも直結します。Claude Partner Network（CPN）では、認定資格の取得数やエンタープライズ導入の実績が Select / Preferred / Global Premier といったティア要件と連動しており、販売して終わりではなく定着と拡大まで伴走することが双方の利益になります。</p>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch4-tbl-3"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">顧客が「まずは 50 シートだけ試して効果を見たい」と言っている</th><td>目標値を決めず、50 シートを納品して 1 か月後に様子を聞く</td><td>導入前に Baseline と Success Metrics を ROI Scorecard に落とし込み、中間・終了レビューの日程まで予約する</td></tr><tr><th scope="row">契約後、利用率が 3 週間目から落ち始めている</th><td>「顧客側の利用努力の問題」として更新時期まで放置する</td><td>Champion Network の活性化と職種別ハンズオンを提案し、30-Day Fade を立て直す</td></tr><tr><th scope="row">パイロットで年間 5,000 時間相当の削減効果が確認できた</th><td>パイロット部門の担当者へお礼を言って完了とする</td><td>成果を ROI Scorecard にまとめて経営層へ報告し、他部門への Expansion 商談へつなぐ</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問 1</h3>
+<p>ある企業の情報システム部長から「100 名規模で Claude Enterprise のパイロットを行いたいが、3 か月後に経営会議で本導入の予算承認を得る必要がある」と相談されました。営業担当として提案に必ず組み込むべき仕組みはどれですか。</p>
+<p>A. 評価指標は設けず、3 か月後に社員の感想だけを口頭で集める<br> B. パイロット開始前に現状業務の Baseline Metrics と達成目標の Success Metrics を定義し、経営会議で説明できる ROI Scorecard を作成する計画を組む<br> C. 経営会議の前日に最も安いプランへ切り替える<br> D. 予算承認を待たずに 5,000 シート分の請求書を先に出す</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。経営会議で予算承認を得るには主観的な感想ではなく定量的な根拠が必要です。導入前から Baseline と Success Metrics を握り、ROI Scorecard で効果を示す設計が不可欠です。</p></div></details>
+<h3>問 2</h3>
+<p>Claude Enterprise を導入した顧客で、最初の 2 週間は活発に使われていたものの、1 か月経つとアクティブ率が大幅に低下しました。営業・カスタマーサクセスとして提案すべき最優先の打ち手はどれですか。</p>
+<p>A. 全社員に同じ内容の長い利用規約 PDF を再送する<br> B. 30-Day Fade への対策として、部門ごとの Champion Network 構築・専用質問チャネル・職種別トレーニング（Role-Based Training）を提案する<br> C. 利用していない社員のアカウントを予告なく削除する<br> D. モデルの説明だけを書いた技術論文を配布する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。30-Day Fade は「自分の日常業務にどう使うか分からない」「困ったときに聞ける相手がいない」ことで起きます。Champion Network と職種別トレーニングによる定着支援が最も効果的です。</p></div></details>
+<h3>問 3</h3>
+<p>顧客の 1 部門でのパイロットが目標を大きく上回る成果を出しました。Land and Expand および Expansion フェーズの営業アクションとして最も適切なものはどれですか。</p>
+<p>A. 成果データを社内に閉じたまま、次のアクションは顧客からの連絡待ちにする<br> B. 得られた定量成果を社内成功事例として整理し、決裁者・Champion と連携して隣接部門（法務・財務・CS 等）への横展開を提案する<br> C. パイロット部門のライセンスを解約して別製品を提案する<br> D. すべての他部門へ事前のヒアリングなしで開発者向け API キーだけを配布する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。初期部門で証明した定量成果をてこに、次の高価値部門へ段階的に適用範囲を広げるのが Expansion フェーズの王道です。</p></div></details>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch3">← 第3章 セキュリティ反論処理</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-glossary">用語集 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-glossary" role="tabpanel" aria-labelledby="tab-sec-glossary" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>用語集（Claude Sales）</h1>
+<p>Claude Sales で押さえておくべき製品・商談・セキュリティ・導入推進の重要用語を整理しています。暗記テスト機能（HTML 版の「暗記マスク」）と組み合わせて確認してください。</p>
+<h2>1. 製品・提供形態</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-glossary-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th><th scope="col">混同・注意ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>Claude for Work</strong></th><td><span class="kw-mask">法人向け SaaS プラン（Team / Enterprise）の総称</span></td><td>個人向け（Free / Pro）とは契約条件とデータ保護が異なる</td></tr><tr><th scope="row"><strong>Claude Enterprise</strong></th><td><span class="kw-mask">大企業向けの最上位 SaaS プラン</span></td><td>SSO、SCIM、Audit Logs、Compliance API、Custom Retention を備える</td></tr><tr><th scope="row"><strong>Shadow AI</strong></th><td><span class="kw-mask">社員が会社管理外の個人向け AI へ業務データを入力している状態</span></td><td>禁止するだけでなく、安全な法人環境（Enterprise）へ移行させるのが営業の役割</td></tr><tr><th scope="row"><strong>Projects / Artifacts</strong></th><td><span class="kw-mask">チームで前提資料を共有する場（Projects）と成果物を並べて編集する機能（Artifacts）</span></td><td>単発チャットとの差別化・日常定着の要になる機能</td></tr><tr><th scope="row"><strong>Cloud Marketplaces</strong></th><td><span class="kw-mask">AWS Bedrock や Google Cloud Vertex AI 経由で Claude を調達・運用する形態</span></td><td>既存クラウドの審査済み環境や EDP 契約枠を活用できる</td></tr></tbody></table></div>
+<h2>2. 商談・ヒアリング</h2>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-glossary-tbl-2"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th><th scope="col">混同・注意ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>Discovery</strong></th><td><span class="kw-mask">提案前に顧客の課題、数値目標、クラウド環境、決裁構造を聞き出す工程</span></td><td>デモを見せる前に実施し、提案の焦点を合わせる</td></tr><tr><th scope="row"><strong>Champion</strong></th><td><span class="kw-mask">顧客社内で導入を推進し、他部門や決裁者との調整を助けてくれる味方</span></td><td>技術者だけでなく、現場の業務影響力を持つ人物を見極める</td></tr><tr><th scope="row"><strong>Economic Buyer</strong></th><td><span class="kw-mask">予算承認と契約の最終決定権を持つ責任者</span></td><td>現場担当者と盛り上がっても、Economic Buyer の関心（ROI・リスク）を外すと失注する</td></tr><tr><th scope="row"><strong>Land and Expand</strong></th><td><span class="kw-mask">まず 1〜2 部門で小さく成果を出し（Land）、全社へ広げる（Expand）戦略</span></td><td>最初から全社一括を狙うより承認が通りやすい</td></tr></tbody></table></div>
+<h2>3. セキュリティ・コンプライアンス</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-glossary-tbl-3"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th><th scope="col">混同・注意ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>Zero Training by Default</strong></th><td><span class="kw-mask">商用プランや API の入力データをモデル学習に使わない原則</span></td><td>個人プランとの違いを説明する際の最重要ポイント</td></tr><tr><th scope="row"><strong>SOC 2 Type II</strong></th><td><span class="kw-mask">セキュリティ・可用性等の統制が一定期間適切に運用されている第三者監査証明</span></td><td>企業のベンダーリスク評価（VRA）で高確率で求められる</td></tr><tr><th scope="row"><strong>HIPAA / BAA</strong></th><td><span class="kw-mask">米国医療情報保護法への準拠と、事業者責任を定める契約（BAA）</span></td><td>医療・ヘルスケア・製薬顧客では早期に確認が必要</td></tr><tr><th scope="row"><strong>DPA</strong></th><td><span class="kw-mask">個人データの適切な処理条件を定めるデータ処理補遺契約</span></td><td>GDPR 等の個人情報保護要件への対応根拠になる</td></tr><tr><th scope="row"><strong>Audit Logs / Compliance API</strong></th><td><span class="kw-mask">組織の利用履歴や会話データをプログラム経由で SIEM 等へ連携できる機能</span></td><td>CISO の「社員の利用状況を監視したい」という要望への直接解</td></tr><tr><th scope="row"><strong>Custom Data Retention</strong></th><td><span class="kw-mask">企業ポリシーに合わせてデータの自動削除期間を設定できる機能</span></td><td>「無期限保持は社内規程違反」という反論への切り返しに使う</td></tr></tbody></table></div>
+<h2>4. ROI・導入拡大</h2>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-glossary-tbl-4"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th><th scope="col">混同・注意ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>Baseline / Success Metrics</strong></th><td><span class="kw-mask">導入前の現状値と、パイロット合格を判定する事前合意目標値</span></td><td>導入後に「良かった気がする」で終わらせないために事前設定する</td></tr><tr><th scope="row"><strong>ROI Scorecard</strong></th><td><span class="kw-mask">導入コストと定量削減効果を対比して示す評価資料</span></td><td>経営層への本番予算稟議・更新商談の根拠になる</td></tr><tr><th scope="row"><strong>30-Day Fade</strong></th><td><span class="kw-mask">導入後 1 か月前後で利用率が急落する企業導入の典型的な失速現象</span></td><td>ツール配布だけでなく定着支援をセット提案すべき理由</td></tr><tr><th scope="row"><strong>Role-Based Training</strong></th><td><span class="kw-mask">職種ごとの実務シナリオに即したハンズオン研修</span></td><td>全社一律の一般説明会より実務定着率が高い</td></tr><tr><th scope="row"><strong>Claude Partner Network (CPN)</strong></th><td><span class="kw-mask">Anthropic のパートナー制度（Select / Preferred / Global Premier 等）</span></td><td>認定資格数と顧客導入実績がパートナーティアに直結する</td></tr></tbody></table></div>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch4">← 第4章 ROI設計と全社拡大</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-check">直前チェック →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-check" role="tabpanel" aria-labelledby="tab-sec-check" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>直前チェック（Claude Sales）</h1>
+<p>商談・提案・反論処理・導入拡大の 4 領域について、迷いやすい二択と総合シナリオ問題で最終確認します。</p>
+<h2>商談場面別：二択判断表</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-check-tbl-1"><table><thead><tr><th scope="col">場面</th><th scope="col">避けるべき判断</th><th scope="col">とるべき判断</th></tr></thead><tbody><tr><th scope="row"><strong>Shadow AI 対策</strong></th><td>個人 Pro アカウントの業務利用を容認・放置する</td><td><span class="kw-mask">学習除外・SSO・監査ログが効く Claude Enterprise への統合を提案する</span></td></tr><tr><th scope="row"><strong>自社アプリ組み込み</strong></th><td>ユーザー数分の SaaS シートを販売しようとする</td><td><span class="kw-mask">Anthropic API、または Bedrock / Vertex AI の API 利用を提案する</span></td></tr><tr><th scope="row"><strong>既存クラウド調達</strong></th><td>直接契約（1st-party）のみに固執して審査で止まる</td><td><span class="kw-mask">既存の AWS（Bedrock）や Google Cloud（Vertex AI）と EDP 枠の活用を提案する</span></td></tr><tr><th scope="row"><strong>商談の進め方</strong></th><td>顧客の課題を聞かずに全機能のデモを一方的に見せる</td><td><span class="kw-mask">Discovery で業務課題・データ所在・IT 要件を聞き出してから焦点を絞る</span></td></tr><tr><th scope="row"><strong>セキュリティ反論</strong></th><td>「安全ですので大丈夫です」と口頭だけで答える</td><td><span class="kw-mask">Zero Training 条項、SOC 2 Type II、DPA / BAA、Audit Logs 等の根拠を示す</span></td></tr><tr><th scope="row"><strong>監査・SIEM 要件</strong></th><td>ログ監視はできないと諦めるか手作業運用を勧める</td><td><span class="kw-mask">Enterprise Audit Logs と Compliance API による SIEM 連携を案内する</span></td></tr><tr><th scope="row"><strong>保持期間の懸念</strong></th><td>デフォルトの無期限保持しか選べないと説明する</td><td><span class="kw-mask">管理者が Custom Data Retention で自動削除期間を設定できると説明する</span></td></tr><tr><th scope="row"><strong>初期スコープ</strong></th><td>最初から全社全部門一括の巨大契約だけを迫る</td><td><span class="kw-mask">Land and Expand に沿って 1〜2 部門の First Slice から始める</span></td></tr><tr><th scope="row"><strong>効果測定</strong></th><td>導入後に感想を聞いて ROI を判断する</td><td><span class="kw-mask">開始前に Baseline と Success Metrics を合意し ROI Scorecard で証明する</span></td></tr><tr><th scope="row"><strong>導入後の定着</strong></th><td>ライセンス納品だけで営業・支援を終了する</td><td><span class="kw-mask">Champion Network と職種別トレーニングで 30-Day Fade を防ぐ</span></td></tr></tbody></table></div>
+<div class="qa-header"><h2>総合確認問題（シナリオ形式）</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>総合問 1（ポジショニング ＋ セキュリティ反論）</h3>
+<p>従業員 2,000 名の金融サービス企業から「社内で個人の生成 AI アカウントが使われており情報漏洩が心配だ。全社で統一環境を導入したいが、全社標準は AWS であり、社員の利用ログは既存の SIEM へ取り込みたい。また入力データがモデルの学習に使われない保証も必須」と相談を受けました。営業担当として最も適切な提案の組み合わせはどれですか。</p>
+<p>A. 個人向け Pro プランを全員に配布し、パスワードを複雑にするよう通達する<br> B. 社員の日常業務向けには SSO・Audit Logs・Compliance API・Zero Training を備えた Claude Enterprise を提案し、自社システム連携や閉域網ワークロードには Amazon Bedrock の併用も選択肢として示す<br> C. Free プランのブラウザ利用を推奨し、週 1 回スクリーンショットを提出させる<br> D. セキュリティ要件が厳しいため、AI 導入自体を見送るよう助言する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。Shadow AI の解消と SIEM 監査・学習除外の要件には Claude Enterprise が適合し、AWS 標準の自社システム連携や閉域網要件には Amazon Bedrock を組み合わせるのが実務的な最適解です。</p></div></details>
+<h3>総合問 2（Discovery ＋ Land and Expand ＋ ROI）</h3>
+<p>ある製造業の顧客が「全社で Claude を導入したいが、役員会が投資対効果に懐疑的で予算が通りにくい」と悩んでいます。商談を前進させる提案戦略として最も適切なものはどれですか。</p>
+<p>A. 「他社もみんな使っているので大丈夫です」と精神論で説得する<br> B. まず効果を測定しやすい 1〜2 部門を Land（着地）対象に選び、導入前の Baseline と達成基準の Success Metrics を定義した ROI Scorecard を作成して、短期パイロットの実績をもとに全社拡大（Expand）を図る<br> C. 役員会を通さずに現場の経費で 1 アカウントずつ購入してもらう<br> D. 全社予算が下りるまで 2 年間待つ</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。懐疑的な決裁者には Land and Expand で初期投資とリスクを抑えつつ、Baseline と ROI Scorecard で定量効果を証明する提案が最も効果的です。</p></div></details>
+<h3>総合問 3（定着支援 ＋ 規制要件）</h3>
+<p>ヘルスケア関連企業で Claude Enterprise の導入が決まり、HIPAA 対応の BAA も締結しました。しかし営業担当は契約締結と同時に次の新規案件へ移り、顧客社内へのトレーニングや推進体制は一切組まれませんでした。2 か月後に予想される最大のリスクと、本来とるべきだった対策はどれですか。</p>
+<p>A. HIPAA の法律が自動的に無効になるため、毎日契約書を再締結すべきだった<br> B. 導入初期の関心が薄れて利用率が急落する 30-Day Fade が起きやすいため、部門別 Champion Network の設置と職種別トレーニング（Role-Based Training）を組み込んでおくべきだった<br> C. ライセンス費用が自動的に 10 倍になるため、全アカウントを停止すべきだった<br> D. 監査ログが消滅するため、紙のノートで記録すべきだった</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。契約とコンプライアンス対応が完了しても、現場での使い方支援と推進体制がなければ 30-Day Fade が起きて更新・拡大に失敗します。Champion Network と職種別トレーニングの伴走が不可欠です。</p></div></details>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-glossary">← 用語集</button>
+            <span></span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <button type="button" class="fab-top" id="fabTop" aria-label="ページ上部へ戻る" title="ページ上部へ戻る">↑</button>
+
+<script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    const isDark = document.querySelector('meta[name="color-scheme"]').content === "dark" ||
+      (document.querySelector('meta[name="color-scheme"]').content === "light dark" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    mermaid.initialize({
+      startOnLoad: false,
+      flowchart: {
+        useMaxWidth: false,
+        htmlLabels: false,
+        padding: 18,
+        nodeSpacing: 40,
+        rankSpacing: 45
+      },
+      themeVariables: {
+        fontFamily: '"BIZ UDPGothic", "Yu Gothic UI", "Meiryo", -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif',
+        fontSize: "14px"
+      },
+      theme: document.documentElement.getAttribute("data-theme") === "bw" ? "neutral" : (isDark ? "dark" : "default")
+    });
+    window.__renderMermaidIn = async (rootEl) => {
+      const nodes = rootEl.querySelectorAll(".mermaid:not([data-processed])");
+      if (nodes.length > 0) {
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
+        await mermaid.run({ nodes: Array.from(nodes) });
+      }
+    };
+    const firstPanel = document.querySelector(".chapter-panel:not([hidden])");
+    if (firstPanel) window.__renderMermaidIn(firstPanel);
+  </script>
+
+  <script>
+    const panels = Array.from(document.querySelectorAll(".chapter-panel"));
+    const tabBtns = Array.from(document.querySelectorAll(".tab-btn"));
+    const navLinks = Array.from(document.querySelectorAll(".nav-link[data-sec]"));
+    const searchInput = document.getElementById("searchInput");
+    const searchStatus = document.getElementById("searchStatus");
+
+    function showSection(secId, pushHash = true) {
+      panels.forEach(p => {
+        const active = p.id === secId;
+        if (active) {
+          p.removeAttribute("hidden");
+          p.setAttribute("tabindex", "0");
+        } else {
+          p.setAttribute("hidden", "until-found");
+          p.removeAttribute("tabindex");
+        }
+      });
+      tabBtns.forEach(t => {
+        const active = t.getAttribute("data-sec") === secId;
+        t.setAttribute("aria-selected", active ? "true" : "false");
+        if (active) {
+          t.setAttribute("focusgroupstart", "");
+          t.scrollIntoView({ block: "nearest", inline: "nearest" });
+        } else {
+          t.removeAttribute("focusgroupstart");
+        }
+      });
+      navLinks.forEach(a => {
+        a.classList.toggle("active", a.getAttribute("data-sec") === secId);
+      });
+      const targetPanel = document.getElementById(secId);
+      if (targetPanel && window.__renderMermaidIn) {
+        window.__renderMermaidIn(targetPanel);
+      }
+      if (pushHash) {
+        history.replaceState(null, "", "#" + secId);
+      }
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    // Bind clicks
+    tabBtns.forEach(btn => btn.addEventListener("click", () => showSection(btn.dataset.sec)));
+    navLinks.forEach(a => a.addEventListener("click", e => {
+      e.preventDefault();
+      showSection(a.dataset.sec);
+      if (window.innerWidth <= 960) closeDrawer();
+    }));
+    document.querySelectorAll("[data-jump]").forEach(el => {
+      el.addEventListener("click", e => {
+        e.preventDefault();
+        showSection(el.dataset.jump);
+      });
+    });
+
+    // Find-in-page support via beforematch
+    panels.forEach(p => {
+      p.addEventListener("beforematch", () => showSection(p.id, false));
+    });
+
+    // Initial hash
+    const initHash = location.hash.replace("#", "");
+    if (initHash && document.getElementById(initHash)) {
+      showSection(initHash, false);
+    }
+
+    // QA Expand/Collapse All
+    document.querySelectorAll(".qa-toggle-all").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const body = btn.closest(".md-body");
+        const detailsList = body.querySelectorAll("details.qa-details");
+        const expand = btn.getAttribute("aria-expanded") !== "true";
+        detailsList.forEach(d => { d.open = expand; });
+        btn.setAttribute("aria-expanded", expand ? "true" : "false");
+        btn.textContent = expand ? "すべて閉じる" : "すべて開く";
+      });
+    });
+
+    // Memorize Mode
+    const btnMemorize = document.getElementById("btnMemorize");
+    btnMemorize.addEventListener("click", () => {
+      document.body.classList.toggle("memorize-mode");
+      btnMemorize.classList.toggle("active");
+      if (!document.body.classList.contains("memorize-mode")) {
+        document.querySelectorAll(".kw-mask.revealed").forEach(el => el.classList.remove("revealed"));
+      }
+    });
+    document.querySelectorAll(".kw-mask").forEach(mask => {
+      mask.addEventListener("click", () => {
+        if (document.body.classList.contains("memorize-mode")) {
+          mask.classList.toggle("revealed");
+        }
+      });
+    });
+
+    // Theme Toggle (Light / Dark / System / BW)
+    const btnTheme = document.getElementById("btnTheme");
+    const btnBW = document.getElementById("btnBW");
+    const metaCS = document.querySelector('meta[name="color-scheme"]');
+
+    function updateThemeUI() {
+      const isBW = document.documentElement.getAttribute("data-theme") === "bw";
+      btnBW.classList.toggle("active", isBW);
+      const cs = metaCS.content;
+      const isDark = !isBW && (cs === "dark" || (cs === "light dark" && window.matchMedia("(prefers-color-scheme: dark)").matches));
+      btnTheme.textContent = isDark ? "☀️ ライト" : "🌙 ダーク";
+    }
+    updateThemeUI();
+
+    btnTheme.addEventListener("click", () => {
+      document.documentElement.removeAttribute("data-theme");
+      const cs = metaCS.content;
+      const currentlyDark = cs === "dark" || (cs === "light dark" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      const next = currentlyDark ? "light" : "dark";
+      metaCS.content = next;
+      try { localStorage.setItem("cs_theme", next); } catch (e) {}
+      updateThemeUI();
+    });
+
+    btnBW.addEventListener("click", () => {
+      const isBW = document.documentElement.getAttribute("data-theme") === "bw";
+      if (isBW) {
+        document.documentElement.removeAttribute("data-theme");
+        metaCS.content = "light dark";
+        try { localStorage.removeItem("cs_theme"); } catch (e) {}
+      } else {
+        document.documentElement.setAttribute("data-theme", "bw");
+        metaCS.content = "light";
+        try { localStorage.setItem("cs_theme", "bw"); } catch (e) {}
+      }
+      updateThemeUI();
+    });
+
+    // Cross-chapter Search (uses textContent so hidden panels are searched too)
+    function clearSearchHighlights() {
+      document.querySelectorAll("mark.search-hit").forEach(mark => {
+        const parent = mark.parentNode;
+        if (parent) {
+          parent.replaceChild(document.createTextNode(mark.textContent), mark);
+          parent.normalize();
+        }
+      });
+    }
+
+    function highlightInPanel(panelEl, rawQuery) {
+      clearSearchHighlights();
+      if (!panelEl || !rawQuery) return null;
+      const body = panelEl.querySelector(".md-body");
+      if (!body) return null;
+      const qLower = rawQuery.toLowerCase();
+      const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          const p = node.parentElement;
+          if (!p || p.closest(".mermaid, .mermaid-wrap, svg, script, style")) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      const textNodes = [];
+      let n;
+      while ((n = walker.nextNode())) textNodes.push(n);
+
+      let firstMark = null;
+      textNodes.forEach(node => {
+        const text = node.nodeValue;
+        const lower = text.toLowerCase();
+        let idx = lower.indexOf(qLower);
+        if (idx === -1) return;
+        const frag = document.createDocumentFragment();
+        let last = 0;
+        while (idx !== -1) {
+          if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+          const mark = document.createElement("mark");
+          mark.className = "search-hit";
+          mark.textContent = text.slice(idx, idx + rawQuery.length);
+          if (!firstMark) firstMark = mark;
+          frag.appendChild(mark);
+          last = idx + rawQuery.length;
+          idx = lower.indexOf(qLower, last);
+        }
+        if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+        node.parentNode.replaceChild(frag, node);
+      });
+      if (firstMark) {
+        const det = firstMark.closest("details.qa-details");
+        if (det) det.open = true;
+      }
+      return firstMark;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    searchInput.addEventListener("input", () => {
+      const rawQ = searchInput.value.trim();
+      const q = rawQ.toLowerCase();
+      if (!q) {
+        clearSearchHighlights();
+        searchStatus.classList.remove("visible");
+        searchStatus.textContent = "";
+        return;
+      }
+      const hits = [];
+      panels.forEach(p => {
+        const body = p.querySelector(".md-body");
+        const txt = (body ? body.textContent : p.textContent).toLowerCase();
+        if (txt.includes(q)) {
+          let count = 0;
+          let pos = txt.indexOf(q);
+          while (pos !== -1) {
+            count++;
+            pos = txt.indexOf(q, pos + q.length);
+          }
+          const title = document.querySelector(`.nav-link[data-sec="${p.id}"]`)?.textContent || p.id;
+          hits.push(`<a href="#${p.id}" data-search-jump="${p.id}" style="font-weight:700;margin-right:0.75rem;">${escapeHtml(title)} (${count}件)</a>`);
+        }
+      });
+      searchStatus.innerHTML = hits.length
+        ? `🔍 「${escapeHtml(rawQ)}」に一致した章 (${hits.length}件): ` + hits.join("")
+        : `🔍 「${escapeHtml(rawQ)}」に一致する章は見つかりませんでした。`;
+      searchStatus.classList.add("visible");
+
+      const currentPanel = document.querySelector(".chapter-panel:not([hidden])");
+      highlightInPanel(currentPanel, rawQ);
+
+      searchStatus.querySelectorAll("[data-search-jump]").forEach(a => {
+        a.addEventListener("click", e => {
+          e.preventDefault();
+          const targetId = a.dataset.searchJump;
+          showSection(targetId);
+          const targetEl = document.getElementById(targetId);
+          const firstHit = highlightInPanel(targetEl, rawQ);
+          if (firstHit) {
+            firstHit.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        });
+      });
+    });
+
+    // Mobile Drawer & Back-to-Top
+    const sidebar = document.getElementById("sidebar");
+    const backdrop = document.getElementById("sidebarBackdrop");
+    const fabTop = document.getElementById("fabTop");
+
+    function closeDrawer() {
+      sidebar.classList.remove("open");
+      backdrop.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+    document.getElementById("btnMenu").addEventListener("click", () => {
+      sidebar.classList.add("open");
+      backdrop.classList.add("open");
+      document.body.style.overflow = "hidden";
+    });
+    document.getElementById("btnCloseMenu").addEventListener("click", closeDrawer);
+    backdrop.addEventListener("click", closeDrawer);
+
+    window.addEventListener("scroll", () => {
+      fabTop.classList.toggle("visible", window.scrollY > 360);
+    }, { passive: true });
+    fabTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  </script>
+</body>
+</html>
