@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    try {
+      var saved = localStorage.getItem("cfde_theme");
+      if (saved === "light" || saved === "dark") {
+        document.querySelector('meta[name="color-scheme"]').content = saved;
+      } else if (saved === "bw") {
+        document.querySelector('meta[name="color-scheme"]').content = "light";
+        document.documentElement.setAttribute("data-theme", "bw");
+      }
+    } catch (e) {}
+  </script>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Claude Forward Deployed Engineer (C-FDE) Core 対策ノート</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=M+PLUS+1+Code:wght@100..700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --target-size: 24px;
+      --bg-primary: light-dark(#f8fafc, #0b1120);
+      --bg-surface: light-dark(#ffffff, #1e293b);
+      --bg-subtle: light-dark(#f1f5f9, #0f172a);
+      --text-primary: light-dark(#0f172a, #f1f5f9);
+      --text-secondary: light-dark(#475569, #cbd5e1);
+      --text-muted: light-dark(#64748b, #94a3b8);
+      --border-color: light-dark(#e2e8f0, #334155);
+      --accent: light-dark(#0f766e, #2dd4bf);
+      --accent-soft: light-dark(#f0fdfa, rgba(45, 212, 191, 0.14));
+      --accent-border: light-dark(#99f6e4, rgba(45, 212, 191, 0.35));
+      --emerald: light-dark(#059669, #34d399);
+      --emerald-soft: light-dark(#ecfdf5, rgba(16, 185, 129, 0.15));
+      --amber: light-dark(#d97706, #fbbf24);
+      --amber-soft: light-dark(#fffbeb, rgba(245, 158, 11, 0.15));
+      --rose: light-dark(#e11d48, #fb7185);
+      --rose-soft: light-dark(#fff1f2, rgba(244, 63, 94, 0.15));
+      --blue: light-dark(#2563eb, #60a5fa);
+      --blue-soft: light-dark(#eff6ff, rgba(59, 130, 246, 0.15));
+      --code-bg: light-dark(#f1f5f9, #0f172a);
+      --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 10px -2px rgba(15, 23, 42, 0.1);
+      --radius: 12px;
+    }
+
+    :root:has(> head > meta[name="color-scheme"][content="dark"]) { color-scheme: dark; }
+    :root:has(> head > meta[name="color-scheme"][content="light"]) { color-scheme: light; }
+
+    @media (pointer: coarse) {
+      :root { --target-size: 44px; }
+    }
+
+    [data-theme="bw"] {
+      color-scheme: light !important;
+      --bg-primary: #ffffff;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f3f4f6;
+      --text-primary: #111827;
+      --text-secondary: #374151;
+      --text-muted: #4b5563;
+      --border-color: #9ca3af;
+      --accent: #111827;
+      --accent-soft: #f3f4f6;
+      --accent-border: #4b5563;
+      --emerald: #111827;
+      --emerald-soft: #e5e7eb;
+      --amber: #111827;
+      --amber-soft: #e5e7eb;
+      --rose: #111827;
+      --rose-soft: #f3f4f6;
+      --blue: #111827;
+      --blue-soft: #f3f4f6;
+      --code-bg: #f3f4f6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));
+    }
+
+    body {
+      font-family: "BIZ UDPGothic", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.75;
+      font-size: 15.5px;
+      overflow-wrap: break-word;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+      padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+    }
+
+    :where(a, code) { overflow-wrap: anywhere; }
+    :where(button, select, textarea, input:not([type="checkbox"], [type="radio"]), [role="button"], nav a) {
+      min-block-size: var(--target-size);
+      min-inline-size: var(--target-size);
+    }
+
+    .top-header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg-surface); border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 0.65rem 1.25rem;
+      padding-top: max(0.65rem, env(safe-area-inset-top, 0px));
+      padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+      padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+    }
+
+    .header-inner {
+      max-width: 1360px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.75rem; flex-wrap: wrap;
+    }
+
+    .brand { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }
+    .menu-toggle {
+      display: none; align-items: center; justify-content: center;
+      background: var(--bg-subtle); border: 1px solid var(--border-color);
+      color: var(--text-primary); width: 44px; height: 44px; border-radius: 8px;
+      font-size: 1.15rem; cursor: pointer; flex-shrink: 0; touch-action: manipulation;
+    }
+    .brand-badge {
+      background: var(--accent); color: #fff; font-weight: 700;
+      font-size: 0.76rem; padding: 0.25rem 0.6rem; border-radius: 6px; flex-shrink: 0;
+    }
+    [data-theme="light"] .brand-badge, :root:not([data-theme="bw"]) .brand-badge { color: #ffffff; }
+    .brand-title { font-size: 1.02rem; font-weight: 800; color: var(--text-primary); }
+
+    .controls { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
+    .search-box { position: relative; min-inline-size: 0; }
+    .search-box input {
+      background: var(--bg-subtle); border: 1px solid var(--border-color);
+      color: var(--text-primary); padding: 0.4rem 0.75rem; border-radius: 8px;
+      font-size: 0.88rem; width: 210px; outline: none;
+    }
+    .search-box input:focus { border-color: var(--accent); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;
+      background: var(--bg-subtle); color: var(--text-secondary);
+      border: 1px solid var(--border-color); padding: 0.4rem 0.75rem;
+      border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      touch-action: manipulation; text-decoration: none;
+      transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+    }
+    .btn:hover { border-color: var(--accent); color: var(--accent); }
+    .btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-border); }
+    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-primary:hover { color: #fff; opacity: 0.92; }
+    .btn-sm { font-size: 0.78rem; padding: 0.3rem 0.65rem; }
+
+    .tablist-bar { max-width: 1360px; margin: 0.75rem auto 0; padding: 0 1.25rem; display: none; }
+    .tablist-scroll {
+      display: flex; gap: 0.35rem; overflow-x: auto; scroll-snap-type: inline proximity;
+      scrollbar-width: none; -webkit-overflow-scrolling: touch; border-bottom: 1px solid var(--border-color);
+    }
+    .tablist-scroll::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex: none; scroll-snap-align: start; position: relative;
+      background: transparent; border: none; color: var(--text-secondary);
+      padding: 0.5rem 0.85rem; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      white-space: nowrap; touch-action: manipulation;
+    }
+    .tab-btn[aria-selected="true"] { color: var(--accent); }
+    .tab-btn[aria-selected="true"]::after {
+      content: ""; position: absolute; inset: auto 0 0; border-block-end: 3px solid var(--accent);
+    }
+
+    .layout {
+      max-width: 1360px; margin: 0 auto; padding: 1.5rem 1.25rem;
+      display: grid; grid-template-columns: 270px 1fr; gap: 1.75rem; align-items: start;
+    }
+
+    .sidebar {
+      position: sticky; top: 4.75rem; background: var(--bg-surface);
+      border: 1px solid var(--border-color); border-radius: var(--radius);
+      padding: 1rem; box-shadow: var(--shadow-sm);
+      max-height: calc(100vh - 6rem); overflow-y: auto;
+    }
+    .sidebar-header-mobile { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+    .sidebar-title {
+      font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--text-muted); font-weight: 700; padding: 0 0.5rem;
+    }
+    .sidebar-close {
+      display: none; background: var(--bg-subtle); border: 1px solid var(--border-color);
+      color: var(--text-secondary); border-radius: 6px; padding: 0.3rem 0.65rem;
+      font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    }
+    .nav-list { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
+    .nav-link {
+      display: flex; align-items: center; padding: 0.45rem 0.65rem; border-radius: 8px;
+      color: var(--text-secondary); text-decoration: none; font-size: 0.84rem; font-weight: 500;
+      transition: all 0.15s;
+    }
+    .nav-link:hover { background: var(--bg-subtle); color: var(--accent); }
+    .nav-link.active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+
+    .sidebar-backdrop {
+      display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5);
+      z-index: 190; backdrop-filter: blur(2px);
+    }
+    .sidebar-backdrop.open { display: block; }
+
+    .main-content { min-width: 0; }
+    .panel-card {
+      background: var(--bg-surface); border: 1px solid var(--border-color);
+      border-radius: var(--radius); padding: 1.75rem 2rem; box-shadow: var(--shadow-sm);
+    }
+
+    .md-body h1 {
+      font-size: 1.55rem; font-weight: 800; margin-bottom: 1rem;
+      padding-bottom: 0.6rem; border-bottom: 2px solid var(--border-color); text-wrap: balance;
+    }
+    .md-body h2 {
+      font-size: 1.25rem; font-weight: 800; margin: 2rem 0 0.85rem;
+      padding-left: 0.65rem; border-left: 4px solid var(--accent); text-wrap: balance;
+    }
+    .md-body h3 { font-size: 1.08rem; font-weight: 700; margin: 1.5rem 0 0.6rem; color: var(--text-primary); text-wrap: balance; }
+    .md-body h4 { font-size: 0.98rem; font-weight: 700; margin: 1.1rem 0 0.45rem; }
+    .md-body p { margin-bottom: 0.85rem; text-wrap: pretty; }
+    .md-body li { margin-bottom: 0.4rem; text-wrap: pretty; }
+    .md-body ul, .md-body ol { margin: 0.5rem 0 1rem 1.5rem; }
+    .md-body hr { border: none; border-top: 1px solid var(--border-color); margin: 1.75rem 0; }
+    .md-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+    .md-body code {
+      background: var(--code-bg); padding: 0.12rem 0.35rem; border-radius: 5px;
+      font-family: "M PLUS 1 Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88em; border: 1px solid var(--border-color);
+    }
+    .code-block {
+      background: var(--code-bg); border: 1px solid var(--border-color); border-radius: 10px;
+      padding: 0.95rem 1.1rem; overflow-x: auto; margin: 0.85rem 0 1.1rem; font-size: 0.86rem; line-height: 1.55;
+    }
+    .code-block code { background: none; border: none; padding: 0; font-size: inherit; }
+
+    .alert {
+      border-radius: 10px; padding: 0.95rem 1.15rem; margin: 1rem 0;
+      border: 1px solid var(--border-color); border-left-width: 4px;
+    }
+    .alert p:last-child { margin-bottom: 0; }
+    .alert-title { font-weight: 800; font-size: 0.88rem; margin-bottom: 0.35rem; }
+    .alert-tip { background: var(--emerald-soft); border-color: var(--emerald); }
+    .alert-tip .alert-title { color: var(--emerald); }
+    .alert-note { background: var(--blue-soft); border-color: var(--blue); }
+    .alert-note .alert-title { color: var(--blue); }
+    .alert-important { background: var(--accent-soft); border-color: var(--accent); }
+    .alert-important .alert-title { color: var(--accent); }
+    .alert-warning { background: var(--amber-soft); border-color: var(--amber); }
+    .alert-warning .alert-title { color: var(--amber); }
+    .alert-caution { background: var(--rose-soft); border-color: var(--rose); }
+    .alert-caution .alert-title { color: var(--rose); }
+
+    blockquote {
+      border-left: 4px solid var(--border-color); padding: 0.5rem 1rem; margin: 0.85rem 0;
+      color: var(--text-secondary); background: var(--bg-subtle); border-radius: 0 8px 8px 0;
+    }
+
+    .mermaid-wrap {
+      background: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: 10px;
+      padding: 1rem; margin: 1rem 0 1.25rem; overflow-x: auto;
+      -webkit-overflow-scrolling: touch; scrollbar-width: thin; text-align: center;
+    }
+    .mermaid-wrap svg { height: auto; max-width: none; overflow: visible; }
+    .mermaid foreignObject { overflow: visible; }
+    .mermaid .nodeLabel, .mermaid .edgeLabel { line-height: 1.4; }
+
+    .table-wrapper {
+      overflow: auto; max-inline-size: 100%; margin: 1rem 0 1.25rem;
+      border: 1px solid var(--border-color); border-radius: 10px;
+      container-type: inline-size; scrollbar-width: thin;
+    }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.9rem; }
+    th, td { padding: 0.65rem 0.9rem; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+    thead th { position: sticky; inset-block-start: 0; z-index: 1; background: var(--bg-subtle); font-weight: 700; color: var(--text-primary); }
+    tbody th { font-weight: 700; color: var(--text-primary); background: var(--bg-surface); }
+    tbody tr:last-child th, tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover th, tbody tr:hover td { background: var(--accent-soft); }
+
+    .qa-header { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin: 2rem 0 0.85rem; flex-wrap: wrap; }
+    .qa-header h2 { margin: 0; }
+    .qa-details { border: 1px solid var(--border-color); border-radius: 10px; margin: 0.5rem 0 1.15rem; background: var(--bg-subtle); }
+    .qa-details > summary {
+      list-style: none; display: flex; align-items: center; gap: 0.5ch;
+      padding: 0.65rem 1rem; font-weight: 700; font-size: 0.92rem; color: var(--accent);
+      cursor: pointer; user-select: none;
+    }
+    .qa-details > summary::-webkit-details-marker { display: none; }
+    .qa-details > summary::before { content: "▶"; font-size: 0.75em; display: inline-block; transition: rotate 0.2s; }
+    .qa-details[open] > summary::before { rotate: 90deg; }
+    .qa-details::details-content { interpolate-size: allow-keywords; overflow: clip; contain: layout; }
+    .qa-details:not([open])::details-content { block-size: 0; }
+    @media (prefers-reduced-motion: no-preference) {
+      .qa-details::details-content { transition: block-size 0.25s ease-in-out, content-visibility 0.25s ease-in-out; transition-behavior: allow-discrete; }
+    }
+    .details-body { padding: 0 1rem 0.9rem; border-top: 1px solid var(--border-color); padding-top: 0.75rem; }
+    .details-body p:last-child { margin-bottom: 0; }
+
+    .kw-mask { border-radius: 4px; padding: 0.05rem 0.25rem; transition: all 0.15s; }
+    body.memorize-mode .kw-mask {
+      background: var(--accent); color: transparent; cursor: pointer;
+      user-select: none; -webkit-user-select: none; display: inline;
+      box-decoration-break: clone; -webkit-box-decoration-break: clone;
+    }
+    body.memorize-mode .kw-mask * { visibility: hidden; }
+    body.memorize-mode .kw-mask.revealed { background: var(--amber-soft); color: var(--amber); font-weight: 700; }
+    body.memorize-mode .kw-mask.revealed * { visibility: visible; }
+    @media (hover: hover) {
+      body.memorize-mode .kw-mask:hover { background: var(--amber-soft); color: var(--amber); font-weight: 700; }
+      body.memorize-mode .kw-mask:hover * { visibility: visible; }
+    }
+
+    .chapter-pager {
+      display: flex; justify-content: space-between; gap: 0.75rem;
+      margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border-color); flex-wrap: wrap;
+    }
+
+    .search-status {
+      display: none; background: var(--accent-soft); border: 1px solid var(--accent-border);
+      color: var(--text-primary); border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.9rem;
+    }
+    .search-status.visible { display: block; }
+    mark.search-hit { background: #fde047; color: #0f172a; padding: 0 2px; border-radius: 3px; }
+
+    .fab-top {
+      position: fixed; right: max(1rem, env(safe-area-inset-right, 0px));
+      bottom: max(1rem, env(safe-area-inset-bottom, 0px)); z-index: 150;
+      width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: #fff;
+      border: none; box-shadow: var(--shadow-md); font-size: 1.1rem; font-weight: 700;
+      cursor: pointer; display: none; align-items: center; justify-content: center; touch-action: manipulation;
+    }
+    .fab-top.visible { display: flex; }
+
+    @media (max-width: 960px) {
+      .tablist-bar { display: block; }
+      .layout { grid-template-columns: 1fr; padding: 1rem; }
+      .menu-toggle { display: inline-flex; }
+      .sidebar {
+        position: fixed; top: 0; left: 0; bottom: 0; width: min(300px, 84vw); max-height: 100vh;
+        z-index: 200; border-radius: 0 14px 14px 0;
+        padding-top: max(1rem, env(safe-area-inset-top, 0px));
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+        transform: translateX(-105%); transition: transform 0.25s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-close { display: inline-block; }
+    }
+
+    @media (max-width: 640px) {
+      .top-header { padding: 0.6rem 0.85rem; padding-top: max(0.6rem, env(safe-area-inset-top, 0px)); }
+      .brand-title { font-size: 0.95rem; line-height: 1.3; white-space: normal; }
+      .controls { width: 100%; }
+      .search-box { flex: 1 1 100%; }
+      .search-box input { width: 100%; font-size: 16px; padding: 0.5rem 0.75rem; }
+      .btn-print-hide { display: none; }
+      .panel-card { padding: 1.15rem 1rem; }
+      .md-body h1 { font-size: 1.3rem; }
+      .md-body h2 { font-size: 1.12rem; }
+      th, td { padding: 0.55rem 0.65rem; font-size: 0.84rem; }
+    }
+
+    @page { size: A4 portrait; margin: 12mm 13mm; }
+
+    @media print {
+      :root, :root:has(> head > meta[name="color-scheme"][content="dark"]) {
+        color-scheme: light !important;
+        --bg-primary: #ffffff !important; --bg-surface: #ffffff !important; --bg-subtle: #f8fafc !important;
+        --text-primary: #0f172a !important; --text-secondary: #334155 !important; --text-muted: #475569 !important;
+        --border-color: #cbd5e1 !important; --code-bg: #f8fafc !important;
+      }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      body { background: #fff !important; color: #0f172a !important; font-size: 9.5pt !important; line-height: 1.6 !important; padding: 0 !important; }
+      .top-header, .tablist-bar, .sidebar, .sidebar-backdrop, .chapter-pager, .fab-top, .qa-toggle-all, .search-status { display: none !important; }
+      .layout { display: block !important; padding: 0 !important; max-width: 100% !important; }
+      .panel-card { border: none !important; box-shadow: none !important; padding: 0 !important; }
+      .table-wrapper { overflow: visible !important; }
+      table { font-size: 8.3pt !important; }
+      thead { display: table-header-group; }
+      tr, .alert, .qa-details, .mermaid-wrap { break-inside: avoid; }
+      h1, h2, h3, h4 { break-after: avoid; }
+      th, td { white-space: normal !important; padding: 4pt 6pt !important; }
+      body.memorize-mode .kw-mask { background: #f3f4f6 !important; color: #111827 !important; border-bottom: 1px solid #111827; }
+      body.memorize-mode .kw-mask * { visibility: visible !important; }
+    }
+  </style>
+
+</head>
+<body>
+  <header class="top-header">
+    <div class="header-inner">
+      <div class="brand">
+        <button type="button" class="menu-toggle" id="btnMenu" aria-label="目次を開く">☰</button>
+        <span class="brand-badge">C-FDE Core</span>
+        <span class="brand-title">Claude Forward Deployed Engineer Core 対策ノート</span>
+      </div>
+      <div class="controls">
+        <div class="search-box">
+          <input type="search" id="searchInput" placeholder="全章キーワード検索...">
+        </div>
+        <button type="button" class="btn" id="btnMemorize" title="用語集・判断表のキーワードを隠して暗記テスト">🎯 暗記マスク</button>
+        <button type="button" class="btn" id="btnTheme" title="ダークモード切替">🌙 テーマ</button>
+        <button type="button" class="btn" id="btnBW" title="白黒印刷用モノクロモード">⬛ 白黒</button>
+        <button type="button" class="btn btn-print-hide" onclick="window.print()" title="表示中の章をA4印刷">🖨️ 印刷</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tablist-bar" aria-label="章の切り替え">
+    <div class="tablist-scroll" role="tablist" aria-label="章タブ">
+      <button type="button" class="tab-btn" id="tab-sec-readme" role="tab" aria-selected="true" data-sec="sec-readme" focusgroupstart>はじめに（全体像・学び方）</button><button type="button" class="tab-btn" id="tab-sec-ch1" role="tab" aria-selected="false" data-sec="sec-ch1">第1章 AIの能力と限界</button><button type="button" class="tab-btn" id="tab-sec-ch2" role="tab" aria-selected="false" data-sec="sec-ch2">第2章 AIフルーエンシーと4D</button><button type="button" class="tab-btn" id="tab-sec-ch3" role="tab" aria-selected="false" data-sec="sec-ch3">第3章 プラットフォーム基盤</button><button type="button" class="tab-btn" id="tab-sec-ch4" role="tab" aria-selected="false" data-sec="sec-ch4">第4章 モデル選定</button><button type="button" class="tab-btn" id="tab-sec-glossary" role="tab" aria-selected="false" data-sec="sec-glossary">用語集</button><button type="button" class="tab-btn" id="tab-sec-check" role="tab" aria-selected="false" data-sec="sec-check">直前チェック</button>
+    </div>
+  </nav>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar" aria-label="目次">
+      <div class="sidebar-header">
+        <span class="sidebar-title">目次（Core 4コース）</span>
+        <button type="button" class="sidebar-close" id="btnCloseMenu" aria-label="目次を閉じる">✕</button>
+      </div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="#sec-readme" class="nav-link active" data-sec="sec-readme">はじめに（全体像・学び方）</a></li><li class="nav-item"><a href="#sec-ch1" class="nav-link" data-sec="sec-ch1">第1章 AI の能力と限界</a></li><li class="nav-item"><a href="#sec-ch2" class="nav-link" data-sec="sec-ch2">第2章 ビルダー向け AI フルーエンシー</a></li><li class="nav-item"><a href="#sec-ch3" class="nav-link" data-sec="sec-ch3">第3章 Claude プラットフォームとモデル基盤</a></li><li class="nav-item"><a href="#sec-ch4" class="nav-link" data-sec="sec-ch4">第4章 適切な Claude モデルの選定</a></li><li class="nav-item"><a href="#sec-glossary" class="nav-link" data-sec="sec-glossary">用語集</a></li><li class="nav-item"><a href="#sec-check" class="nav-link" data-sec="sec-check">直前チェック</a></li>
+      </ul>
+    </aside>
+
+    <main class="content">
+      <div class="search-status" id="searchStatus" role="status" aria-live="polite"></div>
+      <section class="chapter-panel" id="sec-readme" role="tabpanel" aria-labelledby="tab-sec-readme" tabindex="0">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>Claude Forward Deployed Engineer (FDE) Core 対策ノート</h1>
+<h2>このノートについて</h2>
+<p>このノートは Anthropic Partner Academy（Skilljar）の **Claude Forward Deployed Engineer (<code>claude-fde</code>)** ラーニングパスのうち、Core（基礎・中核）に位置づけられる 4 つのコースを体系的にまとめた学習資料です。</p>
+<p>現在はパートナー向けの学習パスですが、今後認定資格として試験化される可能性も見据え、実務の判断軸とシナリオ形式の確認問題までを一通り整理しています。</p>
+<h2>全体像：FDE パスにおける Core の位置づけ</h2>
+<p><code>claude-fde</code> パスは全 11 コース（約 9.5 時間）で構成されており、大きく <strong>Core（基礎 4 コース）</strong> と <strong>Role Courses（構築・デリバリー 7 コース）</strong> に分かれます。</p>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  P[Claude FDE ラーニングパス 全11コース] --&gt; C[Core 基礎 4コース 本ノートの対象]
+  P --&gt; R1[Role Courses: Building 5コース]
+  P --&gt; R2[Role Courses: Delivering 2コース]
+  C --&gt; C1[1. AI Capabilities and Limitations]
+  C --&gt; C2[2. AI Fluency for Builders]
+  C --&gt; C3[3. Claude Platform and Model Foundations]
+  C --&gt; C4[4. Choosing the Right Claude Model]
+  R1 --&gt; REF1[CCAR-F / CCDV-P 等で学習]</pre></div>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-readme-tbl-1"><table><thead><tr><th scope="col">区分</th><th scope="col">コース名</th><th scope="col">目安時間</th><th scope="col">本ノートでの扱い</th></tr></thead><tbody><tr><th scope="row">Core 1</th><td>AI Capabilities and Limitations</td><td>約 60 分</td><td><strong>第 1 章</strong>で解説</td></tr><tr><th scope="row">Core 2</th><td>AI Fluency for Builders</td><td>約 45 分</td><td><strong>第 2 章</strong>で解説</td></tr><tr><th scope="row">Core 3</th><td>Claude Platform and Model Foundations（Partner 限定）</td><td>約 60 分</td><td><strong>第 3 章</strong>で解説</td></tr><tr><th scope="row">Core 4</th><td>Choosing the Right Claude Model</td><td>約 10 分</td><td><strong>第 4 章</strong>で解説</td></tr><tr><th scope="row">Role (Building)</th><td>Claude Platform 101 / Claude Code 101 / Claude Code in Action / MCP / Agent Skills</td><td>約 5 時間</td><td>他資格（CCAR-F / CCDV-P 等）で学習するため対象外</td></tr><tr><th scope="row">Role (Delivering)</th><td>Delivery Methodology / Driving Enterprise Adoption of Claude</td><td>約 2 時間</td><td>本ノートの対象外（Core のみ）</td></tr></tbody></table></div>
+<h2>学び方</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  A[① 各章の要点と用語を確認する] --&gt; B[② 本編の仕組みと判断基準を読む]
+  B --&gt; C[③ まとめの比較表を自分の言葉で説明する]
+  C --&gt; D[④ 確認問題を解き、誤答の理由を確かめる]
+  D --&gt;|迷った箇所| B</pre></div>
+<ol><li>各章の冒頭にある「この章のゴール」「要点 3 つ」「用語」で全体像をつかみます。</li><li>本編では機能の暗記にとどめず「なぜその制約が起きるのか」「どの場面でどの選択をとるべきか」という判断基準を押さえます。</li><li>各章末の「確認問題」を解答を開く前に解き、不正解の選択肢がなぜ不適切なのかまで確認します。</li><li>最後に「用語集」と「直前チェック」で二択の判断軸を総復習します。</li></ol>
+<h2>収録ファイル一覧</h2>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-readme-tbl-2"><table><thead><tr><th scope="col">章</th><th scope="col">ファイル</th><th scope="col">主なテーマ</th></tr></thead><tbody><tr><th scope="row">第 1 章</th><td><a href="#sec-ch1" class="internal-link" data-jump="sec-ch1">01-AIの能力と限界.md</a></td><td>次トークン予測、コンテキストウィンドウ、Hallucination、人間が担うべき判断領域</td></tr><tr><th scope="row">第 2 章</th><td><a href="#sec-ch2" class="internal-link" data-jump="sec-ch2">02-ビルダー向けAIフルーエンシーと4Dフレームワーク.md</a></td><td>AI Fluency の定義、4D Framework（Delegation / Description / Discernment / Diligence）</td></tr><tr><th scope="row">第 3 章</th><td><a href="#sec-ch3" class="internal-link" data-jump="sec-ch3">03-Claudeプラットフォームとモデル基盤.md</a></td><td>実行環境（Anthropic API / Amazon Bedrock / Google Cloud Vertex AI）、プロンプト前の設計判断、Context と Tool Use の基礎</td></tr><tr><th scope="row">第 4 章</th><td><a href="#sec-ch4" class="internal-link" data-jump="sec-ch4">04-適切なClaudeモデルの選定.md</a></td><td>モデルティア（Opus / Sonnet / Haiku 等）、Intelligence / Speed / Cost、Effort パラメータ、2 つの導入アプローチ</td></tr><tr><th scope="row">用語集</th><td><a href="#sec-glossary" class="internal-link" data-jump="sec-glossary">用語集.md</a></td><td>Core 4 コースの重要用語と混同しやすいポイント</td></tr><tr><th scope="row">直前チェック</th><td><a href="#sec-check" class="internal-link" data-jump="sec-check">直前チェック.md</a></td><td>二択判断表と総合確認問題</td></tr></tbody></table></div>
+          </div>
+          <div class="chapter-pager">
+            <span></span>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch1">第1章 AIの能力と限界 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch1" role="tabpanel" aria-labelledby="tab-sec-ch1" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第 1 章 AI の能力と限界（AI Capabilities and Limitations）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：超高速で博識だが、現場の責任は持てない「リサーチアシスタント」</strong></p><p>大量の文献を読み込み、数秒でコードや文章の下書きを作れる優秀なアシスタントがいます。ただし、このアシスタントは「次に来る最も自然な言葉」を確率で紡ぎ出しているため、知らないことも自信満々に言い切ることがあります。何が任せてよい作業で、どこからが人間の責任かを切り分けることが出発点になります。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>LLM がテキストやコードを生成する基本原理（次トークン予測）と、そこから生じる強み・弱みを説明できる。</li><li>Hallucination やコンテキスト劣化（Context Rot / Drift）が起きる構造的な理由を理解し、対策を選べる。</li><li>モデルが予期しない出力を返したときに、原因を切り分けて対処する手順を説明できる。</li><li>顧客や開発チームに対して、AI に任せるべき作業と人間が最終判断すべき境界を明確に伝えられる。</li></ul>
+<h2>要点 3 つ</h2>
+<ol><li><strong>LLM の強みと限界は、どちらも同じ仕組みから生まれる。</strong> 次トークン予測（Next-Token Prediction）と大規模なパターン学習により、要約・変換・コード生成で高い性能を発揮する一方、事実の真偽を自動で検証する仕組みは持たない。</li><li><strong>コンテキストウィンドウには「容量」だけでなく「注意の限界」がある。</strong> 入力が長くなるほど指示の抜け漏れや焦点のぼやけ（Contextual Drift）が起きやすいため、必要な情報だけを整理して渡す設計が欠かせない。</li><li><strong>LLM には自律的な意図や現実世界の責任能力がない。</strong> 下書きの作成・構造化・選択肢の列挙は AI に任せ、セキュリティ承認・アーキテクチャの最終決定・対外的な責任は必ず人間が引き受ける。</li></ol>
+<h2>30 秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  I[入力プロンプトとコンテキスト] --&gt; M[次トークン予測による処理]
+  M --&gt; G[得意: 要約 / コード下書き / 構造変換 / パターン抽出]
+  M --&gt; L[限界: Hallucination / 長文での指示漏れ / 状況認識の欠如]
+  G --&gt; H{人間の検証と最終判断}
+  L --&gt; H
+  H --&gt;|承認・修正| P[本番への適用]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch1-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">Next-Token Prediction</th><td>入力された文脈に続く最も確率の高いトークンを順に予測して出力を生成する仕組み</td></tr><tr><th scope="row">Context Window</th><td>モデルが 1 回の推論で同時に参照できる入力および出力トークンの最大枠</td></tr><tr><th scope="row">Hallucination</th><td>事実や入力コンテキストに根拠がないにもかかわらず、もっともらしく誤った内容を出力する現象</td></tr><tr><th scope="row">Contextual Drift / Context Rot</th><td>会話や入力が長くなるにつれ、初期の指示や制約への注意が薄れて出力品質が低下する現象</td></tr><tr><th scope="row">Parametric Memory</th><td>モデルの事前学習を通じて重み（パラメータ）の内部に保持されている知識</td></tr><tr><th scope="row">Non-deterministic（非決定性）</th><td>同じ入力を与えても、サンプリング設定や確率的処理により毎回まったく同じ出力になるとは限らない性質</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>1-1 LLM が得意な領域と苦手な領域</h3>
+<p>Forward Deployed Engineer（FDE）として顧客の課題に向き合うとき、最初に問われるのは「この課題は LLM で解くべきか、どの部分に使うべきか」の見極めです。LLM の能力と限界は対になっており、性質を正確に把握することで過剰な期待や誤用を防げます。</p>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch1-tbl-2"><table><thead><tr><th scope="col">観点</th><th scope="col">得意な領域（AI に向いている）</th><th scope="col">苦手な領域（人間や決定論的コードが担う）</th></tr></thead><tbody><tr><th scope="row">情報処理</th><td>非構造化テキストの要約、分類、JSON 等の構造化データ抽出</td><td>厳密な数値計算、暗号処理、100% 再現性が必要な決定論的処理</td></tr><tr><th scope="row">生成・執筆</th><td>コードの下書き生成、リファクタリング案、ドキュメント草案</td><td>組織固有の暗黙知を前提とした最終意思決定、法的・倫理的責任を伴う承認</td></tr><tr><th scope="row">推論・探索</th><td>複数の観点からのアイデア出し、ログやコードのパターン照合</td><td>学習データやコンテキストにない最新事実の正確な再現（検索なし）</td></tr><tr><th scope="row">状況認識</th><td>与えられたコンテキスト内での整合性チェックや変換</td><td>現実世界の暗黙の制約、社内の政治的背景、未知の障害への責任ある対処</td></tr></tbody></table></div>
+<div class="alert alert-important"><div class="alert-title">📌 重要</div><p>顧客が「AI にすべてを自動で判断させたい」と要望した場合でも、FDE は「正確性・再現性・説明責任」が求められる箇所を決定論的なコードや人間のレビューゲートとして設計に組み込む必要があります。</p></div>
+<h3>1-2 予期しない出力が起きる 4 つの原因と切り分け</h3>
+<p>モデルが期待どおりに動かないとき、闇雲にプロンプトを書き直すのではなく、どの層で問題が起きているかを切り分けます。</p>
+<ol><li>知識の不足（Knowledge Gap）は、最新の仕様や社内固有のルールが Parametric Memory に含まれていないために起きます。プロンプトや外部検索（RAG・ツール）でコンテキストに根拠を与える必要があります。</li><li>指示の曖昧さ（Ambiguity）は、成功条件や出力形式、禁止事項が明示されていないために起きます。モデルが一般的なパターンで補完してしまうため、制約と具体例を明記します。</li><li>コンテキスト過多・劣化（Context Overload / Drift）は、無関係なログや長大な履歴を詰め込みすぎて重要な指示が埋もれる状態です。不要な情報を削り、重要な制約を明確に配置します。</li><li>能力の境界（Capability Boundary）は、複雑な多段階の厳密計算やツールなしのリアルタイム情報取得など、LLM 単体の性質上不得手な作業を直接頼んでいる状態です。外部ツールやコード実行に委ねる設計へ切り替えます。</li></ol>
+<h3>1-3 AI の限界を踏まえた安全・信頼性の原則</h3>
+<ul><li>非決定性を前提にし、同じ入力でも出力が揺れる可能性に備えて、本番利用では構造化出力の検証や自動テストを組み合わせます。</li><li>「もっともらしさ」と「正しさ」を切り離し、モデルが流暢に回答しても根拠（出典ファイル、ツール結果、事実データ）が伴っているかを必ず検証します。</li><li>Human-in-the-Loop（人間による確認）の境界を引き、取り消せない操作（本番データの削除、外部送信、契約判断）の前には人間の承認を挟みます。</li></ul>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch1-tbl-3"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">社内固有の業務ルールに関する質問でモデルが誤答する</th><td>モデルに「正確に思い出して」とプロンプトで念押しする</td><td>社内ドキュメントを検索ツールやコンテキスト経由で明示的に渡す</td></tr><tr><th scope="row">複雑な金額集計をモデルの暗算に任せたら端数がずれた</th><td>より丁寧な言葉遣いで計算をやり直させる</td><td>計算処理自体はコードやツールに任せ、モデルには解釈や要約を任せる</td></tr><tr><th scope="row">長い会話の後半でモデルが冒頭のフォーマット指定を忘れた</th><td>会話履歴をさらに増やして注意文を何度も繰り返す</td><td>不要な履歴を整理し、必要な制約だけを再提示するかセッションを分ける</td></tr><tr><th scope="row">セキュリティ要件の最終承認を AI のレビューだけで通したい</th><td>高性能モデルに切り替えて承認作業も完全に自動化する</td><td>AI には論点抽出と一次チェックを任せ、最終承認は人間が行う</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問 1</h3>
+<p>ある顧客が過去の商談議事録（テキスト）から「決定事項」「課題」「次のアクション」を抽出し、同時に契約金額の複雑な日割り計算と請求書発行の最終承認までをすべて LLM 単体の 1 回の呼び出しで自動化したいと相談してきました。FDE として最も適切な提案はどれですか。</p>
+<p>A. 最新の大規模モデルを使えば計算も承認も 1 回で完結できると提案する B. 議事録からの項目抽出・要約は LLM に任せ、日割り計算は決定論的なコード、請求書発行の最終承認は人間が担う役割分担を提案する C. プロンプトに「計算を絶対に間違えないでください」と追記して全工程を自動化する D. 議事録を学習データとして毎回ファインチューニングしてから計算させる</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。非構造化テキストからの情報抽出・要約は LLM が得意とする領域ですが、厳密な数値計算は決定論的コード、不可逆で責任を伴う請求承認は人間が担うべきです。</p></div></details>
+<h3>問 2</h3>
+<p>社内規定に関する Q&amp;A ボットを開発中、モデルが実際には存在しない社内制度の名前を挙げて非常に流暢に回答してしまいました。この現象の主な原因と最初の対処として最も適切なものはどれですか。</p>
+<p>A. モデルが意図的に嘘をついているため、温度設定ではなくモデルの倫理ガイドラインを書き換える B. 社内固有の情報がモデルの Parametric Memory にないまま回答生成（Hallucination）しているため、検索等で公式ドキュメントをコンテキストに与え、根拠がない場合は「分からない」と答えるよう指示する C. モデルのコンテキストウィンドウが不足しているため、質問文を 1 単語に短縮する D. 出力トークン上限を増やして、モデルが正しい答えにたどり着くまで長く書かせる</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。LLM は次トークン予測によってもっともらしい文を生成するため、根拠となる知識が与えられないと Hallucination が起きやすくなります。根拠資料をコンテキストへ渡し、不明時は回答を控える設計が有効です。</p></div></details>
+<h3>問 3</h3>
+<p>長時間のチャット支援ツールで、会話が 30 往復を超えたあたりから、最初に指定していた「出力は必ず箇条書き 3 点以内」という制約をモデルが無視するようになりました。最も可能性が高い原因はどれですか。</p>
+<p>A. モデルがユーザーに飽きて指示を拒否している B. 蓄積された会話履歴によってコンテキストが膨らみ、初期指示への注意が薄れる Contextual Drift が起きている C. Next-Token Prediction は 30 往復を超えると必ず停止する仕様になっている D. モデルの重みが会話中に書き換わってしまった</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。コンテキストウィンドウに長大な履歴が溜まると、初期の制約が相対的に埋もれて出力品質が落ちる Contextual Drift が発生します。履歴の整理や制約の再配置が必要です。</p></div></details>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-readme">← はじめに（全体像・学び方）</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch2">第2章 AIフルーエンシーと4D →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch2" role="tabpanel" aria-labelledby="tab-sec-ch2" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第 2 章 ビルダー向け AI フルーエンシーと 4D フレームワーク（AI Fluency for Builders）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：優秀な開発パートナーへの「仕事の任せ方・伝え方・検収・出荷責任」</strong></p><p>単にプロンプトの小手先テクニックを覚えるのではなく、「どの仕事を任せるか（Delegation）」「何をどう伝えるか（Description）」「上がってきた成果物をどう見抜くか（Discernment）」「自分の名前で世に出せる状態まで責任を持てるか（Diligence）」という 4 つの習慣を揃えることが、ビルダーにとっての AI 活用力になります。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>Anthropic が定義する AI Fluency（有効・効率的・倫理的・安全な協働）の意味を説明できる。</li><li>4D Framework（Delegation / Description / Discernment / Diligence）の 4 要素と、それぞれの実務上のチェックポイントを説明できる。</li><li>Description を構成する 3 つの視点（Product / Process / Performance）を使い分けて明確な指示を書ける。</li><li>顧客や開発チームに AI 協働ワークフローを導入する際、人間が主導権（Driver&#x27;s Seat）を握り続ける設計を示せる。</li></ul>
+<h2>要点 3 つ</h2>
+<ol><li><strong>AI Fluency とはプロンプトの暗記ではなく「協働の型」である。</strong> AI と有効（Effective）・効率的（Efficient）・倫理的（Ethical）・安全（Safe）に協働し、人間が主導権を保ちながら成果を出す力を指す。</li><li><strong>4D Framework が設計から出荷までの全工程を支える。</strong> Delegation（委任）・Description（記述・指示）・Discernment（識別・評価）・Diligence（注意・責任）の 4 つが揃って初めて、本番に耐える開発ができる。</li><li><strong>「実装は委任できても、最終判断は委任できない」。</strong> テストや下書きの生成は Claude に任せられるが、要件の妥当性・セキュリティ・アーキテクチャの最終判断と出荷責任はビルダー自身が負う。</li></ol>
+<h2>30 秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  D1[1. Delegation 委任: 何を AI に任せ、何を人間が持つか決める] --&gt; D2[2. Description 記述: Product / Process / Performance を伝える]
+  D2 --&gt; AI[Claude による生成・作業]
+  AI --&gt; D3[3. Discernment 識別: 正確性・品質・前提の妥当性を批判的に評価する]
+  D3 --&gt;|修正が必要| D2
+  D3 --&gt;|基準を満たす| D4[4. Diligence 責任: セキュリティ・ライセンス・倫理を確認し出荷責任を負う]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch2-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">AI Fluency</th><td>AI システムと有効・効率的・倫理的・安全に協働するための実践的な能力</td></tr><tr><th scope="row">4D Framework</th><td>Delegation・Description・Discernment・Diligence の 4 要素からなる Anthropic の AI 協働フレームワーク</td></tr><tr><th scope="row">Delegation（委任）</th><td>課題や工程のうち、いつ・何を・どのように AI に任せ、何を人間が保持するかを決めること</td></tr><tr><th scope="row">Description（記述）</th><td>求める成果物や進め方、AI の振る舞いを明確に言語化して伝えること</td></tr><tr><th scope="row">Discernment（識別・評価）</th><td>AI が返した出力の正確性、品質、技術的負債、抜け漏れを批判的に見極めること</td></tr><tr><th scope="row">Diligence（注意・責任）</th><td>安全性、セキュリティ、法令・ライセンス遵守、説明責任を含めて最終成果物を担保すること</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>2-1 Delegation：何を任せ、何を人間が持つか</h3>
+<p>FDE やビルダーが最初に陥りやすい失敗は、「全部 AI に丸投げする」か「逆に何も任せず手作業に固執する」かの両極端です。Delegation では、タスクの性質とリスクに応じて分担を決めます。</p>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch2-tbl-2"><table><thead><tr><th scope="col">観点</th><th scope="col">AI に委任しやすい作業</th><th scope="col">人間が保持すべき判断</th></tr></thead><tbody><tr><th scope="row">設計・仕様</th><td>仕様書の叩き台作成、エッジケースの洗い出し</td><td>業務要件の優先順位付け、顧客との合意形成</td></tr><tr><th scope="row">実装・テスト</th><td>ボイラープレート作成、単体テスト生成、リファクタリング案</td><td>コアアーキテクチャの選定、不可逆なデータ移行判断</td></tr><tr><th scope="row">レビュー・調査</th><td>ログの一次整理、既知パターンのバグ候補抽出</td><td>セキュリティ上の最終承認、本番リリース可否の判断</td></tr></tbody></table></div>
+<div class="alert alert-important"><div class="alert-title">📌 重要</div><p>コアとなる判断基準は <strong>「実装（Implementation）の委任は多くの場合安全だが、最終判断（Final Judgment）の委任は危険である」</strong> という点です。</p></div>
+<h3>2-2 Description：3 つの視点で明確に伝える</h3>
+<p>「ログイン画面を作って」のような曖昧な依頼では、前提の食い違いがそのまま手戻りにつながります。ビルダー向けの Description では、次の 3 つを意識して指示を組み立てます。</p>
+<ol><li><strong>Product Description（何を作るか）</strong>: 目的、対象ユーザー、満たすべき要件、出力フォーマット、制約条件。</li><li><strong>Process Description（どう進めるか）</strong>: 手順、採用すべき技術・設計方針、避けるべきアプローチ、段階的な確認ポイント。</li><li><strong>Performance Description（どう振る舞うか）</strong>: 協働中の AI の役割や姿勢（例：「厳格なコードレビュアーとして、実装前に私の前提の穴を指摘してから進めてください」）。</li></ol>
+<p>この 3 つを分けることで、AI は「何を出せばよいか」だけでなく「どの順序で、どのような基準で思考すべきか」を把握しやすくなります。</p>
+<h3>2-3 Discernment：出力を批判的に見抜く</h3>
+<p>Claude が読みやすいコードや整った提案書を返しても、そのままコピー＆ペーストしてはいけません。Discernment では、以下の観点で出力を検証します。</p>
+<ul><li><strong>正確性</strong>: 要件や仕様と食い違っていないか、存在しない API や設定値を作り出していないか。</li><li><strong>品質と保守性</strong>: 過剰な複雑化や不要な依存関係、将来的な技術的負債を増やしていないか。</li><li><strong>前提の妥当性</strong>: AI が暗黙のうちに置いた仮定が、顧客環境の制約と矛盾していないか。</li></ul>
+<h3>2-4 Diligence：責任を持って出荷する</h3>
+<p>Diligence は、技術的な正しさにとどまらず「プロフェッショナルとして世に出せる状態か」を担保する姿勢です。</p>
+<ul><li><strong>セキュリティとプライバシー</strong>: 機密情報や認証情報をプロンプトに不用意に含めていないか、生成コードに脆弱性（インジェクション、権限漏れ等）がないか。</li><li><strong>透明性と説明責任</strong>: AI の支援を受けた成果物であっても、仕組みと根拠を自分の言葉で顧客やチームに説明できるか。</li><li><strong>ライセンスとコンプライアンス</strong>: 顧客の組織ポリシーや著作権・ライセンス要件に違反していないか。</li></ul>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch2-tbl-3"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">顧客向けの設計書を急いで作る必要がある</th><td>AI に一言だけ投げて生成文をそのまま提出する</td><td>Delegation で下書きを任せ、Description で要件と制約を伝え、Discernment と Diligence で人間が検証してから提出する</td></tr><tr><th scope="row">AI が一見動くコードを出力したが、なぜ動くか理解できない</th><td>テストが通ったので中身を読まずに本番へマージする</td><td>Discernment の観点から処理と境界条件を読み解き、説明できる状態にしてから採用する</td></tr><tr><th scope="row">仕様が固まっていない段階で AI に実装を頼みたい</th><td>いきなりコード全文を書かせて後で手直しする</td><td>Performance Description で「まず不明点やリスクを質問させてから設計案を出す」よう指示する</td></tr><tr><th scope="row">機密性の高い顧客データを扱うプロトタイプを作る</th><td>本番データをそのままチャットに貼り付けて試す</td><td>Diligence の観点からダミーデータやマスキング済みデータを使い、データ取扱い方針を確認する</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問 1</h3>
+<p>あるエンジニアが Claude を使って新機能の実装を進める際、「機能の要件（Product）」と「使ってほしいライブラリや禁止事項（Process）」に加えて、「いきなりコードを書かず、まず設計上の懸念点を 3 つ指摘してから提案してください」と伝えました。4D Framework のうち、この工夫に最も直接当てはまる要素はどれですか。</p>
+<p>A. Delegation B. Description（特に Performance Description） C. Discernment D. Diligence</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。協働中に AI がどのような姿勢・振る舞いで応答するかを指定するのは、Description のうちの Performance Description に該当します。</p></div></details>
+<h3>問 2</h3>
+<p>Claude が生成した認証機能のコードが、ローカルの簡易テストでは問題なく動作しました。しかし開発者はコードの中身を確認せず、「AI が書いた最新ベストプラクティスだから大丈夫」と考えて本番へデプロイしようとしています。4D Framework に照らして最も欠けている要素の組み合わせはどれですか。</p>
+<p>A. Delegation と Description B. Description と Performance C. Discernment と Diligence D. Product と Process</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>C</strong>。生成されたコードの妥当性や脆弱性を批判的に見極める力（Discernment）と、セキュリティや本番出荷に対する最終責任を果たす姿勢（Diligence）の両方が欠けています。</p></div></details>
+<h3>問 3</h3>
+<p>4D Framework における Delegation の原則として、最も適切な考え方はどれですか。</p>
+<p>A. 複雑な判断ほど人間より AI の方が客観的なので、セキュリティ承認も AI に委任する B. 下書き作成やテストコード生成などの実装作業は委任しやすいが、要件の優先順位や最終承認などの判断は人間が保持する C. AI とのやり取りを最小限にするため、プロジェクト全体を 1 つのプロンプトで委任する D. AI が誤るリスクを避けるため、定型的なコード変換も含めてすべて人間が手書きする</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。実装の下書きや定型作業は有効に委任できますが、最終判断と責任は人間（ビルダー）が握り続けることが Delegation の基本原則です。</p></div></details>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch1">← 第1章 AIの能力と限界</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch3">第3章 プラットフォーム基盤 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch3" role="tabpanel" aria-labelledby="tab-sec-ch3" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第 3 章 Claude プラットフォームとモデル基盤（Claude Platform and Model Foundations）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：料理を始める前の「キッチンの選定と下ごしらえ」</strong></p><p>プロンプトを書くことは「火にかけて調理すること」に似ています。しかし、そもそもどのキッチンで調理するか（実行環境の選定）、どれだけの作業台があるか（Context Window）、どんな調理器具を並べるか（Tool Use）、火事を出さない安全装置はあるか（安全性・コンプライアンス）を先に決めておかなければ、顧客の本番環境では通用しません。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>プロンプトを書き始める前に、実行基盤（Anthropic API / Amazon Bedrock / Google Cloud Vertex AI 等）やデータ境界をどう選定するか説明できる。</li><li>Context Window、トークン課金、マルチモーダル入力、構造化出力といったプラットフォームの基礎構造を理解する。</li><li>Claude がツール（Tool Use）や外部知識と連携して動作する仕組みと、モデル挙動の診断ポイントを説明できる。</li><li>顧客のセキュリティ・コンプライアンス要件に応じた基盤選びの基本判断ができる。</li></ul>
+<h2>要点 3 つ</h2>
+<ol><li><strong>プロンプト設計の前に「どこで動かすか」と「データの境界」を決める。</strong> Anthropic 直接 API（Console / API）に加え、企業のクラウド環境やガバナンス要件に応じて <strong>Amazon Bedrock</strong> や <strong>Google Cloud Vertex AI</strong> などを選択する。</li><li><strong>モデルはステートレスであり、コンテキストがすべての入力になる。</strong> API 呼び出し自体は過去の会話を自動記憶しないため、必要な履歴・システム指示・ツール定義を毎リクエストの構成として設計する。</li><li><strong>テキスト出力だけでなく、Tool Use と構造化出力がアプリケーション統合の軸になる。</strong> 自然言語の会話にとどまらず、JSON 形式での出力や外部システム呼び出しを前提に設計することで、業務システムへ安全に組み込める。</li></ol>
+<h2>30 秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  REQ[顧客の業務要件とセキュリティ制約] --&gt; ENV[実行環境の選定: Anthropic API / Bedrock / Vertex AI]
+  ENV --&gt; CTX[コンテキスト設計: System指示 / 会話履歴 / 外部知識]
+  CTX --&gt; CAP[能力の選択: Vision / 構造化出力 / Tool Use]
+  CAP --&gt; SAFE[安全性と診断: Guardrails / 出力検証 / レイテンシ監視]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch3-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">Anthropic API（1st-party）</th><td>Anthropic が直接提供する API および Console 環境。最新機能やモデルへのアクセスが最も早い</td></tr><tr><th scope="row">Amazon Bedrock</th><td>AWS 上で Claude を利用できるマネージドサービス。IAM や VPC など AWS のガバナンスと統合しやすい</td></tr><tr><th scope="row">Google Cloud Vertex AI</th><td>Google Cloud 上で Claude を利用できるプラットフォーム。GCP の権限管理や請求・セキュリティ基盤と統合しやすい</td></tr><tr><th scope="row">Stateless API</th><td>各 API リクエストが独立しており、サーバー側が前回のやり取りを自動で保持しない設計（履歴はクライアント側から渡す）</td></tr><tr><th scope="row">Tool Use（関数呼び出し）</th><td>モデルが外部 API 検索やデータ取得の必要性を判断し、構造化された引数でツール呼び出しを要求する仕組み</td></tr><tr><th scope="row">Vision（マルチモーダル入力）</th><td>テキストだけでなく、画像や PDF ページ等をコンテキストとして読み取り分析する能力</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>3-1 プロンプトを書く前に決める「実行環境」</h3>
+<p>FDE が企業顧客のパイロット案件に入るとき、最初に確認すべきなのは「どのプロバイダ経由で Claude を呼び出すか」です。モデルの知能は同じファミリーでも、調達・セキュリティ・ネットワーク・既存クラウド契約によって最適解が変わります。</p>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch3-tbl-2"><table><thead><tr><th scope="col">実行環境</th><th scope="col">主な特徴</th><th scope="col">選ばれやすい顧客ケース</th></tr></thead><tbody><tr><th scope="row"><strong>Anthropic API（直接利用）</strong></th><td>最新モデル・最新機能（Prompt Caching や新しいベータ機能等）の提供が最も早い。シンプルな課金と直接サポート</td><td>スピード重視の PoC、最新機能を使いたい開発チーム、マルチクラウドや独立系 SaaS</td></tr><tr><th scope="row"><strong>Amazon Bedrock</strong></th><td>AWS アカウント内で完結し、IAM・PrivateLink・CloudTrail・既存 AWS 契約（EDP）を活用できる</td><td>すでに AWS を標準基盤としており、データ閉域化や AWS 請求統合が必須の大企業</td></tr><tr><th scope="row"><strong>Google Cloud Vertex AI</strong></th><td>GCP の IAM・VPC Service Controls・監査ログ・既存 GCP 契約と統合できる</td><td>GCP を主軸にしており、BigQuery や GCP セキュリティ統制下で動かしたい企業</td></tr></tbody></table></div>
+<div class="alert alert-note"><div class="alert-title">📝 補足</div><p>いずれの環境を選ぶ場合も、モデルの切り替えや将来的な移行を見据え、アプリケーションコードは特定のプロバイダ固有仕様に過度に密結合させない設計（設定やアダプタ層の分離）が望まれます。</p></div>
+<h3>3-2 プラットフォームの 4 つの基礎メカニズム</h3>
+<ol><li>ステートレスな対話構造のため、Messages API は呼び出しごとに独立しています。連続した会話や業務フローを実現するには、必要なシステムプロンプトと会話履歴を毎回コンテキストとして組み立てて渡します。そのため、会話が長くなるほど入力トークン数とレイテンシが増える構造を理解しておく必要があります。</li><li>コンテキストとトークンの経済性として、入力（Prompt）と出力（Completion）の両方がトークン単位で計算されます。大量の固定指示や資料を毎回送る場合は、後続のコスト最適化（Prompt Caching や必要最小限のコンテキスト抽出）を視野に入れて構造を整理します。</li><li>マルチモーダル（Vision 等）を活用すると、請求書画像、画面スクリーンショット、図表を含む PDF などをそのまま入力して構造化データを取り出せるため、従来の OCR 前処理パイプラインを簡素化できる場合があります。</li><li>Tool Use による外部接続では、モデルにツール定義（名前・説明・入力スキーマ）を渡すことで、モデルが必要なときにツール呼び出しを要求します。アプリケーション側がそのツールを実行して結果を返すことで、社内 DB 検索やチケット起票などの実業務と連携できます。</li></ol>
+<h3>3-3 モデル挙動の診断と品質・安全性の基盤</h3>
+<p>パイロット構築中に「期待した出力が出ない」「意図しない拒否や誤動作が起きる」といった事象が起きた際、プラットフォームの基礎を押さえていれば冷静に原因を特定できます。</p>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch3-tbl-3"><table><thead><tr><th scope="col">症状</th><th scope="col">確認すべき基盤要素</th><th scope="col">改善の方向性</th></tr></thead><tbody><tr><th scope="row">特定業務の用語やルールを誤解する</th><td>システムプロンプトまたはコンテキスト内の前提情報</td><td>用語定義や判断基準をコンテキストに明記する、または検索ツールで参照させる</td></tr><tr><th scope="row">出力形式が崩れて後続プログラムでパースできない</th><td>構造化出力の指定や出力スキーマの定義</td><td>JSON スキーマやツール呼び出し形式を使い、形式を強制・検証する</td></tr><tr><th scope="row">応答が遅すぎてユーザー体験が悪い</th><td>入力トークン量、出力トークン量、モデルティア、ストリーミング有無</td><td>ストリーミング（Streaming）の有効化、不要コンテキスト削減、モデルや Effort の見直し</td></tr><tr><th scope="row">安全性フィルタに誤って引っかかる・不適切な出力が出る</th><td>入力データの文脈やプロンプトの曖昧さ、アプリケーション側のガードレール</td><td>業務上の正当な文脈を明確化し、入出力の検証ルールをアプリケーション層に設ける</td></tr></tbody></table></div>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-ch3-tbl-4"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">全社標準が AWS で、データを外部インターネットに出せない要件がある</th><td>顧客のネットワーク要件を確認せず個人向け API キーで開発を進める</td><td>Amazon Bedrock など、顧客の既存クラウド統制（IAM / 閉域接続）に適合する基盤を提案する</td></tr><tr><th scope="row">チャットボットで長い会話を続けるとコストと遅延が増えている</th><td>API が自動で過去の会話を記憶していると思い込み原因を放置する</td><td>ステートレス構造で毎回履歴を送っている前提に立ち、履歴の要約・削減やキャッシュ活用を設計する</td></tr><tr><th scope="row">システム連携のため、毎回決まった JSON 形式で結果を受け取りたい</th><td>「必ず JSON で書いて」と自然言語で頼むだけでパース処理を書く</td><td>構造化出力や Tool Use のスキーマ定義を活用し、型や必須項目を検証する</td></tr><tr><th scope="row">応答完了まで画面が 10 秒固まり、ユーザーが離脱している</th><td>すべての生成が終わるまで画面表示を待たせる</td><td>ストリーミング配信を有効にし、生成途中のテキストを逐次表示して体感待ち時間を減らす</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問 1</h3>
+<p>ある金融機関の顧客が既存の AWS セキュリティ統制（IAM による権限管理、VPC 閉域ネットワーク、AWS 請求への統合）を満たした上で Claude を業務アプリに組み込みたいと考えています。プロンプト作成に入る前にまず検討すべき実行基盤として最も適切なものはどれですか。</p>
+<p>A. 個人のクレジットカードで作成した Anthropic Console アカウントを全員で共有する B. Amazon Bedrock 上で Claude を利用する構成を検討・選定する C. ローカル PC にモデルの重みをダウンロードして社内 LAN で動かす D. ブラウザ拡張機能を使って手作業でコピー＆ペーストする運用にする</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。顧客が AWS のセキュリティ統制・閉域接続・請求統合を要件としている場合、Amazon Bedrock を選択するのが実務上の定石です。</p></div></details>
+<h3>問 2</h3>
+<p>Claude Messages API を利用した社内システムで、ターン数が増えるにつれて 1 リクエストあたりの入力トークン課金と応答までの待ち時間が比例して増加していることが分かりました。プラットフォームの仕様に基づく原因として最も適切なものはどれですか。</p>
+<p>A. API がユーザーごとに課金単価を自動で値上げしているため B. API がステートレスであり、会話の継続のために毎回システム指示と蓄積された会話履歴をすべて入力として再送信しているため C. 出力トークンが自動的に 10 倍に水増しされるため D. 2 回目以降の呼び出しでは必ず全ツールが自動実行されるため</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。Messages API はステートレスであるため、会話文脈を維持するには過去の履歴を含めて毎回送信する必要があります。履歴が膨らむと入力トークンとレイテンシが増えるため、履歴管理やキャッシュの設計が重要になります。</p></div></details>
+<h3>問 3</h3>
+<p>社内の問い合わせ対応エージェントで、顧客の注文データベースを参照して回答を返す必要があります。プラットフォームの能力を最も適切に活用した設計はどれですか。</p>
+<p>A. 100 万件の注文データベースを毎回システムプロンプトに全件貼り付ける B. Tool Use を設計し、モデルが必要に応じて注文 ID 等を引数に検索ツールを呼び出し、返却された結果をもとに回答を組み立てるようにする C. モデルが注文番号から内容を推測して回答するようプロンプトで指示する D. データベースの内容を画像化して Vision で毎回全件読み込ませる</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。動的な外部データや大規模データベースとの連携には Tool Use を用い、必要なレコードだけを検索・取得してコンテキストに渡すのが適切です。</p></div></details>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch2">← 第2章 AIフルーエンシーと4D</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch4">第4章 モデル選定 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch4" role="tabpanel" aria-labelledby="tab-sec-ch4" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第 4 章 適切な Claude モデルの選定（Choosing the Right Claude Model）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：用途に応じた「車両の使い分け」</strong></p><p>すべての荷物を大型トラック（Opus）で運ぶとコストと時間がかかりすぎ、逆に軽自動車（Haiku）に重い重機を積むと途中で止まってしまいます。日々の配送はバランスのよい中型車（Sonnet）を軸にしつつ、試作や大量の軽作業には軽自動車、高難度の長距離・精密作業には大型トラックを選ぶ、という使い分けがモデル選定の本質です。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>Claude の主要モデルティア（Opus / Sonnet / Haiku 等）の特性と得意なワークロードを説明できる。</li><li>モデル選定の 3 つの評価軸（Capabilities / Speed &amp; Latency / Cost &amp; Budget）のトレードオフを整理できる。</li><li>モデル自体を切り替える前に調整できる <strong>Effort パラメータ</strong> の役割を理解する。</li><li><strong>Efficiency-First Approach</strong> と <strong>Capability-First Approach</strong> の 2 つの導入戦略を場面に応じて使い分けられる。</li></ul>
+<h2>要点 3 つ</h2>
+<ol><li><strong>「常に最強のモデル」ではなく、タスクの複雑さと制約に合わせて選ぶ。</strong> Opus（最高難度の推論・長時間の自律コーディング）、Sonnet（知能と速度の最適バランス・汎用開発）、Haiku（超高速・低コスト・大量分類やルーティング）を使い分ける。</li><li>**モデルを変える前に <code>effort</code> パラメータでの調整も検討する。** 同一モデルファミリー内でも推論の深さ（Effort）を調整することで、レイテンシ・コストと回答品質のバランスを制御できる。</li><li><strong>2 つのアプローチ（Efficiency-First / Capability-First）を使い分ける。</strong> 低リスク・高頻度で素早く試したいなら <strong>Efficiency-First（軽量モデルから開始）</strong>、高難度・失敗が許されない業務でまず成立性を確かめるなら <strong>Capability-First（高性能モデルから開始して最適化）</strong> をとる。</li></ol>
+<h2>30 秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  T[対象タスクの分析] --&gt; Q{知能・推論の要求水準は?}
+  Q --&gt;|最難関・長時間エージェント| OP[Claude Opus / 上位モデル]
+  Q --&gt;|汎用開発・業務標準バランス| SO[Claude Sonnet]
+  Q --&gt;|大量処理・低遅延・ルーティング| HA[Claude Haiku]
+  OP --&gt; EFF[Effort パラメータとキャッシュで最適化]
+  SO --&gt; EFF
+  HA --&gt; EFF</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch4-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">Claude Opus</th><td>複雑な推論、高度な知識業務、長時間の自律型エージェント・コーディング向けの最上位ティア</td></tr><tr><th scope="row">Claude Sonnet</th><td>高い知能と高速な応答を両立したバランス型ティア。一般的なアプリケーション開発や日常業務の主力</td></tr><tr><th scope="row">Claude Haiku</th><td>最も高速かつ低コストな軽量ティア。大量の分類、データ抽出、入力ルーティング、リアルタイム応答向け</td></tr><tr><th scope="row">Effort Parameter</th><td>同一モデル内で推論に割く計算量（思考の深さ）を調整し、品質とレイテンシ・コストのバランスをとる設定</td></tr><tr><th scope="row">Efficiency-First Approach</th><td>軽量・低コストなモデルから検証を始め、能力が不足する箇所だけ上位モデルへ引き上げる進め方</td></tr><tr><th scope="row">Capability-First Approach</th><td>まず最上位の知能を持つモデルで課題が解けるベースラインを作り、後からコストや速度を最適化する進め方</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>4-1 モデルティアの比較と使い分け</h3>
+<p>Claude のモデルラインナップは、単一の優劣ではなく「どの業務制約を優先するか」で設計されています。</p>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch4-tbl-2"><table><thead><tr><th scope="col">モデルティア</th><th scope="col">強み</th><th scope="col">主な適用ワークロード</th><th scope="col">注意点</th></tr></thead><tbody><tr><th scope="row"><strong>Opus</strong>（高難度・フラッグシップ）</th><td>深い推論、曖昧な要件の整理、複雑なコードベースの横断修正、長時間エージェント</td><td>高度な設計判断、複雑なデバッグ、高付加価値な専門文書分析</td><td>トークン単価とレイテンシが高いため、単純作業や大量バッチに無差別適用しない</td></tr><tr><th scope="row"><strong>Sonnet</strong>（バランス・主力）</th><td>知能と応答速度のバランスが優秀。コスト効率と品質の両立</td><td>一般的な企業向けアプリ、RAG 回答生成、標準的なコーディング支援、業務ワークフロー</td><td>ほとんどのユースケースで最初の基準点（標準候補）になる</td></tr><tr><th scope="row"><strong>Haiku</strong>（高速・低コスト）</th><td>極めて低いレイテンシと安価な単価。大量並列処理に強い</td><td>問い合わせの一次分類（Routing）、定型データ抽出、スパム判定、リアルタイム補完</td><td>複雑な多段階推論や微妙なニュアンスの判断では精度が落ちやすい</td></tr></tbody></table></div>
+<div class="alert alert-note"><div class="alert-title">📝 補足</div><p>コース教材では、さらに高度な長期推論タスク向けの最上位枠（Fable 等の位置づけ）に触れる場合もありますが、実務の標準設計では <strong>Opus / Sonnet / Haiku の 3 ティア</strong> と <strong>モデルルーティング（入力の難易度に応じて振り分ける構成）</strong> が基本になります。</p></div>
+<h3>4-2 選定を左右する 4 つの評価軸</h3>
+<ol><li>Capabilities（必要な能力）として、複雑なツール連携、長文コンテキストの統合、高度なコード生成が必要かを見極めます。</li><li>Speed &amp; Latency（速度と待ち時間）として、ユーザーが画面の前で待っている（インタラクティブ）か、夜間の非同期バッチ処理かを確認します。</li><li>Cost &amp; Budget（コストと予算）として、1 日あたりのリクエスト数や 1 件あたりの入力トークン量に対して採算が合うかを評価します。</li><li>Effort Parameter（推論の深さ）を調整することで、モデルティアを上げ下げする前に同じモデル上で要件を満たせるか確認します。たとえば、単純な問いには低い Effort で即答させ、複雑な分析だけ Effort を引き上げる運用ができます。</li></ol>
+<h3>4-3 2 つの導入アプローチ</h3>
+<p>顧客のパイロット案件を立ち上げる際、FDE はタスクの性質に応じて 2 つの進め方を選びます。</p>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch4-tbl-3"><table><thead><tr><th scope="col">アプローチ</th><th scope="col">進め方</th><th scope="col">向いているケース</th></tr></thead><tbody><tr><th scope="row"><strong>Efficiency-First（効率優先）</strong></th><td>Haiku や Sonnet の軽量構成から素早くプロトタイプを作り、評価テストで能力不足が見つかった部分だけ上位モデルへ切り替える</td><td>処理件数が非常に多い分類・抽出業務、厳しいレイテンシ上限や予算制約が最初からある案件</td></tr><tr><th scope="row"><strong>Capability-First（能力優先）</strong></th><td>まず Opus 等の高性能モデルで「この課題は AI で本当に解けるか（品質の上限）」を証明し、ベースラインが確定してから Sonnet / Haiku への置き換えや最適化を行う</td><td>複雑で成否が未知数な業務、まず顧客に品質インパクトを示して価値を証明したい PoC</td></tr></tbody></table></div>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-ch4-tbl-4"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">1 日 100 万件の問い合わせを 5 カテゴリに分類したい</th><td>精度を気にして全件を Opus で処理する</td><td>Haiku（必要に応じて分類基準の具体例を提示）で高速・低コストに処理する</td></tr><tr><th scope="row">顧客の新規 PoC で「そもそも AI で複雑な契約レビューができるか」を検証したい</th><td>最初から最安モデルだけで試し、「AI では無理」と結論づける</td><td>Capability-First で上位モデルを使って成立性を検証し、その後コスト最適化を図る</td></tr><tr><th scope="row">Sonnet で概ね良いが、ごく一部の難問だけ推論が浅く感じる</th><td>すべてのリクエストを無条件で最上位モデルへ切り替える</td><td>Effort パラメータの引き上げ、または難問だけを上位モデルへルーティングする構成にする</td></tr><tr><th scope="row">チャットボットの応答速度を上げつつ品質も保ちたい</th><td>モデルを変える以外の工夫（ストリーミングや不要コンテキスト削減）を一切見ない</td><td>適切なティア選定に加え、不要な入力削減と Streaming 配信を組み合わせる</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問 1</h3>
+<p>ある EC サイトで、毎日 50 万件届くユーザーレビューから「商品カテゴリ」「感情（ポジティブ／ネガティブ）」「配送トラブルの有無」の 3 項目を抽出し、0.5 秒以内の応答と最小限の API コストで処理したいと考えています。最初に選ぶべきモデルティアとして最も適切なものはどれですか。</p>
+<p>A. Claude Opus B. Claude Haiku C. 推論の深さを最大にした最上位モデル D. 毎回 3 つのモデルを並列実行して多数決をとる構成</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。大量・高頻度かつ定型的な分類・情報抽出と低レイテンシが求められるタスクには、最も高速でコスト効率の高い Claude Haiku が適しています。</p></div></details>
+<h3>問 2</h3>
+<p>FDE として顧客の新規パイロットを担当することになりました。対象業務は「過去の設計書と障害報告書を横断して原因仮説を立てる」という高難度な作業で、そもそも LLM で実用レベルに達するかが未知数です。初期フェーズで採るべきアプローチとして最も適切なものはどれですか。</p>
+<p>A. Capability-First Approach を採り、まず高性能なモデルで課題が解けるベースラインを証明してから、段階的にコストや速度を最適化する B. Efficiency-First Approach を採り、最も安価なモデルで動かない場合はプロジェクトを即座に中止する C. モデル選定を行わず、プロンプトの長さだけを 10 倍に増やす D. コストをゼロにするため、モデル呼び出しをすべて乱数生成に置き換える</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>A</strong>。難易度が高く成立性の検証が最優先となるパイロットでは、Capability-First Approach でまず実用品質のベースラインを示し、その後に下位モデルへの置き換えや最適化を行うのが有効です。</p></div></details>
+<h3>問 3</h3>
+<p>社内開発支援ツールで Claude Sonnet を主力として使っていますが、一部の複雑なリファクタリング依頼だけ思考が浅く見落としが出ることが分かりました。コストの急増を抑えつつ改善を図るアプローチとして適切なものはどれですか。</p>
+<p>A. 全社すべての単純な質問も含めて無条件に Opus へ切り替える B. Effort パラメータの調整や、複雑なタスクのみ上位モデルへ振り分けるルーティングを検討する C. 会話履歴を毎ターン削除せずに 100 万トークンまで溜め続ける D. 出力形式を JSON から自由記述の詩に変更する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。全量を上位モデルへ切り替える前に、同一モデルでの Effort 設定の見直しや、タスクの難易度に応じたモデルルーティングを行うことで、品質とコストのバランスを最適化できます。</p></div></details>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch3">← 第3章 プラットフォーム基盤</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-glossary">用語集 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-glossary" role="tabpanel" aria-labelledby="tab-sec-glossary" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>用語集（Claude FDE Core）</h1>
+<p>Core 4 コースで登場する重要用語を、混同しやすいポイントとあわせて整理しています。暗記テスト機能（HTML 版の「暗記マスク」）と組み合わせて確認してください。</p>
+<h2>1. AI の能力と限界</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-glossary-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th><th scope="col">混同・注意ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>Next-Token Prediction</strong></th><td><span class="kw-mask">文脈に続く最も確率の高い次のトークンを予測し続ける生成原理</span></td><td>「意味を理解して論理検証している」のではなく確率予測であるため、真偽検証は別工程が必要</td></tr><tr><th scope="row"><strong>Context Window</strong></th><td><span class="kw-mask">1 回の推論で参照できる入力・出力トークンの総容量</span></td><td>上限に収まっていても、長大になるほど途中の指示が薄れる（Contextual Drift）</td></tr><tr><th scope="row"><strong>Hallucination</strong></th><td><span class="kw-mask">事実や根拠がない内容を、もっともらしく出力する現象</span></td><td>モデルの悪意ではなく確率生成の性質。根拠資料の提示と不明時の回答保留で抑える</td></tr><tr><th scope="row"><strong>Contextual Drift / Context Rot</strong></th><td><span class="kw-mask">会話や入力が長くなるにつれ、初期指示や制約への注意が落ちて品質が下がる現象</span></td><td>履歴を無制限に積むのではなく、整理・要約・セッション分割で防ぐ</td></tr><tr><th scope="row"><strong>Parametric Memory</strong></th><td><span class="kw-mask">事前学習を通じてモデルの重みに蓄えられた知識</span></td><td>社内ルールや最新情報は含まれないため、検索やコンテキスト付与が必要</td></tr><tr><th scope="row"><strong>Non-deterministic</strong></th><td><span class="kw-mask">同じ入力でも毎回まったく同じ出力になるとは限らない性質</span></td><td>再現性・厳密性が必須な計算や状態遷移は決定論的コードへ任せる</td></tr></tbody></table></div>
+<h2>2. AI Fluency と 4D Framework</h2>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-glossary-tbl-2"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th><th scope="col">混同・注意ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>AI Fluency</strong></th><td><span class="kw-mask">AI と有効・効率的・倫理的・安全に協働する実践的能力</span></td><td>派手なプロンプト集を覚えることではなく、人間が主導権を握る設計・運用力</td></tr><tr><th scope="row"><strong>4D Framework</strong></th><td><span class="kw-mask">Delegation / Description / Discernment / Diligence の 4 要素</span></td><td>1 つでも欠けると「丸投げ」「手戻り」「品質劣化」「事故」につながる</td></tr><tr><th scope="row"><strong>Delegation（委任）</strong></th><td><span class="kw-mask">何を AI に任せ、何を人間が担うかを決める判断</span></td><td>実装の下書きは委任できるが、要件やセキュリティの最終判断は委任しない</td></tr><tr><th scope="row"><strong>Description（記述）</strong></th><td><span class="kw-mask">求める内容・進め方・振る舞いを明確に言語化すること</span></td><td>Product / Process / Performance の 3 視点を揃えると手戻りが減る</td></tr><tr><th scope="row"><strong>Discernment（識別）</strong></th><td><span class="kw-mask">AI の出力の正しさ・品質・前提の妥当性を批判的に評価すること</span></td><td>テストが通っただけで中身を読まないのは Discernment 不足</td></tr><tr><th scope="row"><strong>Diligence（責任）</strong></th><td><span class="kw-mask">安全性・プライバシー・ライセンス・説明責任を含めて出荷を担保すること</span></td><td>「AI が書いたから分からない」はプロとして通用しない</td></tr></tbody></table></div>
+<h2>3. Claude プラットフォーム基盤</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-glossary-tbl-3"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th><th scope="col">混同・注意ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>Anthropic API（1st-party）</strong></th><td><span class="kw-mask">Anthropic が直接提供する API / Console 環境</span></td><td>最新機能やモデルの反映が最も早い</td></tr><tr><th scope="row"><strong>Amazon Bedrock</strong></th><td><span class="kw-mask">AWS 上で Claude を動かすマネージドサービス</span></td><td>AWS IAM・閉域網・請求統合が必須な企業で選ばれやすい</td></tr><tr><th scope="row"><strong>Google Cloud Vertex AI</strong></th><td><span class="kw-mask">GCP 上で Claude を動かすプラットフォーム</span></td><td>GCP 統制・BigQuery 連携・GCP 契約を重視する企業で選ばれやすい</td></tr><tr><th scope="row"><strong>Stateless API</strong></th><td><span class="kw-mask">各リクエストが独立し、サーバーが会話履歴を自動保持しない設計</span></td><td>毎回履歴を送るため、長会話ではトークンと遅延が増える前提で設計する</td></tr><tr><th scope="row"><strong>Tool Use</strong></th><td><span class="kw-mask">モデルが必要に応じて外部ツール呼び出しを構造化形式で要求する機能</span></td><td>社内 DB 参照や最新データ取得に必須。全データをプロンプトに貼る代わりに使う</td></tr><tr><th scope="row"><strong>Vision</strong></th><td><span class="kw-mask">画像や図表付き PDF などをコンテキストとして直接読み取る能力</span></td><td>OCR 前処理を簡素化できる場合があるが、トークン消費と精度確認は必要</td></tr></tbody></table></div>
+<h2>4. モデル選定</h2>
+<div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-glossary-tbl-4"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th><th scope="col">混同・注意ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>Claude Opus</strong></th><td><span class="kw-mask">最高難度の推論・長時間の自律コーディング向けフラッグシップ</span></td><td>全タスクに使うとコストと遅延が過大になるため、高難度タスクに絞る</td></tr><tr><th scope="row"><strong>Claude Sonnet</strong></th><td><span class="kw-mask">高い知能と高速な応答を両立するバランス型主力モデル</span></td><td>多くの企業アプリ・開発支援における標準の起点</td></tr><tr><th scope="row"><strong>Claude Haiku</strong></th><td><span class="kw-mask">最速・最安価な軽量モデル</span></td><td>大量分類・抽出・ルーティング向き。複雑な多段階推論には不向き</td></tr><tr><th scope="row"><strong>Effort Parameter</strong></th><td><span class="kw-mask">同一モデル内で推論に使う計算量（思考の深さ）を調整する設定</span></td><td>上位モデルへ即座に変える前に、Effort 調整で品質と速度の折り合いを探れる</td></tr><tr><th scope="row"><strong>Efficiency-First</strong></th><td><span class="kw-mask">軽量モデルから始め、不足分だけ上位モデルへ上げる進め方</span></td><td>大量処理や厳しいコスト・遅延制約が明確な案件に向く</td></tr><tr><th scope="row"><strong>Capability-First</strong></th><td><span class="kw-mask">高性能モデルでまず成立性を証明し、後から最適化する進め方</span></td><td>難易度が高く、まず価値実証（PoC）を成立させたい案件に向く</td></tr></tbody></table></div>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch4">← 第4章 モデル選定</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-check">直前チェック →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-check" role="tabpanel" aria-labelledby="tab-sec-check" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>直前チェック（Claude FDE Core）</h1>
+<p>Core 4 コースの学びを「二択の判断軸」と「総合シナリオ問題」で最終確認します。今後資格試験化された際にもそのまま問われやすい判断ポイントを中心にまとめています。</p>
+<h2>4 コース横断：二択判断表</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-check-tbl-1"><table><thead><tr><th scope="col">場面</th><th scope="col">避けるべき判断</th><th scope="col">とるべき判断</th></tr></thead><tbody><tr><th scope="row"><strong>能力と限界</strong></th><td>厳密な計算や最終承認まで 1 回の LLM 呼び出しに丸投げする</td><td><span class="kw-mask">抽出・下書きは LLM、厳密計算はコード、最終承認は人間（HITL）に分担する</span></td></tr><tr><th scope="row"><strong>Hallucination 対策</strong></th><td>プロンプトで「絶対に嘘をつくな」と精神論を追記する</td><td><span class="kw-mask">根拠となる社内資料をコンテキストへ渡し、根拠がない場合は保留させる</span></td></tr><tr><th scope="row"><strong>長会話の指示漏れ</strong></th><td>同じ注意文を会話履歴の後ろに何度も重複して貼り直す</td><td><span class="kw-mask">不要な履歴を整理し、制約を明確な位置へ再配置するかセッションを分ける</span></td></tr><tr><th scope="row"><strong>4D: Delegation</strong></th><td>テスト生成もセキュリティ承認も区別なく AI に任せる</td><td><span class="kw-mask">実装の下書きは委任し、要件定義と最終判断は人間が保持する</span></td></tr><tr><th scope="row"><strong>4D: Description</strong></th><td>「いい感じの画面を作って」と目的だけを一言で投げる</td><td><span class="kw-mask">Product（何を作るか）・Process（どう進めるか）・Performance（どう振る舞うか）を明記する</span></td></tr><tr><th scope="row"><strong>4D: Discernment / Diligence</strong></th><td>動くコードを中身も読まずそのまま本番へ反映する</td><td><span class="kw-mask">仕様・脆弱性・ライセンス・説明責任を人間が検証してから出荷する</span></td></tr><tr><th scope="row"><strong>実行環境の選定</strong></th><td>顧客のクラウド統制を確認せず個人 API キーで組み始める</td><td><span class="kw-mask">AWS なら Bedrock、GCP なら Vertex AI、最新機能優先なら Anthropic API など要件で選ぶ</span></td></tr><tr><th scope="row"><strong>ステートレス前提</strong></th><td>API が前回のやり取りを記憶していると想定して設計する</td><td><span class="kw-mask">毎回必要な履歴・システム指示を組み立てて送る前提でコストと遅延を見積もる</span></td></tr><tr><th scope="row"><strong>モデル選定の起点</strong></th><td>すべてのタスクを無条件に最上位モデル（Opus）で動かす</td><td><span class="kw-mask">Sonnet を基準にし、大量・低遅延は Haiku、高難度推論は Opus と使い分ける</span></td></tr><tr><th scope="row"><strong>導入アプローチ</strong></th><td>失敗が許されない高難度 PoC を最安モデルだけで試して諦める</td><td><span class="kw-mask">成立性検証は Capability-First、大量・制約厳守タスクは Efficiency-First を採る</span></td></tr></tbody></table></div>
+<div class="qa-header"><h2>総合確認問題（シナリオ形式）</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>総合問 1（能力と限界 ＋ 4D Framework）</h3>
+<p>FDE として顧客企業の開発チームを支援しています。顧客のエンジニアが「Claude に既存システムの複雑な決済ロジックのリファクタリングを依頼し、生成されたコードの単体テストも AI に書かせてすべてパスしたので、コードレビューを省略して本番リリースしたい」と提案してきました。FDE として指摘すべき最も重要な懸念はどれですか。</p>
+<p>A. AI が書いたコードは単体テストが通るなら論理的に 100% 正しいため、レビュー省略で問題ない B. テスト自体も AI が生成しているため前提の抜け漏れやエッジケースの欠落が起きる可能性があり、Discernment（出力の批判的評価）と Diligence（セキュリティ・出荷責任）の観点から人間による検証が不可欠である C. リファクタリングは Next-Token Prediction の仕組み上、絶対に成功しないため手作業に戻すべきである D. 単体テストの代わりに、より大型のモデルに「問題ないですか」と質問して Yes ならリリースしてよい</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。実装やテストの下書き生成は Delegation できますが、決済のような重要領域で人間の検証（Discernment）と責任担保（Diligence）を省略するのは危険です。</p></div></details>
+<h3>総合問 2（プラットフォーム基盤 ＋ モデル選定）</h3>
+<p>ある大手企業で、社内の問い合わせ一次振り分け（1 日 20 万件、500ms 以内で 6 カテゴリに分類）と、複雑な法務契約書のリスク条項分析（1 日 50 件、見落とし厳禁）の 2 つのユースケースを、既存の GCP セキュリティ統制下で稼働させたいという要件があります。基盤とモデルの組み合わせとして最も適切なものはどれですか。</p>
+<p>A. Anthropic API（個人アカウント）上で、両方のユースケースを Claude Opus で処理する B. Google Cloud Vertex AI 上で、一次振り分けには Claude Haiku、契約書リスク分析には Claude Opus（または上位モデル）を割り当てる C. Google Cloud Vertex AI 上で、一次振り分けには Claude Opus、契約書リスク分析には Claude Haiku を割り当てる D. 2 つのユースケースを 1 つの長い会話セッションに混ぜて処理する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。GCP のセキュリティ統制要件には Google Cloud Vertex AI が適合します。また、大量・低遅延の分類には Haiku、高難度で見落とし厳禁の分析には Opus を選ぶのがモデル選定の原則に合致しています。</p></div></details>
+<h3>総合問 3（Description ＋ モデル挙動の診断）</h3>
+<p>顧客向けアプリで Claude に JSON 形式で顧客データを出力させようとしていますが、ときどき前置き文が混ざったり項目名が揺れたりして後続プログラムがエラーになります。原因と対策として最も適切なものはどれですか。</p>
+<p>A. LLM は非決定的な性質を持つため、自然言語のお願いだけで形式を 100% 保証しようとせず、Tool Use や構造化出力のスキーマ定義を用い、アプリケーション側でも検証を行う B. 出力が揺れるのはモデルが壊れているため、毎回異なるランダムなプロンプトを送る C. 顧客データを画像に変換して Vision で出力させる D. 会話履歴を 100 往復以上溜めてから JSON を出力させる</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>A</strong>。LLM は非決定的であるため、自然言語の指示だけに頼らず構造化出力や Tool Use のスキーマ機能で形式を制御し、さらにアプリ層でバリデーションするのが安全な設計です。</p></div></details>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-glossary">← 用語集</button>
+            <span></span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <button type="button" class="fab-top" id="fabTop" aria-label="ページ上部へ戻る" title="ページ上部へ戻る">↑</button>
+
+<script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    const isDark = document.querySelector('meta[name="color-scheme"]').content === "dark" ||
+      (document.querySelector('meta[name="color-scheme"]').content === "light dark" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    mermaid.initialize({
+      startOnLoad: false,
+      flowchart: {
+        useMaxWidth: false,
+        htmlLabels: false,
+        padding: 18,
+        nodeSpacing: 40,
+        rankSpacing: 45
+      },
+      themeVariables: {
+        fontFamily: '"BIZ UDPGothic", "Yu Gothic UI", "Meiryo", -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif',
+        fontSize: "14px"
+      },
+      theme: document.documentElement.getAttribute("data-theme") === "bw" ? "neutral" : (isDark ? "dark" : "default")
+    });
+    window.__renderMermaidIn = async (rootEl) => {
+      const nodes = rootEl.querySelectorAll(".mermaid:not([data-processed])");
+      if (nodes.length > 0) {
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
+        await mermaid.run({ nodes: Array.from(nodes) });
+      }
+    };
+    const firstPanel = document.querySelector(".chapter-panel:not([hidden])");
+    if (firstPanel) window.__renderMermaidIn(firstPanel);
+  </script>
+
+  <script>
+    const panels = Array.from(document.querySelectorAll(".chapter-panel"));
+    const tabBtns = Array.from(document.querySelectorAll(".tab-btn"));
+    const navLinks = Array.from(document.querySelectorAll(".nav-link[data-sec]"));
+    const searchInput = document.getElementById("searchInput");
+    const searchStatus = document.getElementById("searchStatus");
+
+    function showSection(secId, pushHash = true) {
+      panels.forEach(p => {
+        const active = p.id === secId;
+        if (active) {
+          p.removeAttribute("hidden");
+          p.setAttribute("tabindex", "0");
+        } else {
+          p.setAttribute("hidden", "until-found");
+          p.removeAttribute("tabindex");
+        }
+      });
+      tabBtns.forEach(t => {
+        const active = t.getAttribute("data-sec") === secId;
+        t.setAttribute("aria-selected", active ? "true" : "false");
+        if (active) {
+          t.setAttribute("focusgroupstart", "");
+          t.scrollIntoView({ block: "nearest", inline: "nearest" });
+        } else {
+          t.removeAttribute("focusgroupstart");
+        }
+      });
+      navLinks.forEach(a => {
+        a.classList.toggle("active", a.getAttribute("data-sec") === secId);
+      });
+      const targetPanel = document.getElementById(secId);
+      if (targetPanel && window.__renderMermaidIn) {
+        window.__renderMermaidIn(targetPanel);
+      }
+      if (pushHash) {
+        history.replaceState(null, "", "#" + secId);
+      }
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    tabBtns.forEach(btn => btn.addEventListener("click", () => showSection(btn.dataset.sec)));
+    navLinks.forEach(a => a.addEventListener("click", e => {
+      e.preventDefault();
+      showSection(a.dataset.sec);
+      if (window.innerWidth <= 960) closeDrawer();
+    }));
+    document.querySelectorAll("[data-jump]").forEach(el => {
+      el.addEventListener("click", e => {
+        e.preventDefault();
+        showSection(el.dataset.jump);
+      });
+    });
+
+    panels.forEach(p => {
+      p.addEventListener("beforematch", () => showSection(p.id, false));
+    });
+
+    const initHash = location.hash.replace("#", "");
+    if (initHash && document.getElementById(initHash)) {
+      showSection(initHash, false);
+    }
+
+    document.querySelectorAll(".qa-toggle-all").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const body = btn.closest(".md-body");
+        const detailsList = body.querySelectorAll("details.qa-details");
+        const expand = btn.getAttribute("aria-expanded") !== "true";
+        detailsList.forEach(d => { d.open = expand; });
+        btn.setAttribute("aria-expanded", expand ? "true" : "false");
+        btn.textContent = expand ? "すべて閉じる" : "すべて開く";
+      });
+    });
+
+    const btnMemorize = document.getElementById("btnMemorize");
+    btnMemorize.addEventListener("click", () => {
+      document.body.classList.toggle("memorize-mode");
+      btnMemorize.classList.toggle("active");
+      if (!document.body.classList.contains("memorize-mode")) {
+        document.querySelectorAll(".kw-mask.revealed").forEach(el => el.classList.remove("revealed"));
+      }
+    });
+    document.querySelectorAll(".kw-mask").forEach(mask => {
+      mask.addEventListener("click", () => {
+        if (document.body.classList.contains("memorize-mode")) {
+          mask.classList.toggle("revealed");
+        }
+      });
+    });
+
+    const btnTheme = document.getElementById("btnTheme");
+    const btnBW = document.getElementById("btnBW");
+    const metaCS = document.querySelector('meta[name="color-scheme"]');
+
+    function updateThemeUI() {
+      const isBW = document.documentElement.getAttribute("data-theme") === "bw";
+      btnBW.classList.toggle("active", isBW);
+      const cs = metaCS.content;
+      const isDark = !isBW && (cs === "dark" || (cs === "light dark" && window.matchMedia("(prefers-color-scheme: dark)").matches));
+      btnTheme.textContent = isDark ? "☀️ ライト" : "🌙 ダーク";
+    }
+    updateThemeUI();
+
+    btnTheme.addEventListener("click", () => {
+      document.documentElement.removeAttribute("data-theme");
+      const cs = metaCS.content;
+      const currentlyDark = cs === "dark" || (cs === "light dark" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      const next = currentlyDark ? "light" : "dark";
+      metaCS.content = next;
+      try { localStorage.setItem("cfde_theme", next); } catch (e) {}
+      updateThemeUI();
+    });
+
+    btnBW.addEventListener("click", () => {
+      const isBW = document.documentElement.getAttribute("data-theme") === "bw";
+      if (isBW) {
+        document.documentElement.removeAttribute("data-theme");
+        metaCS.content = "light dark";
+        try { localStorage.removeItem("cfde_theme"); } catch (e) {}
+      } else {
+        document.documentElement.setAttribute("data-theme", "bw");
+        metaCS.content = "light";
+        try { localStorage.setItem("cfde_theme", "bw"); } catch (e) {}
+      }
+      updateThemeUI();
+    });
+
+    function clearSearchHighlights() {
+      document.querySelectorAll("mark.search-hit").forEach(m => {
+        const p = m.parentNode;
+        p.replaceChild(document.createTextNode(m.textContent), m);
+        p.normalize();
+      });
+    }
+
+    function highlightInPanel(panel, rawQuery) {
+      clearSearchHighlights();
+      if (!panel || !rawQuery) return null;
+      const body = panel.querySelector(".md-body");
+      if (!body) return null;
+      const qLower = rawQuery.toLowerCase();
+      const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
+        acceptNode: node => {
+          if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          const p = node.parentElement;
+          if (!p || p.closest(".mermaid, script, style")) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      const nodes = [];
+      let n;
+      while ((n = walker.nextNode())) nodes.push(n);
+      let firstMark = null;
+      nodes.forEach(node => {
+        const text = node.nodeValue;
+        const lower = text.toLowerCase();
+        if (!lower.includes(qLower)) return;
+        const frag = document.createDocumentFragment();
+        let last = 0;
+        let idx = lower.indexOf(qLower);
+        while (idx !== -1) {
+          if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+          const mark = document.createElement("mark");
+          mark.className = "search-hit";
+          mark.textContent = text.slice(idx, idx + rawQuery.length);
+          if (!firstMark) firstMark = mark;
+          frag.appendChild(mark);
+          last = idx + rawQuery.length;
+          idx = lower.indexOf(qLower, last);
+        }
+        if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+        node.parentNode.replaceChild(frag, node);
+      });
+      if (firstMark) {
+        const det = firstMark.closest("details.qa-details");
+        if (det) det.open = true;
+      }
+      return firstMark;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    searchInput.addEventListener("input", () => {
+      const rawQ = searchInput.value.trim();
+      const q = rawQ.toLowerCase();
+      if (!q) {
+        clearSearchHighlights();
+        searchStatus.classList.remove("visible");
+        searchStatus.textContent = "";
+        return;
+      }
+      const hits = [];
+      panels.forEach(p => {
+        const body = p.querySelector(".md-body");
+        const txt = (body ? body.textContent : p.textContent).toLowerCase();
+        if (txt.includes(q)) {
+          let count = 0;
+          let pos = txt.indexOf(q);
+          while (pos !== -1) {
+            count++;
+            pos = txt.indexOf(q, pos + q.length);
+          }
+          const title = document.querySelector(`.nav-link[data-sec="${p.id}"]`)?.textContent || p.id;
+          hits.push(`<a href="#${p.id}" data-search-jump="${p.id}" style="font-weight:700;margin-right:0.75rem;">${escapeHtml(title)} (${count}件)</a>`);
+        }
+      });
+      searchStatus.innerHTML = hits.length
+        ? `🔍 「${escapeHtml(rawQ)}」に一致した章 (${hits.length}件): ` + hits.join("")
+        : `🔍 「${escapeHtml(rawQ)}」に一致する章は見つかりませんでした。`;
+      searchStatus.classList.add("visible");
+
+      const currentPanel = document.querySelector(".chapter-panel:not([hidden])");
+      highlightInPanel(currentPanel, rawQ);
+
+      searchStatus.querySelectorAll("[data-search-jump]").forEach(a => {
+        a.addEventListener("click", e => {
+          e.preventDefault();
+          const targetId = a.dataset.searchJump;
+          showSection(targetId);
+          const targetEl = document.getElementById(targetId);
+          const firstHit = highlightInPanel(targetEl, rawQ);
+          if (firstHit) {
+            firstHit.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        });
+      });
+    });
+
+    const sidebar = document.getElementById("sidebar");
+    const backdrop = document.getElementById("sidebarBackdrop");
+    const fabTop = document.getElementById("fabTop");
+
+    function closeDrawer() {
+      sidebar.classList.remove("open");
+      backdrop.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+    document.getElementById("btnMenu").addEventListener("click", () => {
+      sidebar.classList.add("open");
+      backdrop.classList.add("open");
+      document.body.style.overflow = "hidden";
+    });
+    document.getElementById("btnCloseMenu").addEventListener("click", closeDrawer);
+    backdrop.addEventListener("click", closeDrawer);
+
+    window.addEventListener("scroll", () => {
+      fabTop.classList.toggle("visible", window.scrollY > 360);
+    }, { passive: true });
+    fabTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  </script>
+</body>
+</html>
