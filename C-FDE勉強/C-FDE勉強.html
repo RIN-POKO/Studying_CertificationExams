@@ -31,9 +31,9 @@
       --text-secondary: light-dark(#475569, #cbd5e1);
       --text-muted: light-dark(#64748b, #94a3b8);
       --border-color: light-dark(#e2e8f0, #334155);
-      --accent: light-dark(#0f766e, #2dd4bf);
-      --accent-soft: light-dark(#f0fdfa, rgba(45, 212, 191, 0.14));
-      --accent-border: light-dark(#99f6e4, rgba(45, 212, 191, 0.35));
+      --accent: light-dark(#6d28d9, #a78bfa);
+      --accent-soft: light-dark(#f5f3ff, rgba(139, 92, 246, 0.16));
+      --accent-border: light-dark(#ddd6fe, rgba(167, 139, 250, 0.35));
       --emerald: light-dark(#059669, #34d399);
       --emerald-soft: light-dark(#ecfdf5, rgba(16, 185, 129, 0.15));
       --amber: light-dark(#d97706, #fbbf24);
@@ -48,11 +48,17 @@
       --radius: 12px;
     }
 
-    :root:has(> head > meta[name="color-scheme"][content="dark"]) { color-scheme: dark; }
-    :root:has(> head > meta[name="color-scheme"][content="light"]) { color-scheme: light; }
+    :root:has(> head > meta[name="color-scheme"][content="dark"]) {
+      color-scheme: dark;
+    }
+    :root:has(> head > meta[name="color-scheme"][content="light"]) {
+      color-scheme: light;
+    }
 
     @media (pointer: coarse) {
-      :root { --target-size: 44px; }
+      :root {
+        --target-size: 44px;
+      }
     }
 
     [data-theme="bw"] {
@@ -78,7 +84,12 @@
       --code-bg: #f3f4f6;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
     html {
       scroll-behavior: smooth;
@@ -97,15 +108,22 @@
       padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
     }
 
-    :where(a, code) { overflow-wrap: anywhere; }
+    :where(a, code) {
+      overflow-wrap: anywhere;
+    }
+
     :where(button, select, textarea, input:not([type="checkbox"], [type="radio"]), [role="button"], nav a) {
       min-block-size: var(--target-size);
       min-inline-size: var(--target-size);
     }
 
+    /* Top Header */
     .top-header {
-      position: sticky; top: 0; z-index: 100;
-      background: var(--bg-surface); border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
       box-shadow: var(--shadow-sm);
       padding: 0.65rem 1.25rem;
       padding-top: max(0.65rem, env(safe-area-inset-top, 0px));
@@ -114,139 +132,392 @@
     }
 
     .header-inner {
-      max-width: 1360px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 0.75rem; flex-wrap: wrap;
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
     }
 
-    .brand { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-width: 0;
+    }
+
     .menu-toggle {
-      display: none; align-items: center; justify-content: center;
-      background: var(--bg-subtle); border: 1px solid var(--border-color);
-      color: var(--text-primary); width: 44px; height: 44px; border-radius: 8px;
-      font-size: 1.15rem; cursor: pointer; flex-shrink: 0; touch-action: manipulation;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      font-size: 1.15rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      touch-action: manipulation;
     }
-    .brand-badge {
-      background: var(--accent); color: #fff; font-weight: 700;
-      font-size: 0.76rem; padding: 0.25rem 0.6rem; border-radius: 6px; flex-shrink: 0;
-    }
-    [data-theme="light"] .brand-badge, :root:not([data-theme="bw"]) .brand-badge { color: #ffffff; }
-    .brand-title { font-size: 1.02rem; font-weight: 800; color: var(--text-primary); }
 
-    .controls { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
-    .search-box { position: relative; min-inline-size: 0; }
-    .search-box input {
-      background: var(--bg-subtle); border: 1px solid var(--border-color);
-      color: var(--text-primary); padding: 0.4rem 0.75rem; border-radius: 8px;
-      font-size: 0.88rem; width: 210px; outline: none;
+    .brand-badge {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.76rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      flex-shrink: 0;
     }
-    .search-box input:focus { border-color: var(--accent); }
+
+    .brand-title {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      position: relative;
+      min-inline-size: 0;
+    }
+
+    .search-box input {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      width: 210px;
+      outline: none;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+    }
 
     .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;
-      background: var(--bg-subtle); color: var(--text-secondary);
-      border: 1px solid var(--border-color); padding: 0.4rem 0.75rem;
-      border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
-      touch-action: manipulation; text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      touch-action: manipulation;
+      text-decoration: none;
       transition: border-color 0.15s, color 0.15s, background-color 0.15s;
     }
-    .btn:hover { border-color: var(--accent); color: var(--accent); }
-    .btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-border); }
-    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .btn-primary:hover { color: #fff; opacity: 0.92; }
-    .btn-sm { font-size: 0.78rem; padding: 0.3rem 0.65rem; }
 
-    .tablist-bar { max-width: 1360px; margin: 0.75rem auto 0; padding: 0 1.25rem; display: none; }
+    .btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: var(--accent-border);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      color: #fff;
+      opacity: 0.92;
+    }
+
+    .btn-sm {
+      font-size: 0.78rem;
+      padding: 0.3rem 0.65rem;
+    }
+
+    /* Tablist Bar (Mobile/Tablet quick switcher) */
+    .tablist-bar {
+      max-width: 1360px;
+      margin: 0.75rem auto 0;
+      padding: 0 1.25rem;
+      display: none;
+    }
+
     .tablist-scroll {
-      display: flex; gap: 0.35rem; overflow-x: auto; scroll-snap-type: inline proximity;
-      scrollbar-width: none; -webkit-overflow-scrolling: touch; border-bottom: 1px solid var(--border-color);
+      display: flex;
+      gap: 0.35rem;
+      overflow-x: auto;
+      scroll-snap-type: inline proximity;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      border-bottom: 1px solid var(--border-color);
     }
-    .tablist-scroll::-webkit-scrollbar { display: none; }
+    .tablist-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
     .tab-btn {
-      flex: none; scroll-snap-align: start; position: relative;
-      background: transparent; border: none; color: var(--text-secondary);
-      padding: 0.5rem 0.85rem; font-size: 0.85rem; font-weight: 600; cursor: pointer;
-      white-space: nowrap; touch-action: manipulation;
+      flex: none;
+      scroll-snap-align: start;
+      position: relative;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 0.5rem 0.85rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      touch-action: manipulation;
     }
-    .tab-btn[aria-selected="true"] { color: var(--accent); }
+
+    .tab-btn[aria-selected="true"] {
+      color: var(--accent);
+    }
+
     .tab-btn[aria-selected="true"]::after {
-      content: ""; position: absolute; inset: auto 0 0; border-block-end: 3px solid var(--accent);
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      border-block-end: 3px solid var(--accent);
     }
 
+    /* Layout */
     .layout {
-      max-width: 1360px; margin: 0 auto; padding: 1.5rem 1.25rem;
-      display: grid; grid-template-columns: 270px 1fr; gap: 1.75rem; align-items: start;
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem;
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      gap: 1.75rem;
+      align-items: start;
     }
 
+    /* Sidebar */
     .sidebar {
-      position: sticky; top: 4.75rem; background: var(--bg-surface);
-      border: 1px solid var(--border-color); border-radius: var(--radius);
-      padding: 1rem; box-shadow: var(--shadow-sm);
-      max-height: calc(100vh - 6rem); overflow-y: auto;
+      position: sticky;
+      top: 4.75rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
+      max-height: calc(100vh - 6rem);
+      overflow-y: auto;
     }
-    .sidebar-header-mobile { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+
+    .sidebar-header-mobile {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+    }
+
     .sidebar-title {
-      font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em;
-      color: var(--text-muted); font-weight: 700; padding: 0 0.5rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      font-weight: 700;
+      padding: 0 0.5rem;
     }
+
     .sidebar-close {
-      display: none; background: var(--bg-subtle); border: 1px solid var(--border-color);
-      color: var(--text-secondary); border-radius: 6px; padding: 0.3rem 0.65rem;
-      font-size: 0.8rem; font-weight: 600; cursor: pointer;
+      display: none;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      border-radius: 6px;
+      padding: 0.3rem 0.65rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
     }
-    .nav-list { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
     .nav-link {
-      display: flex; align-items: center; padding: 0.45rem 0.65rem; border-radius: 8px;
-      color: var(--text-secondary); text-decoration: none; font-size: 0.84rem; font-weight: 500;
+      display: flex;
+      align-items: center;
+      padding: 0.45rem 0.65rem;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
       transition: all 0.15s;
     }
-    .nav-link:hover { background: var(--bg-subtle); color: var(--accent); }
-    .nav-link.active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+
+    .nav-link:hover {
+      background: var(--bg-subtle);
+      color: var(--accent);
+    }
+
+    .nav-link.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 700;
+    }
 
     .sidebar-backdrop {
-      display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5);
-      z-index: 190; backdrop-filter: blur(2px);
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 190;
+      backdrop-filter: blur(2px);
     }
-    .sidebar-backdrop.open { display: block; }
+    .sidebar-backdrop.open {
+      display: block;
+    }
 
-    .main-content { min-width: 0; }
+    /* Main Content & Panels */
+    .main-content {
+      min-width: 0;
+    }
+
     .panel-card {
-      background: var(--bg-surface); border: 1px solid var(--border-color);
-      border-radius: var(--radius); padding: 1.75rem 2rem; box-shadow: var(--shadow-sm);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1.75rem 2rem;
+      box-shadow: var(--shadow-sm);
     }
 
+    /* Typography inside Markdown body */
     .md-body h1 {
-      font-size: 1.55rem; font-weight: 800; margin-bottom: 1rem;
-      padding-bottom: 0.6rem; border-bottom: 2px solid var(--border-color); text-wrap: balance;
+      font-size: 1.55rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--border-color);
+      text-wrap: balance;
     }
-    .md-body h2 {
-      font-size: 1.25rem; font-weight: 800; margin: 2rem 0 0.85rem;
-      padding-left: 0.65rem; border-left: 4px solid var(--accent); text-wrap: balance;
-    }
-    .md-body h3 { font-size: 1.08rem; font-weight: 700; margin: 1.5rem 0 0.6rem; color: var(--text-primary); text-wrap: balance; }
-    .md-body h4 { font-size: 0.98rem; font-weight: 700; margin: 1.1rem 0 0.45rem; }
-    .md-body p { margin-bottom: 0.85rem; text-wrap: pretty; }
-    .md-body li { margin-bottom: 0.4rem; text-wrap: pretty; }
-    .md-body ul, .md-body ol { margin: 0.5rem 0 1rem 1.5rem; }
-    .md-body hr { border: none; border-top: 1px solid var(--border-color); margin: 1.75rem 0; }
-    .md-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
-    .md-body code {
-      background: var(--code-bg); padding: 0.12rem 0.35rem; border-radius: 5px;
-      font-family: "M PLUS 1 Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.88em; border: 1px solid var(--border-color);
-    }
-    .code-block {
-      background: var(--code-bg); border: 1px solid var(--border-color); border-radius: 10px;
-      padding: 0.95rem 1.1rem; overflow-x: auto; margin: 0.85rem 0 1.1rem; font-size: 0.86rem; line-height: 1.55;
-    }
-    .code-block code { background: none; border: none; padding: 0; font-size: inherit; }
 
+    .md-body h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin: 2rem 0 0.85rem;
+      padding-left: 0.65rem;
+      border-left: 4px solid var(--accent);
+      text-wrap: balance;
+    }
+
+    .md-body h3 {
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin: 1.5rem 0 0.6rem;
+      color: var(--text-primary);
+      text-wrap: balance;
+    }
+
+    .md-body h4 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      margin: 1.1rem 0 0.45rem;
+    }
+
+    .md-body p {
+      margin-bottom: 0.85rem;
+      text-wrap: pretty;
+    }
+
+    .md-body li {
+      margin-bottom: 0.4rem;
+      text-wrap: pretty;
+    }
+
+    .md-body ul, .md-body ol {
+      margin: 0.5rem 0 1rem 1.5rem;
+    }
+
+    .md-body hr {
+      border: none;
+      border-top: 1px solid var(--border-color);
+      margin: 1.75rem 0;
+    }
+
+    .md-body a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .md-body code {
+      background: var(--code-bg);
+      padding: 0.12rem 0.35rem;
+      border-radius: 5px;
+      font-family: "M PLUS 1 Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88em;
+      border: 1px solid var(--border-color);
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.95rem 1.1rem;
+      overflow-x: auto;
+      margin: 0.85rem 0 1.1rem;
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+
+    .code-block code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    .audio-ref {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.86em;
+      color: var(--text-secondary);
+    }
+
+    /* Alerts */
     .alert {
-      border-radius: 10px; padding: 0.95rem 1.15rem; margin: 1rem 0;
-      border: 1px solid var(--border-color); border-left-width: 4px;
+      border-radius: 10px;
+      padding: 0.95rem 1.15rem;
+      margin: 1rem 0;
+      border: 1px solid var(--border-color);
+      border-left-width: 4px;
     }
     .alert p:last-child { margin-bottom: 0; }
-    .alert-title { font-weight: 800; font-size: 0.88rem; margin-bottom: 0.35rem; }
+    .alert-title {
+      font-weight: 800;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+    }
     .alert-tip { background: var(--emerald-soft); border-color: var(--emerald); }
     .alert-tip .alert-title { color: var(--emerald); }
     .alert-note { background: var(--blue-soft); border-color: var(--blue); }
@@ -259,136 +530,407 @@
     .alert-caution .alert-title { color: var(--rose); }
 
     blockquote {
-      border-left: 4px solid var(--border-color); padding: 0.5rem 1rem; margin: 0.85rem 0;
-      color: var(--text-secondary); background: var(--bg-subtle); border-radius: 0 8px 8px 0;
+      border-left: 4px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      margin: 0.85rem 0;
+      color: var(--text-secondary);
+      background: var(--bg-subtle);
+      border-radius: 0 8px 8px 0;
     }
 
+    /* Mermaid Wrapper */
     .mermaid-wrap {
-      background: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: 10px;
-      padding: 1rem; margin: 1rem 0 1.25rem; overflow-x: auto;
-      -webkit-overflow-scrolling: touch; scrollbar-width: thin; text-align: center;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0 1.25rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      text-align: center;
     }
-    .mermaid-wrap svg { height: auto; max-width: none; overflow: visible; }
-    .mermaid foreignObject { overflow: visible; }
-    .mermaid .nodeLabel, .mermaid .edgeLabel { line-height: 1.4; }
+    .mermaid-wrap svg {
+      height: auto;
+      max-width: none;
+      overflow: visible;
+    }
+    .mermaid foreignObject {
+      overflow: visible;
+    }
+    .mermaid .nodeLabel,
+    .mermaid .edgeLabel {
+      line-height: 1.4;
+    }
 
+    /* Responsive Table (modern-web-guidance: responsive-table) */
     .table-wrapper {
-      overflow: auto; max-inline-size: 100%; margin: 1rem 0 1.25rem;
-      border: 1px solid var(--border-color); border-radius: 10px;
-      container-type: inline-size; scrollbar-width: thin;
+      overflow: auto;
+      max-inline-size: 100%;
+      margin: 1rem 0 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      container-type: inline-size;
+      scrollbar-width: thin;
     }
-    table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.9rem; }
-    th, td { padding: 0.65rem 0.9rem; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: top; }
-    thead th { position: sticky; inset-block-start: 0; z-index: 1; background: var(--bg-subtle); font-weight: 700; color: var(--text-primary); }
-    tbody th { font-weight: 700; color: var(--text-primary); background: var(--bg-surface); }
-    tbody tr:last-child th, tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover th, tbody tr:hover td { background: var(--accent-soft); }
 
-    .qa-header { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin: 2rem 0 0.85rem; flex-wrap: wrap; }
-    .qa-header h2 { margin: 0; }
-    .qa-details { border: 1px solid var(--border-color); border-radius: 10px; margin: 0.5rem 0 1.15rem; background: var(--bg-subtle); }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 0.65rem 0.9rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+
+    thead th {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 1;
+      background: var(--bg-subtle);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    tbody th {
+      font-weight: 700;
+      color: var(--text-primary);
+      background: var(--bg-surface);
+    }
+
+    tbody tr:last-child th,
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover th,
+    tbody tr:hover td {
+      background: var(--accent-soft);
+    }
+
+    /* Accordion / Details (modern-web-guidance: accordion) */
+    .qa-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin: 2rem 0 0.85rem;
+      flex-wrap: wrap;
+    }
+    .qa-header h2 {
+      margin: 0;
+    }
+
+    .qa-details {
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      margin: 0.5rem 0 1.15rem;
+      background: var(--bg-subtle);
+    }
+
     .qa-details > summary {
-      list-style: none; display: flex; align-items: center; gap: 0.5ch;
-      padding: 0.65rem 1rem; font-weight: 700; font-size: 0.92rem; color: var(--accent);
-      cursor: pointer; user-select: none;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5ch;
+      padding: 0.65rem 1rem;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--accent);
+      cursor: pointer;
+      user-select: none;
     }
-    .qa-details > summary::-webkit-details-marker { display: none; }
-    .qa-details > summary::before { content: "▶"; font-size: 0.75em; display: inline-block; transition: rotate 0.2s; }
-    .qa-details[open] > summary::before { rotate: 90deg; }
-    .qa-details::details-content { interpolate-size: allow-keywords; overflow: clip; contain: layout; }
-    .qa-details:not([open])::details-content { block-size: 0; }
+
+    .qa-details > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .qa-details > summary::before {
+      content: "▶";
+      font-size: 0.75em;
+      display: inline-block;
+      transition: rotate 0.2s;
+    }
+
+    .qa-details[open] > summary::before {
+      rotate: 90deg;
+    }
+
+    .qa-details::details-content {
+      interpolate-size: allow-keywords;
+      overflow: clip;
+      contain: layout;
+    }
+
+    .qa-details:not([open])::details-content {
+      block-size: 0;
+    }
+
     @media (prefers-reduced-motion: no-preference) {
-      .qa-details::details-content { transition: block-size 0.25s ease-in-out, content-visibility 0.25s ease-in-out; transition-behavior: allow-discrete; }
+      .qa-details::details-content {
+        transition: block-size 0.25s ease-in-out, content-visibility 0.25s ease-in-out;
+        transition-behavior: allow-discrete;
+      }
     }
-    .details-body { padding: 0 1rem 0.9rem; border-top: 1px solid var(--border-color); padding-top: 0.75rem; }
-    .details-body p:last-child { margin-bottom: 0; }
 
-    .kw-mask { border-radius: 4px; padding: 0.05rem 0.25rem; transition: all 0.15s; }
+    .details-body {
+      padding: 0 1rem 0.9rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 0.75rem;
+    }
+    .details-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Memorize Mode Mask */
+    .kw-mask {
+      border-radius: 4px;
+      padding: 0.05rem 0.25rem;
+      transition: all 0.15s;
+    }
+
     body.memorize-mode .kw-mask {
-      background: var(--accent); color: transparent; cursor: pointer;
-      user-select: none; -webkit-user-select: none; display: inline;
-      box-decoration-break: clone; -webkit-box-decoration-break: clone;
+      background: var(--accent);
+      color: transparent;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      display: inline;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
     }
-    body.memorize-mode .kw-mask * { visibility: hidden; }
-    body.memorize-mode .kw-mask.revealed { background: var(--amber-soft); color: var(--amber); font-weight: 700; }
-    body.memorize-mode .kw-mask.revealed * { visibility: visible; }
+
+    body.memorize-mode .kw-mask * {
+      visibility: hidden;
+    }
+
+    body.memorize-mode .kw-mask.revealed {
+      background: var(--amber-soft);
+      color: var(--amber);
+      font-weight: 700;
+    }
+
+    body.memorize-mode .kw-mask.revealed * {
+      visibility: visible;
+    }
+
     @media (hover: hover) {
-      body.memorize-mode .kw-mask:hover { background: var(--amber-soft); color: var(--amber); font-weight: 700; }
-      body.memorize-mode .kw-mask:hover * { visibility: visible; }
+      body.memorize-mode .kw-mask:hover {
+        background: var(--amber-soft);
+        color: var(--amber);
+        font-weight: 700;
+      }
+      body.memorize-mode .kw-mask:hover * {
+        visibility: visible;
+      }
     }
 
+    /* Pager */
     .chapter-pager {
-      display: flex; justify-content: space-between; gap: 0.75rem;
-      margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border-color); flex-wrap: wrap;
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-color);
+      flex-wrap: wrap;
     }
 
+    /* Search Banner */
     .search-status {
-      display: none; background: var(--accent-soft); border: 1px solid var(--accent-border);
-      color: var(--text-primary); border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.9rem;
+      display: none;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      color: var(--text-primary);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
     }
-    .search-status.visible { display: block; }
-    mark.search-hit { background: #fde047; color: #0f172a; padding: 0 2px; border-radius: 3px; }
+    .search-status.visible {
+      display: block;
+    }
 
+    mark.search-hit {
+      background: #fde047;
+      color: #0f172a;
+      padding: 0 2px;
+      border-radius: 3px;
+    }
+
+    /* Floating Back-to-Top */
     .fab-top {
-      position: fixed; right: max(1rem, env(safe-area-inset-right, 0px));
-      bottom: max(1rem, env(safe-area-inset-bottom, 0px)); z-index: 150;
-      width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: #fff;
-      border: none; box-shadow: var(--shadow-md); font-size: 1.1rem; font-weight: 700;
-      cursor: pointer; display: none; align-items: center; justify-content: center; touch-action: manipulation;
+      position: fixed;
+      right: max(1rem, env(safe-area-inset-right, 0px));
+      bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+      z-index: 150;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      box-shadow: var(--shadow-md);
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
     }
-    .fab-top.visible { display: flex; }
+    .fab-top.visible {
+      display: flex;
+    }
 
+    /* Tablet & Mobile */
     @media (max-width: 960px) {
-      .tablist-bar { display: block; }
-      .layout { grid-template-columns: 1fr; padding: 1rem; }
-      .menu-toggle { display: inline-flex; }
+      .tablist-bar {
+        display: block;
+      }
+      .layout {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+      .menu-toggle {
+        display: inline-flex;
+      }
       .sidebar {
-        position: fixed; top: 0; left: 0; bottom: 0; width: min(300px, 84vw); max-height: 100vh;
-        z-index: 200; border-radius: 0 14px 14px 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: min(300px, 84vw);
+        max-height: 100vh;
+        z-index: 200;
+        border-radius: 0 14px 14px 0;
         padding-top: max(1rem, env(safe-area-inset-top, 0px));
         padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
-        transform: translateX(-105%); transition: transform 0.25s ease;
+        transform: translateX(-105%);
+        transition: transform 0.25s ease;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
       }
-      .sidebar.open { transform: translateX(0); }
-      .sidebar-close { display: inline-block; }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-close {
+        display: inline-block;
+      }
     }
 
     @media (max-width: 640px) {
-      .top-header { padding: 0.6rem 0.85rem; padding-top: max(0.6rem, env(safe-area-inset-top, 0px)); }
-      .brand-title { font-size: 0.95rem; line-height: 1.3; white-space: normal; }
-      .controls { width: 100%; }
-      .search-box { flex: 1 1 100%; }
-      .search-box input { width: 100%; font-size: 16px; padding: 0.5rem 0.75rem; }
-      .btn-print-hide { display: none; }
-      .panel-card { padding: 1.15rem 1rem; }
-      .md-body h1 { font-size: 1.3rem; }
-      .md-body h2 { font-size: 1.12rem; }
-      th, td { padding: 0.55rem 0.65rem; font-size: 0.84rem; }
+      .top-header {
+        padding: 0.6rem 0.85rem;
+        padding-top: max(0.6rem, env(safe-area-inset-top, 0px));
+      }
+      .brand-title {
+        font-size: 0.95rem;
+        line-height: 1.3;
+        white-space: normal;
+      }
+      .controls {
+        width: 100%;
+      }
+      .search-box {
+        flex: 1 1 100%;
+      }
+      .search-box input {
+        width: 100%;
+        font-size: 16px;
+        padding: 0.5rem 0.75rem;
+      }
+      .btn-print-hide {
+        display: none;
+      }
+      .panel-card {
+        padding: 1.15rem 1rem;
+      }
+      .md-body h1 {
+        font-size: 1.3rem;
+      }
+      .md-body h2 {
+        font-size: 1.12rem;
+      }
+      th, td {
+        padding: 0.55rem 0.65rem;
+        font-size: 0.84rem;
+      }
     }
 
-    @page { size: A4 portrait; margin: 12mm 13mm; }
+    /* A4 Print Styles */
+    @page {
+      size: A4 portrait;
+      margin: 12mm 13mm;
+    }
 
     @media print {
       :root, :root:has(> head > meta[name="color-scheme"][content="dark"]) {
         color-scheme: light !important;
-        --bg-primary: #ffffff !important; --bg-surface: #ffffff !important; --bg-subtle: #f8fafc !important;
-        --text-primary: #0f172a !important; --text-secondary: #334155 !important; --text-muted: #475569 !important;
-        --border-color: #cbd5e1 !important; --code-bg: #f8fafc !important;
+        --bg-primary: #ffffff !important;
+        --bg-surface: #ffffff !important;
+        --bg-subtle: #f8fafc !important;
+        --text-primary: #0f172a !important;
+        --text-secondary: #334155 !important;
+        --text-muted: #475569 !important;
+        --border-color: #cbd5e1 !important;
+        --code-bg: #f8fafc !important;
       }
-      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-      body { background: #fff !important; color: #0f172a !important; font-size: 9.5pt !important; line-height: 1.6 !important; padding: 0 !important; }
-      .top-header, .tablist-bar, .sidebar, .sidebar-backdrop, .chapter-pager, .fab-top, .qa-toggle-all, .search-status { display: none !important; }
-      .layout { display: block !important; padding: 0 !important; max-width: 100% !important; }
-      .panel-card { border: none !important; box-shadow: none !important; padding: 0 !important; }
-      .table-wrapper { overflow: visible !important; }
-      table { font-size: 8.3pt !important; }
-      thead { display: table-header-group; }
-      tr, .alert, .qa-details, .mermaid-wrap { break-inside: avoid; }
-      h1, h2, h3, h4 { break-after: avoid; }
-      th, td { white-space: normal !important; padding: 4pt 6pt !important; }
-      body.memorize-mode .kw-mask { background: #f3f4f6 !important; color: #111827 !important; border-bottom: 1px solid #111827; }
-      body.memorize-mode .kw-mask * { visibility: visible !important; }
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      body {
+        background: #fff !important;
+        color: #0f172a !important;
+        font-size: 9.5pt !important;
+        line-height: 1.6 !important;
+        padding: 0 !important;
+      }
+      .top-header, .tablist-bar, .sidebar, .sidebar-backdrop, .chapter-pager, .fab-top, .qa-toggle-all, .search-status {
+        display: none !important;
+      }
+      .layout {
+        display: block !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+      .panel-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+      }
+      .table-wrapper {
+        overflow: visible !important;
+      }
+      table {
+        font-size: 8.3pt !important;
+      }
+      thead {
+        display: table-header-group;
+      }
+      tr, .alert, .qa-details, .mermaid-wrap {
+        break-inside: avoid;
+      }
+      h1, h2, h3, h4 {
+        break-after: avoid;
+      }
+      th, td {
+        white-space: normal !important;
+        padding: 4pt 6pt !important;
+      }
+      body.memorize-mode .kw-mask {
+        background: #f3f4f6 !important;
+        color: #111827 !important;
+        border-bottom: 1px solid #111827;
+      }
+      body.memorize-mode .kw-mask * {
+        visibility: visible !important;
+      }
     }
   </style>
 
@@ -398,8 +940,8 @@
     <div class="header-inner">
       <div class="brand">
         <button type="button" class="menu-toggle" id="btnMenu" aria-label="目次を開く">☰</button>
-        <span class="brand-badge">C-FDE Core</span>
-        <span class="brand-title">Claude Forward Deployed Engineer Core 対策ノート</span>
+        <span class="brand-badge">C-FDE</span>
+        <span class="brand-title">Claude Forward Deployed Engineer 対策ノート</span>
       </div>
       <div class="controls">
         <div class="search-box">
@@ -415,44 +957,42 @@
 
   <nav class="tablist-bar" aria-label="章の切り替え">
     <div class="tablist-scroll" role="tablist" aria-label="章タブ">
-      <button type="button" class="tab-btn" id="tab-sec-readme" role="tab" aria-selected="true" data-sec="sec-readme" focusgroupstart>はじめに（全体像・学び方）</button><button type="button" class="tab-btn" id="tab-sec-ch1" role="tab" aria-selected="false" data-sec="sec-ch1">第1章 AIの能力と限界</button><button type="button" class="tab-btn" id="tab-sec-ch2" role="tab" aria-selected="false" data-sec="sec-ch2">第2章 AIフルーエンシーと4D</button><button type="button" class="tab-btn" id="tab-sec-ch3" role="tab" aria-selected="false" data-sec="sec-ch3">第3章 プラットフォーム基盤</button><button type="button" class="tab-btn" id="tab-sec-ch4" role="tab" aria-selected="false" data-sec="sec-ch4">第4章 モデル選定</button><button type="button" class="tab-btn" id="tab-sec-glossary" role="tab" aria-selected="false" data-sec="sec-glossary">用語集</button><button type="button" class="tab-btn" id="tab-sec-check" role="tab" aria-selected="false" data-sec="sec-check">直前チェック</button>
+      <button type="button" class="tab-btn" id="tab-sec-readme" role="tab" aria-selected="true" data-sec="sec-readme" focusgroupstart>はじめに（全体像・学び方）</button><button type="button" class="tab-btn" id="tab-sec-ch1" role="tab" aria-selected="false" data-sec="sec-ch1">第1章 AIの能力と限界</button><button type="button" class="tab-btn" id="tab-sec-ch2" role="tab" aria-selected="false" data-sec="sec-ch2">第2章 AIフルーエンシーと4D</button><button type="button" class="tab-btn" id="tab-sec-ch3" role="tab" aria-selected="false" data-sec="sec-ch3">第3章 プラットフォーム基盤</button><button type="button" class="tab-btn" id="tab-sec-ch4" role="tab" aria-selected="false" data-sec="sec-ch4">第4章 モデル選定</button><button type="button" class="tab-btn" id="tab-sec-ch5" role="tab" aria-selected="false" data-sec="sec-ch5">第5章 デリバリーメソドロジー</button><button type="button" class="tab-btn" id="tab-sec-ch6" role="tab" aria-selected="false" data-sec="sec-ch6">第6章 エンタープライズ導入</button><button type="button" class="tab-btn" id="tab-sec-glossary" role="tab" aria-selected="false" data-sec="sec-glossary">用語集</button><button type="button" class="tab-btn" id="tab-sec-check" role="tab" aria-selected="false" data-sec="sec-check">直前チェック</button>
     </div>
   </nav>
 
   <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
   <div class="layout">
-    <aside class="sidebar" id="sidebar" aria-label="目次">
-      <div class="sidebar-header">
-        <span class="sidebar-title">目次（Core 4コース）</span>
-        <button type="button" class="sidebar-close" id="btnCloseMenu" aria-label="目次を閉じる">✕</button>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header-mobile">
+        <div class="sidebar-title">目次ナビゲーション</div>
+        <button type="button" class="sidebar-close" id="btnCloseMenu">✕ 閉じる</button>
       </div>
       <ul class="nav-list">
-        <li class="nav-item"><a href="#sec-readme" class="nav-link active" data-sec="sec-readme">はじめに（全体像・学び方）</a></li><li class="nav-item"><a href="#sec-ch1" class="nav-link" data-sec="sec-ch1">第1章 AI の能力と限界</a></li><li class="nav-item"><a href="#sec-ch2" class="nav-link" data-sec="sec-ch2">第2章 ビルダー向け AI フルーエンシー</a></li><li class="nav-item"><a href="#sec-ch3" class="nav-link" data-sec="sec-ch3">第3章 Claude プラットフォームとモデル基盤</a></li><li class="nav-item"><a href="#sec-ch4" class="nav-link" data-sec="sec-ch4">第4章 適切な Claude モデルの選定</a></li><li class="nav-item"><a href="#sec-glossary" class="nav-link" data-sec="sec-glossary">用語集</a></li><li class="nav-item"><a href="#sec-check" class="nav-link" data-sec="sec-check">直前チェック</a></li>
+        <li><a class="nav-link" href="../index.html" style="font-weight: 700; color: var(--accent);">← 資格一覧へ戻る</a></li>
+        <li class="nav-item"><a href="#sec-readme" class="nav-link active" data-sec="sec-readme">はじめに（全体像・学び方）</a></li><li class="nav-item"><a href="#sec-ch1" class="nav-link" data-sec="sec-ch1">第1章 AI の能力と限界</a></li><li class="nav-item"><a href="#sec-ch2" class="nav-link" data-sec="sec-ch2">第2章 ビルダー向け AI フルーエンシー</a></li><li class="nav-item"><a href="#sec-ch3" class="nav-link" data-sec="sec-ch3">第3章 Claude プラットフォームとモデル基盤</a></li><li class="nav-item"><a href="#sec-ch4" class="nav-link" data-sec="sec-ch4">第4章 適切な Claude モデルの選定</a></li><li class="nav-item"><a href="#sec-ch5" class="nav-link" data-sec="sec-ch5">第5章 デリバリーメソドロジー</a></li><li class="nav-item"><a href="#sec-ch6" class="nav-link" data-sec="sec-ch6">第6章 エンタープライズ導入の推進</a></li><li class="nav-item"><a href="#sec-glossary" class="nav-link" data-sec="sec-glossary">用語集</a></li><li class="nav-item"><a href="#sec-check" class="nav-link" data-sec="sec-check">直前チェック</a></li>
       </ul>
     </aside>
 
-    <main class="content">
+    <main class="main-content" id="mainContent">
       <div class="search-status" id="searchStatus" role="status" aria-live="polite"></div>
       <section class="chapter-panel" id="sec-readme" role="tabpanel" aria-labelledby="tab-sec-readme" tabindex="0">
         <div class="panel-card">
           <div class="md-body">
-<h1>Claude Forward Deployed Engineer (FDE) Core 対策ノート</h1>
+<h1>Claude Forward Deployed Engineer (FDE) 対策ノート</h1>
 <h2>このノートについて</h2>
-<p>このノートは Anthropic Partner Academy（Skilljar）の **Claude Forward Deployed Engineer (<code>claude-fde</code>)** ラーニングパスのうち、Core（基礎・中核）に位置づけられる 4 つのコースを体系的にまとめた学習資料です。</p>
-<p>現在はパートナー向けの学習パスですが、今後認定資格として試験化される可能性も見据え、実務の判断軸とシナリオ形式の確認問題までを一通り整理しています。</p>
-<h2>全体像：FDE パスにおける Core の位置づけ</h2>
-<p><code>claude-fde</code> パスは全 11 コース（約 9.5 時間）で構成されており、大きく <strong>Core（基礎 4 コース）</strong> と <strong>Role Courses（構築・デリバリー 7 コース）</strong> に分かれます。</p>
+<p>このノートは Anthropic Partner Academy（Skilljar）の **Claude Forward Deployed Engineer (<code>claude-fde</code>)<strong> ラーニングパスのうち、</strong>Core（基礎 4 コース）<strong> と </strong>Role: Delivering（デリバリー・導入推進 2 コース）** の計 6 コースをまとめた学習資料です。</p>
+<p>Role: Building（Claude Platform 101 / Claude Code / MCP / Agent Skills）は CCAR-F / CCDV-P 等で学習済みのため、本ノートでは FDE 固有の基盤と顧客導入・定着の領域に絞って整理しています。</p>
+<h2>全体像：FDE パスにおける本ノートの範囲</h2>
+<p><code>claude-fde</code> パスは全 11 コース（約 9.5 時間）で構成されており、本ノートでは Core 4 コースと Delivering 2 コースを扱います。</p>
 <div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
-  P[Claude FDE ラーニングパス 全11コース] --&gt; C[Core 基礎 4コース 本ノートの対象]
-  P --&gt; R1[Role Courses: Building 5コース]
-  P --&gt; R2[Role Courses: Delivering 2コース]
-  C --&gt; C1[1. AI Capabilities and Limitations]
-  C --&gt; C2[2. AI Fluency for Builders]
-  C --&gt; C3[3. Claude Platform and Model Foundations]
-  C --&gt; C4[4. Choosing the Right Claude Model]
-  R1 --&gt; REF1[CCAR-F / CCDV-P 等で学習]</pre></div>
-<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-readme-tbl-1"><table><thead><tr><th scope="col">区分</th><th scope="col">コース名</th><th scope="col">目安時間</th><th scope="col">本ノートでの扱い</th></tr></thead><tbody><tr><th scope="row">Core 1</th><td>AI Capabilities and Limitations</td><td>約 60 分</td><td><strong>第 1 章</strong>で解説</td></tr><tr><th scope="row">Core 2</th><td>AI Fluency for Builders</td><td>約 45 分</td><td><strong>第 2 章</strong>で解説</td></tr><tr><th scope="row">Core 3</th><td>Claude Platform and Model Foundations（Partner 限定）</td><td>約 60 分</td><td><strong>第 3 章</strong>で解説</td></tr><tr><th scope="row">Core 4</th><td>Choosing the Right Claude Model</td><td>約 10 分</td><td><strong>第 4 章</strong>で解説</td></tr><tr><th scope="row">Role (Building)</th><td>Claude Platform 101 / Claude Code 101 / Claude Code in Action / MCP / Agent Skills</td><td>約 5 時間</td><td>他資格（CCAR-F / CCDV-P 等）で学習するため対象外</td></tr><tr><th scope="row">Role (Delivering)</th><td>Delivery Methodology / Driving Enterprise Adoption of Claude</td><td>約 2 時間</td><td>本ノートの対象外（Core のみ）</td></tr></tbody></table></div>
+  P[Claude FDE ラーニングパス&lt;br&gt;全11コース] --&gt; C[Core 基礎 4コース&lt;br&gt;第1〜4章]
+  P --&gt; R1[Role: Building 5コース&lt;br&gt;CCAR-F / CCDV-P等で学習]
+  P --&gt; R2[Role: Delivering 2コース&lt;br&gt;第5〜6章]
+  C --&gt; C_LIST[1. AI Capabilities and Limitations&lt;br&gt;2. AI Fluency for Builders&lt;br&gt;3. Claude Platform and Model Foundations&lt;br&gt;4. Choosing the Right Claude Model]
+  R2 --&gt; D_LIST[5. Delivery Methodology&lt;br&gt;6. Driving Enterprise Adoption of Claude]</pre></div>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-readme-tbl-1"><table><thead><tr><th scope="col">区分</th><th scope="col">コース名</th><th scope="col">目安時間</th><th scope="col">本ノートでの扱い</th></tr></thead><tbody><tr><th scope="row">Core 1</th><td>AI Capabilities and Limitations</td><td>約 60 分</td><td><strong>第 1 章</strong>で解説</td></tr><tr><th scope="row">Core 2</th><td>AI Fluency for Builders</td><td>約 45 分</td><td><strong>第 2 章</strong>で解説</td></tr><tr><th scope="row">Core 3</th><td>Claude Platform and Model Foundations（Partner 限定）</td><td>約 60 分</td><td><strong>第 3 章</strong>で解説</td></tr><tr><th scope="row">Core 4</th><td>Choosing the Right Claude Model</td><td>約 10 分</td><td><strong>第 4 章</strong>で解説</td></tr><tr><th scope="row">Role (Building)</th><td>Claude Platform 101 / Claude Code 101 / Claude Code in Action / MCP / Agent Skills</td><td>約 5 時間</td><td>他資格（CCAR-F / CCDV-P 等）で学習するため対象外</td></tr><tr><th scope="row">Role (Delivering) 1</th><td>Delivery Methodology（Partner 限定）</td><td>約 40 分＋演習</td><td><strong>第 5 章</strong>で解説</td></tr><tr><th scope="row">Role (Delivering) 2</th><td>Driving Enterprise Adoption of Claude（Partner 限定）</td><td>約 60 分</td><td><strong>第 6 章</strong>で解説</td></tr></tbody></table></div>
 <h2>学び方</h2>
 <div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
   A[① 各章の要点と用語を確認する] --&gt; B[② 本編の仕組みと判断基準を読む]
@@ -461,7 +1001,7 @@
   D --&gt;|迷った箇所| B</pre></div>
 <ol><li>各章の冒頭にある「この章のゴール」「要点 3 つ」「用語」で全体像をつかみます。</li><li>本編では機能の暗記にとどめず「なぜその制約が起きるのか」「どの場面でどの選択をとるべきか」という判断基準を押さえます。</li><li>各章末の「確認問題」を解答を開く前に解き、不正解の選択肢がなぜ不適切なのかまで確認します。</li><li>最後に「用語集」と「直前チェック」で二択の判断軸を総復習します。</li></ol>
 <h2>収録ファイル一覧</h2>
-<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-readme-tbl-2"><table><thead><tr><th scope="col">章</th><th scope="col">ファイル</th><th scope="col">主なテーマ</th></tr></thead><tbody><tr><th scope="row">第 1 章</th><td><a href="#sec-ch1" class="internal-link" data-jump="sec-ch1">01-AIの能力と限界.md</a></td><td>次トークン予測、コンテキストウィンドウ、Hallucination、人間が担うべき判断領域</td></tr><tr><th scope="row">第 2 章</th><td><a href="#sec-ch2" class="internal-link" data-jump="sec-ch2">02-ビルダー向けAIフルーエンシーと4Dフレームワーク.md</a></td><td>AI Fluency の定義、4D Framework（Delegation / Description / Discernment / Diligence）</td></tr><tr><th scope="row">第 3 章</th><td><a href="#sec-ch3" class="internal-link" data-jump="sec-ch3">03-Claudeプラットフォームとモデル基盤.md</a></td><td>実行環境（Anthropic API / Amazon Bedrock / Google Cloud Vertex AI）、プロンプト前の設計判断、Context と Tool Use の基礎</td></tr><tr><th scope="row">第 4 章</th><td><a href="#sec-ch4" class="internal-link" data-jump="sec-ch4">04-適切なClaudeモデルの選定.md</a></td><td>モデルティア（Opus / Sonnet / Haiku 等）、Intelligence / Speed / Cost、Effort パラメータ、2 つの導入アプローチ</td></tr><tr><th scope="row">用語集</th><td><a href="#sec-glossary" class="internal-link" data-jump="sec-glossary">用語集.md</a></td><td>Core 4 コースの重要用語と混同しやすいポイント</td></tr><tr><th scope="row">直前チェック</th><td><a href="#sec-check" class="internal-link" data-jump="sec-check">直前チェック.md</a></td><td>二択判断表と総合確認問題</td></tr></tbody></table></div>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-readme-tbl-2"><table><thead><tr><th scope="col">章</th><th scope="col">ファイル</th><th scope="col">主なテーマ</th></tr></thead><tbody><tr><th scope="row">第 1 章</th><td><a href="#sec-ch1" class="internal-link" data-jump="sec-ch1">01-AIの能力と限界.md</a></td><td>次トークン予測、コンテキストウィンドウ、Hallucination、人間が担うべき判断領域</td></tr><tr><th scope="row">第 2 章</th><td><a href="#sec-ch2" class="internal-link" data-jump="sec-ch2">02-ビルダー向けAIフルーエンシーと4Dフレームワーク.md</a></td><td>AI Fluency の定義、4D Framework（Delegation / Description / Discernment / Diligence）</td></tr><tr><th scope="row">第 3 章</th><td><a href="#sec-ch3" class="internal-link" data-jump="sec-ch3">03-Claudeプラットフォームとモデル基盤.md</a></td><td>実行環境（Anthropic API / Amazon Bedrock / Google Cloud Vertex AI）、プロンプト前の設計判断、Context と Tool Use の基礎</td></tr><tr><th scope="row">第 4 章</th><td><a href="#sec-ch4" class="internal-link" data-jump="sec-ch4">04-適切なClaudeモデルの選定.md</a></td><td>モデルティア（Opus / Sonnet / Haiku 等）、Intelligence / Speed / Cost、Effort パラメータ、2 つの導入アプローチ</td></tr><tr><th scope="row">第 5 章</th><td><a href="#sec-ch5" class="internal-link" data-jump="sec-ch5">05-デリバリーメソドロジー.md</a></td><td>Use-Case Qualification、Baseline / Success Metrics、First Slice、Delivery Plan Pack</td></tr><tr><th scope="row">第 6 章</th><td><a href="#sec-ch6" class="internal-link" data-jump="sec-ch6">06-エンタープライズ導入の推進.md</a></td><td>30-Day Fade 対策、Champion Network、職種別 Enablement、ガバナンスと他部門横展開</td></tr><tr><th scope="row">用語集</th><td><a href="#sec-glossary" class="internal-link" data-jump="sec-glossary">用語集.md</a></td><td>全 6 章の重要用語と混同しやすいポイント</td></tr><tr><th scope="row">直前チェック</th><td><a href="#sec-check" class="internal-link" data-jump="sec-check">直前チェック.md</a></td><td>二択判断表と総合確認問題</td></tr></tbody></table></div>
           </div>
           <div class="chapter-pager">
             <span></span>
@@ -503,15 +1043,15 @@
 <div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
 <h3>問 1</h3>
 <p>ある顧客が過去の商談議事録（テキスト）から「決定事項」「課題」「次のアクション」を抽出し、同時に契約金額の複雑な日割り計算と請求書発行の最終承認までをすべて LLM 単体の 1 回の呼び出しで自動化したいと相談してきました。FDE として最も適切な提案はどれですか。</p>
-<p>A. 最新の大規模モデルを使えば計算も承認も 1 回で完結できると提案する B. 議事録からの項目抽出・要約は LLM に任せ、日割り計算は決定論的なコード、請求書発行の最終承認は人間が担う役割分担を提案する C. プロンプトに「計算を絶対に間違えないでください」と追記して全工程を自動化する D. 議事録を学習データとして毎回ファインチューニングしてから計算させる</p>
+<p>A. 最新の大規模モデルを使えば計算も承認も 1 回で完結できると提案する<br> B. 議事録からの項目抽出・要約は LLM に任せ、日割り計算は決定論的なコード、請求書発行の最終承認は人間が担う役割分担を提案する<br> C. プロンプトに「計算を絶対に間違えないでください」と追記して全工程を自動化する<br> D. 議事録を学習データとして毎回ファインチューニングしてから計算させる</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。非構造化テキストからの情報抽出・要約は LLM が得意とする領域ですが、厳密な数値計算は決定論的コード、不可逆で責任を伴う請求承認は人間が担うべきです。</p></div></details>
 <h3>問 2</h3>
 <p>社内規定に関する Q&amp;A ボットを開発中、モデルが実際には存在しない社内制度の名前を挙げて非常に流暢に回答してしまいました。この現象の主な原因と最初の対処として最も適切なものはどれですか。</p>
-<p>A. モデルが意図的に嘘をついているため、温度設定ではなくモデルの倫理ガイドラインを書き換える B. 社内固有の情報がモデルの Parametric Memory にないまま回答生成（Hallucination）しているため、検索等で公式ドキュメントをコンテキストに与え、根拠がない場合は「分からない」と答えるよう指示する C. モデルのコンテキストウィンドウが不足しているため、質問文を 1 単語に短縮する D. 出力トークン上限を増やして、モデルが正しい答えにたどり着くまで長く書かせる</p>
+<p>A. モデルが意図的に嘘をついているため、温度設定ではなくモデルの倫理ガイドラインを書き換える<br> B. 社内固有の情報がモデルの Parametric Memory にないまま回答生成（Hallucination）しているため、検索等で公式ドキュメントをコンテキストに与え、根拠がない場合は「分からない」と答えるよう指示する<br> C. モデルのコンテキストウィンドウが不足しているため、質問文を 1 単語に短縮する<br> D. 出力トークン上限を増やして、モデルが正しい答えにたどり着くまで長く書かせる</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。LLM は次トークン予測によってもっともらしい文を生成するため、根拠となる知識が与えられないと Hallucination が起きやすくなります。根拠資料をコンテキストへ渡し、不明時は回答を控える設計が有効です。</p></div></details>
 <h3>問 3</h3>
 <p>長時間のチャット支援ツールで、会話が 30 往復を超えたあたりから、最初に指定していた「出力は必ず箇条書き 3 点以内」という制約をモデルが無視するようになりました。最も可能性が高い原因はどれですか。</p>
-<p>A. モデルがユーザーに飽きて指示を拒否している B. 蓄積された会話履歴によってコンテキストが膨らみ、初期指示への注意が薄れる Contextual Drift が起きている C. Next-Token Prediction は 30 往復を超えると必ず停止する仕様になっている D. モデルの重みが会話中に書き換わってしまった</p>
+<p>A. モデルがユーザーに飽きて指示を拒否している<br> B. 蓄積された会話履歴によってコンテキストが膨らみ、初期指示への注意が薄れる Contextual Drift が起きている<br> C. Next-Token Prediction は 30 往復を超えると必ず停止する仕様になっている<br> D. モデルの重みが会話中に書き換わってしまった</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。コンテキストウィンドウに長大な履歴が溜まると、初期の制約が相対的に埋もれて出力品質が落ちる Contextual Drift が発生します。履歴の整理や制約の再配置が必要です。</p></div></details>
           </div>
           <div class="chapter-pager">
@@ -558,15 +1098,15 @@
 <div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
 <h3>問 1</h3>
 <p>あるエンジニアが Claude を使って新機能の実装を進める際、「機能の要件（Product）」と「使ってほしいライブラリや禁止事項（Process）」に加えて、「いきなりコードを書かず、まず設計上の懸念点を 3 つ指摘してから提案してください」と伝えました。4D Framework のうち、この工夫に最も直接当てはまる要素はどれですか。</p>
-<p>A. Delegation B. Description（特に Performance Description） C. Discernment D. Diligence</p>
+<p>A. Delegation<br> B. Description（特に Performance Description）<br> C. Discernment<br> D. Diligence</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。協働中に AI がどのような姿勢・振る舞いで応答するかを指定するのは、Description のうちの Performance Description に該当します。</p></div></details>
 <h3>問 2</h3>
 <p>Claude が生成した認証機能のコードが、ローカルの簡易テストでは問題なく動作しました。しかし開発者はコードの中身を確認せず、「AI が書いた最新ベストプラクティスだから大丈夫」と考えて本番へデプロイしようとしています。4D Framework に照らして最も欠けている要素の組み合わせはどれですか。</p>
-<p>A. Delegation と Description B. Description と Performance C. Discernment と Diligence D. Product と Process</p>
+<p>A. Delegation と Description<br> B. Description と Performance<br> C. Discernment と Diligence<br> D. Product と Process</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>C</strong>。生成されたコードの妥当性や脆弱性を批判的に見極める力（Discernment）と、セキュリティや本番出荷に対する最終責任を果たす姿勢（Diligence）の両方が欠けています。</p></div></details>
 <h3>問 3</h3>
 <p>4D Framework における Delegation の原則として、最も適切な考え方はどれですか。</p>
-<p>A. 複雑な判断ほど人間より AI の方が客観的なので、セキュリティ承認も AI に委任する B. 下書き作成やテストコード生成などの実装作業は委任しやすいが、要件の優先順位や最終承認などの判断は人間が保持する C. AI とのやり取りを最小限にするため、プロジェクト全体を 1 つのプロンプトで委任する D. AI が誤るリスクを避けるため、定型的なコード変換も含めてすべて人間が手書きする</p>
+<p>A. 複雑な判断ほど人間より AI の方が客観的なので、セキュリティ承認も AI に委任する<br> B. 下書き作成やテストコード生成などの実装作業は委任しやすいが、要件の優先順位や最終承認などの判断は人間が保持する<br> C. AI とのやり取りを最小限にするため、プロジェクト全体を 1 つのプロンプトで委任する<br> D. AI が誤るリスクを避けるため、定型的なコード変換も含めてすべて人間が手書きする</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。実装の下書きや定型作業は有効に委任できますが、最終判断と責任は人間（ビルダー）が握り続けることが Delegation の基本原則です。</p></div></details>
           </div>
           <div class="chapter-pager">
@@ -607,15 +1147,15 @@
 <div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
 <h3>問 1</h3>
 <p>ある金融機関の顧客が既存の AWS セキュリティ統制（IAM による権限管理、VPC 閉域ネットワーク、AWS 請求への統合）を満たした上で Claude を業務アプリに組み込みたいと考えています。プロンプト作成に入る前にまず検討すべき実行基盤として最も適切なものはどれですか。</p>
-<p>A. 個人のクレジットカードで作成した Anthropic Console アカウントを全員で共有する B. Amazon Bedrock 上で Claude を利用する構成を検討・選定する C. ローカル PC にモデルの重みをダウンロードして社内 LAN で動かす D. ブラウザ拡張機能を使って手作業でコピー＆ペーストする運用にする</p>
+<p>A. 個人のクレジットカードで作成した Anthropic Console アカウントを全員で共有する<br> B. Amazon Bedrock 上で Claude を利用する構成を検討・選定する<br> C. ローカル PC にモデルの重みをダウンロードして社内 LAN で動かす<br> D. ブラウザ拡張機能を使って手作業でコピー＆ペーストする運用にする</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。顧客が AWS のセキュリティ統制・閉域接続・請求統合を要件としている場合、Amazon Bedrock を選択するのが実務上の定石です。</p></div></details>
 <h3>問 2</h3>
 <p>Claude Messages API を利用した社内システムで、ターン数が増えるにつれて 1 リクエストあたりの入力トークン課金と応答までの待ち時間が比例して増加していることが分かりました。プラットフォームの仕様に基づく原因として最も適切なものはどれですか。</p>
-<p>A. API がユーザーごとに課金単価を自動で値上げしているため B. API がステートレスであり、会話の継続のために毎回システム指示と蓄積された会話履歴をすべて入力として再送信しているため C. 出力トークンが自動的に 10 倍に水増しされるため D. 2 回目以降の呼び出しでは必ず全ツールが自動実行されるため</p>
+<p>A. API がユーザーごとに課金単価を自動で値上げしているため<br> B. API がステートレスであり、会話の継続のために毎回システム指示と蓄積された会話履歴をすべて入力として再送信しているため<br> C. 出力トークンが自動的に 10 倍に水増しされるため<br> D. 2 回目以降の呼び出しでは必ず全ツールが自動実行されるため</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。Messages API はステートレスであるため、会話文脈を維持するには過去の履歴を含めて毎回送信する必要があります。履歴が膨らむと入力トークンとレイテンシが増えるため、履歴管理やキャッシュの設計が重要になります。</p></div></details>
 <h3>問 3</h3>
 <p>社内の問い合わせ対応エージェントで、顧客の注文データベースを参照して回答を返す必要があります。プラットフォームの能力を最も適切に活用した設計はどれですか。</p>
-<p>A. 100 万件の注文データベースを毎回システムプロンプトに全件貼り付ける B. Tool Use を設計し、モデルが必要に応じて注文 ID 等を引数に検索ツールを呼び出し、返却された結果をもとに回答を組み立てるようにする C. モデルが注文番号から内容を推測して回答するようプロンプトで指示する D. データベースの内容を画像化して Vision で毎回全件読み込ませる</p>
+<p>A. 100 万件の注文データベースを毎回システムプロンプトに全件貼り付ける<br> B. Tool Use を設計し、モデルが必要に応じて注文 ID 等を引数に検索ツールを呼び出し、返却された結果をもとに回答を組み立てるようにする<br> C. モデルが注文番号から内容を推測して回答するようプロンプトで指示する<br> D. データベースの内容を画像化して Vision で毎回全件読み込ませる</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。動的な外部データや大規模データベースとの連携には Tool Use を用い、必要なレコードだけを検索・取得してコンテキストに渡すのが適切です。</p></div></details>
           </div>
           <div class="chapter-pager">
@@ -659,19 +1199,121 @@
 <div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
 <h3>問 1</h3>
 <p>ある EC サイトで、毎日 50 万件届くユーザーレビューから「商品カテゴリ」「感情（ポジティブ／ネガティブ）」「配送トラブルの有無」の 3 項目を抽出し、0.5 秒以内の応答と最小限の API コストで処理したいと考えています。最初に選ぶべきモデルティアとして最も適切なものはどれですか。</p>
-<p>A. Claude Opus B. Claude Haiku C. 推論の深さを最大にした最上位モデル D. 毎回 3 つのモデルを並列実行して多数決をとる構成</p>
+<p>A. Claude Opus<br> B. Claude Haiku<br> C. 推論の深さを最大にした最上位モデル<br> D. 毎回 3 つのモデルを並列実行して多数決をとる構成</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。大量・高頻度かつ定型的な分類・情報抽出と低レイテンシが求められるタスクには、最も高速でコスト効率の高い Claude Haiku が適しています。</p></div></details>
 <h3>問 2</h3>
 <p>FDE として顧客の新規パイロットを担当することになりました。対象業務は「過去の設計書と障害報告書を横断して原因仮説を立てる」という高難度な作業で、そもそも LLM で実用レベルに達するかが未知数です。初期フェーズで採るべきアプローチとして最も適切なものはどれですか。</p>
-<p>A. Capability-First Approach を採り、まず高性能なモデルで課題が解けるベースラインを証明してから、段階的にコストや速度を最適化する B. Efficiency-First Approach を採り、最も安価なモデルで動かない場合はプロジェクトを即座に中止する C. モデル選定を行わず、プロンプトの長さだけを 10 倍に増やす D. コストをゼロにするため、モデル呼び出しをすべて乱数生成に置き換える</p>
+<p>A. Capability-First Approach を採り、まず高性能なモデルで課題が解けるベースラインを証明してから、段階的にコストや速度を最適化する<br> B. Efficiency-First Approach を採り、最も安価なモデルで動かない場合はプロジェクトを即座に中止する<br> C. モデル選定を行わず、プロンプトの長さだけを 10 倍に増やす<br> D. コストをゼロにするため、モデル呼び出しをすべて乱数生成に置き換える</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>A</strong>。難易度が高く成立性の検証が最優先となるパイロットでは、Capability-First Approach でまず実用品質のベースラインを示し、その後に下位モデルへの置き換えや最適化を行うのが有効です。</p></div></details>
 <h3>問 3</h3>
 <p>社内開発支援ツールで Claude Sonnet を主力として使っていますが、一部の複雑なリファクタリング依頼だけ思考が浅く見落としが出ることが分かりました。コストの急増を抑えつつ改善を図るアプローチとして適切なものはどれですか。</p>
-<p>A. 全社すべての単純な質問も含めて無条件に Opus へ切り替える B. Effort パラメータの調整や、複雑なタスクのみ上位モデルへ振り分けるルーティングを検討する C. 会話履歴を毎ターン削除せずに 100 万トークンまで溜め続ける D. 出力形式を JSON から自由記述の詩に変更する</p>
+<p>A. 全社すべての単純な質問も含めて無条件に Opus へ切り替える<br> B. Effort パラメータの調整や、複雑なタスクのみ上位モデルへ振り分けるルーティングを検討する<br> C. 会話履歴を毎ターン削除せずに 100 万トークンまで溜め続ける<br> D. 出力形式を JSON から自由記述の詩に変更する</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。全量を上位モデルへ切り替える前に、同一モデルでの Effort 設定の見直しや、タスクの難易度に応じたモデルルーティングを行うことで、品質とコストのバランスを最適化できます。</p></div></details>
           </div>
           <div class="chapter-pager">
             <button type="button" class="btn nav-step" data-jump="sec-ch3">← 第3章 プラットフォーム基盤</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch5">第5章 デリバリーメソドロジー →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch5" role="tabpanel" aria-labelledby="tab-sec-ch5" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第 5 章 デリバリーメソドロジー（Delivery Methodology）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：大きな建物を建てる前の「測量とモデルルーム建築」</strong></p><p>顧客から「全社業務を AI で自動化したい」と相談されたとき、いきなり全社システムの設計図を引き始めると予算も時間も破綻します。まずは現在の作業時間やエラー率を測量し（Baseline Establishment）、最初に価値を示せる 1 部屋（First Slice）に絞ってモデルルーム（Pilot）を建て、合意した合格基準で評価する手順がデリバリーメソドロジーです。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>Use-Case Qualification により、LLM・エージェント適用に適した顧客課題を厳選できる。</li><li>コードやプロンプトを書く前に Baseline Metrics と定量的な Success Metrics を定義できる。</li><li>全社一括ではなく First Slice に絞った Pilot Design を行える。</li><li>Delivery Plan Pack を構成する成果物（ユースケース評価・パイロット設計・ROI Scorecard・リスク管理）を説明できる。</li></ul>
+<h2>要点 3 つ</h2>
+<ol><li><strong>コードを書く前に Baseline と Success Metrics を合意する。</strong> 導入前の所要時間・精度・エラー率を数値で押さえ、何をもってパイロット成功とみなすかを事前に握っておくことで、後からの評価ブレを防ぐ。</li><li><strong>「First Slice」に絞って素早く価値を証明する。</strong> 最初から全社横断の巨大システムを狙わず、インパクトが大きく複雑さが制御できる業務の切り口を選んでパイロットを回す。</li><li><strong>Delivery Plan Pack で関係者間の期待値とリスクを構造化する。</strong> ユースケース適格性、パイロット境界、ROI Scorecard、マイルストーン・依存関係・リスク対策を一式で文書化し、本番移行の判断材料を揃える。</li></ol>
+<h2>30 秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  Q[1. Use-Case Qualification: 課題の適格性評価] --&gt; B[2. Baseline &amp; Success Metrics: 現状値と合格基準の合意]
+  B --&gt; S[3. First Slice &amp; Pilot Design: 最小スコープの設計]
+  S --&gt; P[4. Delivery Plan Pack: ROI Scorecard とリスク計画の確定]
+  P --&gt; I[5. 反復実装と評価]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch5-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">Use-Case Qualification</th><td>顧客の業務課題が技術的・ビジネス的に LLM / エージェント適用に適しているかを見極める工程</td></tr><tr><th scope="row">Baseline Metrics</th><td>AI 導入前の現状値（処理時間、人件費、誤答率、エスカレーション率など）の定量記録</td></tr><tr><th scope="row">Success Metrics</th><td>パイロットの成否を判定するために事前合意する具体的な目標指標</td></tr><tr><th scope="row">First Slice</th><td>全体構想のうち、短期間で価値を実証しやすくリスクを制御できる最初の実装範囲</td></tr><tr><th scope="row">Delivery Plan Pack</th><td>ユースケース適格性、パイロット設計、ROI Scorecard、マイルストーン、リスク対策をまとめた標準計画資料</td></tr><tr><th scope="row">ROI Scorecard</th><td>投資コスト（開発・API 費用）と期待効果（時間削減・品質向上）を定量比較する評価表</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>5-1 Use-Case Qualification：案件の適格性を見極める</h3>
+<p>顧客の要望をすべてそのまま引き受けるのではなく、FDE は最初に「成功確率が高く、投資対効果が見合うか」を査定します。</p>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch5-tbl-2"><table><thead><tr><th scope="col">評価軸</th><th scope="col">適している課題</th><th scope="col">注意・見直しが必要な課題</th></tr></thead><tbody><tr><th scope="row">ビジネス価値</th><td>反復頻度が高く、1 件あたりの処理時間や人手コストが大きい</td><td>年数回しか発生せず、自動化しても効果が見合わない</td></tr><tr><th scope="row">技術的適合性</th><td>非構造化データの読解、要約、分類、コード生成、知識検索が中心</td><td>100% 決定論的な厳密計算や、リアルタイム超低遅延制御のみが目的</td></tr><tr><th scope="row">データと検証</th><td>参照すべき正解データや評価基準が社内に存在し、人手で検証できる</td><td>正解の定義が曖昧で、誰も出力の良し悪しを判定できない</td></tr><tr><th scope="row">顧客の関与</th><td>現場の業務オーナーと意思決定者がパイロットに参加できる</td><td>現場不在で IT 部門だけが「何か作ってほしい」と依頼している</td></tr></tbody></table></div>
+<h3>5-2 Baseline Establishment と Success Metrics</h3>
+<p>パイロット終了後に「なんとなく便利になった気がするが投資対効果が分からない」という状態（Pilot Fatigue）を防ぐため、実装前に必ず数値の物差しを置きます。</p>
+<ol><li>現状の計測（Baseline）では、AI 導入前に人間が同じ作業を行った場合の平均所要時間、手戻り率、処理件数、既存ツールの精度を記録します。</li><li>成功基準の合意（Success Metrics）では、「応答精度 90% 以上」「1 件あたり調査時間を 30 分から 5 分へ短縮」のように、ビジネス側と技術側の双方が納得できる合格ラインを明文化します。</li><li>評価データの準備として、実際の業務に近いテストケースをあらかじめ確保し、主観的な感想ではなく定量評価で改善を回します。</li></ol>
+<h3>5-3 First Slice による Pilot Design</h3>
+<p>企業の大規模ワークフローを最初からすべて置き換えようとすると、権限調整や例外処理で頓挫しやすくなります。</p>
+<ul><li><strong>境界を明確にする</strong>: 対象部署、入力データの種類、連携するシステムを最小限に絞ります。</li><li><strong>Human-in-the-Loop を前提に組む</strong>: 初期パイロットでは完全自律実行にこだわらず、人が最終確認する半自動化から始めて安全に実績を作ります。</li><li><strong>段階的拡張を設計する</strong>: First Slice が目標を達成したあとに、次のスライスへどう広げるかの道筋を描いておきます。</li></ul>
+<h3>5-4 Delivery Plan Pack の構成</h3>
+<p>Anthropic のデリバリー手法では、顧客と合意形成するための標準成果物として Delivery Plan Pack を整備します。</p>
+<ul><li><strong>Use-Case Qualification Summary</strong>: 選定理由、対象業務、期待されるビジネスインパクト。</li><li><strong>Pilot Architecture &amp; Scope</strong>: 実行環境、連携システム、First Slice の範囲、対象外（Out of Scope）の明記。</li><li><strong>ROI Scorecard</strong>: 現状の Baseline、開発・運用コスト、目標削減効果の試算。</li><li><strong>Milestones, Dependencies &amp; Risk Mitigation</strong>: 週次マイルストーン、顧客側の前提作業（データ提供・権限付与）、想定リスクと回避策。</li></ul>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch5-tbl-3"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">顧客が「全 10 部署の業務を一度に AI 化したい」と要望した</th><td>全社一括の巨大プロジェクトとして見積もり・実装を始める</td><td>最も効果が高く検証しやすい First Slice（1 部署・1 業務）に絞ってパイロットを設計する</td></tr><tr><th scope="row">開発を始める前に顧客が指標設定を後回しにしようとしている</th><td>まず動くものを作り、評価基準は最後に考える</td><td>実装前に Baseline Metrics と Success Metrics を文書で合意する</td></tr><tr><th scope="row">顧客が「精度が良ければ導入する」と曖昧に述べている</th><td>開発側の感覚で「良さそう」と判断して開発を進める</td><td>Delivery Plan Pack に具体的な合格数値と評価手順を落とし込む</td></tr><tr><th scope="row">パイロットで外部 API 連携の承認に 2 か月かかることが分かった</th><td>承認待ちでプロジェクト全体を停止させる</td><td>モックデータや読み取り専用の範囲で First Slice を先行させ、依存関係をリスク管理表で追う</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問 1</h3>
+<p>ある顧客がカスタマーサポート部門への Claude 導入を希望しています。現場の担当者は「まずは動かしてみて、使えそうなら本番展開を決めたい」と話しており、現在の平均対応時間や目標精度は未定のままです。Delivery Methodology に基づき、FDE が最初にとるべき行動として最も適切なものはどれですか。</p>
+<p>A. すぐに最新のプロンプトを書き始め、1 週間後にデモを見せる<br> B. 実装に入る前に、現状の平均対応時間や正答率などの Baseline Metrics を計測し、パイロットの合格ラインとなる Success Metrics を顧客と合意する<br> C. サポート部門の全システムへの書き込み権限を初日に要求する<br> D. 目標値は決めず、最も安価なモデルで無制限に試行錯誤する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。コードやプロンプトを書く前に Baseline Metrics と定量的な Success Metrics を合意しておくことで、パイロット終了後の客観的な ROI 判断が可能になります。</p></div></details>
+<h3>問 2</h3>
+<p>顧客の経理部門から「請求書受領から仕訳入力、承認、支払実行、監査レポート作成までを最初から全自動で完結させたい」という相談を受けました。Delivery Methodology の観点から最も適切な提案はどれですか。</p>
+<p>A. 全工程を一度に構築する大規模開発計画を提示する<br> B. 価値が高く検証しやすい工程（例：請求書からの情報抽出と仕訳案の提示）を First Slice として切り出し、人間の確認を挟むパイロットから始める<br> C. 経理ルールが複雑なため AI 適用は不可能であると断る<br> D. 支払実行だけ先に自動化し、情報抽出は手作業のまま残す</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。全体を一気に作り込むのではなく、効果と実現性のバランスが良い First Slice にスコープを絞り、HITL を含めた安全なパイロットで価値を証明するのが定石です。</p></div></details>
+<h3>問 3</h3>
+<p>Delivery Plan Pack に含める要素として、役割が適切に組み合わされているものはどれですか。</p>
+<p>A. モデルの学習重みパラメータ一覧と社内人事評価表<br> B. Use-Case Qualification、Pilot Scope（対象・対象外）、Baseline と Success Metrics を含む ROI Scorecard、マイルストーンとリスク対策<br> C. 開発者の個人メモと未検証のプロンプト履歴のみ<br> D. 競合他社の価格表とマーケティング用パンフレット</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。Delivery Plan Pack は、ユースケース適格性、パイロット境界、ROI Scorecard、マイルストーン・依存関係・リスク軽減策を構造化して関係者と合意するための計画資料です。</p></div></details>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch4">← 第4章 モデル選定</button>
+            <button type="button" class="btn btn-primary nav-step" data-jump="sec-ch6">第6章 エンタープライズ導入 →</button>
+          </div>
+        </div>
+      </section>
+      <section class="chapter-panel" id="sec-ch6" role="tabpanel" aria-labelledby="tab-sec-ch6" hidden="until-found">
+        <div class="panel-card">
+          <div class="md-body">
+<h1>第 6 章 エンタープライズ導入の推進（Driving Enterprise Adoption of Claude）</h1>
+<div class="alert alert-tip"><div class="alert-title">💡 ヒント</div><p><strong>この章のたとえ：ジムの「法人会員権配布」で終わらせず「通い続ける仕組み」を作ること</strong></p><p>企業に Claude のライセンスや API を配ることは、社員全員にジムの会員証を配るようなものです。最初の 2〜3 週間は物珍しさで賑わいますが、使い方が分からないまま 1 か月経つと通わなくなります（30-Day Fade）。部門ごとの Champion を育て、日常業務の動線に組み込み、成果を横展開して初めて組織の習慣になります。</p></div>
+<h2>この章のゴール</h2>
+<ul><li>パイロット成功後に起きやすい「ライセンス配布止まり」と <strong>30-Day Fade</strong> の構造的原因を説明できる。</li><li><strong>Champion Network</strong>、職種別トレーニング、専用サポートチャネルを用いた組織定着の仕組みを設計できる。</li><li>日常業務への組み込み（Projects / Skills / 定例ワークフロー化）と、AI 利用ガバナンスの両立を説明できる。</li><li>初期部門から他部門（Engineering / Legal / Finance / Customer Support 等）へワークロードを段階展開する計画を立てられる。</li></ul>
+<h2>要点 3 つ</h2>
+<ol><li><strong>アクセス権の配布と「定着（Adoption）」は別物である。</strong> 導入直後の関心が 3〜4 週間で薄れる 30-Day Fade を防ぐには、ツール提供後のチェンジマネジメントが不可欠になる。</li><li><strong>社内 Champion Network と職種別 Enablement が拡大のエンジンになる。</strong> IT 部門からの一方的な通達ではなく、各部門の実務者が相談できる Champion と専用の質問チャネル、役割ごとの実践演習を整える。</li><li><strong>日常の業務動線に組み込み、成果が出たワークロードを横展開する。</strong> 単発のチャット利用にとどめず、共有 Projects や標準化されたワークフローに落とし込み、他部門へ順序立てて展開する。</li></ol>
+<h2>30 秒で全体像</h2>
+<div class="mermaid-wrap" tabindex="0" role="region" aria-label="図解"><pre class="mermaid">flowchart TD
+  P[パイロット成功と全社ライセンス展開] --&gt; F{30-Day Fade の壁}
+  F --&gt;|放置: 配布のみ| D[一部ユーザーのみ利用・他は旧業務へ逆戻り]
+  F --&gt;|チェンジマネジメント実施| C[Champion Network 構築と職種別トレーニング]
+  C --&gt; W[日常業務への組み込み: 共有 Projects / Skills / 定例動線]
+  W --&gt; E[他部門へのワークロード横展開とガバナンス定着]</pre></div>
+<h2>用語</h2>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-ch6-tbl-1"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th></tr></thead><tbody><tr><th scope="row">30-Day Fade</th><td>AI ツール導入直後 2〜3 週間は利用が伸びるものの、1 か月前後で多くの社員が元の業務手順へ戻ってしまう現象</td></tr><tr><th scope="row">Champion Network</th><td>各部門の先進ユーザーを旗振り役として任命し、身近な相談・事例共有を担わせる社内ネットワーク</td></tr><tr><th scope="row">Role-Based Training</th><td>全社一律の一般論ではなく、法務・財務・営業・開発など職種ごとの実業務に即したトレーニング設計</td></tr><tr><th scope="row">AI Governance &amp; Policy</th><td>セキュリティ、機密情報の取扱い、禁止事項、人間による最終確認ルールを定めた組織運用規程</td></tr><tr><th scope="row">Workload Expansion</th><td>パイロットで成果が出た業務パターンを、隣接チームや他部門の高価値ワークロードへ順次広げる展開戦略</td></tr></tbody></table></div>
+<h2>本編</h2>
+<h3>6-1 なぜ「30-Day Fade」が起きるのか</h3>
+<p>多くの企業導入で、技術的なパイロットやライセンス配布は順調に進んだにもかかわらず、数週間後にアクティブ率が急落します。主な原因は次の 3 点です。</p>
+<ul><li>日常業務との接続不足により、「何に使えばよいか」が抽象的なままで、自分の毎日のタスクにどう当てはめるかが分からない。</li><li>最初の失敗体験として、曖昧なプロンプトで期待外れの結果が出たとき、相談できる相手がおらずそのまま使わなくなる。</li><li>組織的な後押しとルールの欠如により、「使ってよいデータか分からない」「上司や評価制度が AI 活用を推奨していない」という心理的ブレーキが残っている。</li></ul>
+<h3>6-2 チェンジマネジメントの 4 本柱</h3>
+<p>30-Day Fade を乗り越え、組織全体の習慣に変えるために、以下の 4 つを並行して整備します。</p>
+<div tabindex="0" role="region" aria-label="表 2" class="table-wrapper" id="sec-ch6-tbl-2"><table><thead><tr><th scope="col">柱</th><th scope="col">具体的な施策</th><th scope="col">ねらい</th></tr></thead><tbody><tr><th scope="row"><strong>1. Champion Network</strong></th><td>各部門から意欲的な実務者を選出し、Slack / Teams の専用チャネルで質問対応や成功事例の共有を担う</td><td>IT 部門任せにせず、現場の言葉で素早く疑問を解消できる体制を作る</td></tr><tr><th scope="row"><strong>2. 職種別 Enablement</strong></th><td>エンジニア、法務、財務、CS など職種ごとに「明日から使える実例プロンプトとワークフロー」をハンズオンで学ぶ</td><td>一般的な操作説明ではなく、自分の業務時間に直結する成功体験を提供する</td></tr><tr><th scope="row"><strong>3. ガバナンスと安心感</strong></th><td>入力してよいデータ区分、禁止事項、レビュー責任のルールを明確にし、迷わず使える基準を示す</td><td>コンプライアンス不安による利用萎縮と、無秩序なシャドー AI 利用の両方を防ぐ</td></tr><tr><th scope="row"><strong>4. 業務リズムへの組み込み</strong></th><td>定例の会議準備、週次レポート、共有 Projects、再利用可能な Skills としてチームの標準手順に組み込む</td><td>「余裕があるときに使う道具」から「いつもの業務手順の一部」へ変える</td></tr></tbody></table></div>
+<h3>6-3 他部門へのワークロード横展開（Expansion）</h3>
+<p>最初のパイロット部門で定着が進んだら、成果データをもとに次の展開先を選定・順序付けします。</p>
+<ol><li><strong>定量成果の可視化</strong>: 削減時間、対応件数、品質改善を社内事例として経営層と現場双方へ共有する。</li><li><strong>次期ワークロードの優先順位付け</strong>: 「データ整備度」「業務頻度」「部門の推進意欲」を基準に、エンジニアリング、法務、財務、カスタマーサポートなどから次の展開先を選ぶ。</li><li><strong>テンプレートの再利用</strong>: 先行部門で磨き込んだワークフローやガバナンス基準を横展開し、立ち上げコストを下げる。</li></ol>
+<h2>まとめ：どう判断するか</h2>
+<div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-ch6-tbl-3"><table><thead><tr><th scope="col">状況</th><th scope="col">避ける選択</th><th scope="col">とるべき選択</th></tr></thead><tbody><tr><th scope="row">全社に Claude アカウントを配布したが、1 か月後に利用率が 15% まで落ちた</th><td>「社員の関心が低い」と判断し、追加の周知メールだけを送る</td><td>30-Day Fade と捉え、部門別 Champion の配置、質問チャネル設置、職種別ハンズオンを実施する</td></tr><tr><th scope="row">全社研修として「プロンプトの基礎」を全社員に同じ内容で 1 回実施する予定</th><td>職種を問わず同じ汎用デモだけを見せて終える</td><td>法務・営業・開発など職種別の実務シナリオを使った Role-Based Training に組み替える</td></tr><tr><th scope="row">現場社員が「顧客情報を入れてよいか分からず使えない」と足踏みしている</th><td>個人の判断に任せて放置する</td><td>AI 利用ポリシーとデータ取扱い区分を明文化し、安全に使える範囲を周知する</td></tr><tr><th scope="row">開発部門での導入が成功し、経営層から他部門展開を求められた</th><td>すべての他部門へ同じ開発者向けツールをそのまま渡す</td><td>各部門の業務課題と準備度に応じて優先順位を付け、業務に合った形で順次展開する</td></tr></tbody></table></div>
+<div class="qa-header"><h2>確認問題</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
+<h3>問 1</h3>
+<p>ある企業で全社員向けに Claude を導入し、最初の 2 週間は高い利用率を記録しました。しかし 4 週間後には、もともと新しい技術に関心が高かった一部社員しか使わなくなっていました。この現象と、立て直し策として最も適切なものはどれですか。</p>
+<p>A. 一時的なシステム障害が起きているため、モデルティアを最上位に変更する<br> B. 導入直後の利用が 1 か月前後で落ち込む 30-Day Fade が起きているため、部門ごとの Champion Network 構築や職種別トレーニング、専用サポートチャネルで日常業務への定着を支援する<br> C. 利用しない社員への罰則規定を設け、強制的にアクセス数を増やす<br> D. 導入に失敗したと判断して全アカウントを解約する</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。ツールを配布しただけでは 30-Day Fade が起きやすいため、現場に近い Champion の支援と職種に即した Enablement により、日常業務へ組み込むチェンジマネジメントが必要です。</p></div></details>
+<h3>問 2</h3>
+<p>法務部・財務部・カスタマーサポート部へ Claude の活用を広げる際、全社一律の一般的な使い方説明会ではなく Role-Based Training を行う最大の理由はどれですか。</p>
+<p>A. 部門ごとに使える文字数上限が異なるため<br> B. 各職種の日常業務に直結する具体的なユースケースで成功体験を作らないと、実務への定着が進まないため<br> C. 法務部には英語だけで説明する必要があるため<br> D. トレーニング回数を増やしてライセンス費用を上げるため</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。汎用的な機能紹介だけでは「自分の仕事でどう使うか」が結びつかず定着しません。職種別の実務シナリオで学ぶことで、即座に業務時間を削減できる実感が生まれます。</p></div></details>
+<h3>問 3</h3>
+<p>エンタープライズ導入を成功させるためのガバナンス設計として、最も適切な考え方はどれですか。</p>
+<p>A. リスクをゼロにするため、どの部門でも業務データの入力を全面禁止する<br> B. セキュリティ・機密データの取扱い基準と人間による確認ルールを明確に示し、社員が安心して業務利用できる境界を整える<br> C. ガバナンス規程を作ると利用が減るため、ルールは一切定めず完全に自由利用とする<br> D. すべての出力を法務部長 1 人が毎回承認する体制にする</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。全面禁止や無制限放任ではなく、「何を入力してよく、どこを人が確認するか」の明確な基準を設けることが、安全性と積極的な業務活用を両立する鍵になります。</p></div></details>
+          </div>
+          <div class="chapter-pager">
+            <button type="button" class="btn nav-step" data-jump="sec-ch5">← 第5章 デリバリーメソドロジー</button>
             <button type="button" class="btn btn-primary nav-step" data-jump="sec-glossary">用語集 →</button>
           </div>
         </div>
@@ -689,9 +1331,13 @@
 <div tabindex="0" role="region" aria-label="表 3" class="table-wrapper" id="sec-glossary-tbl-3"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th><th scope="col">混同・注意ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>Anthropic API（1st-party）</strong></th><td><span class="kw-mask">Anthropic が直接提供する API / Console 環境</span></td><td>最新機能やモデルの反映が最も早い</td></tr><tr><th scope="row"><strong>Amazon Bedrock</strong></th><td><span class="kw-mask">AWS 上で Claude を動かすマネージドサービス</span></td><td>AWS IAM・閉域網・請求統合が必須な企業で選ばれやすい</td></tr><tr><th scope="row"><strong>Google Cloud Vertex AI</strong></th><td><span class="kw-mask">GCP 上で Claude を動かすプラットフォーム</span></td><td>GCP 統制・BigQuery 連携・GCP 契約を重視する企業で選ばれやすい</td></tr><tr><th scope="row"><strong>Stateless API</strong></th><td><span class="kw-mask">各リクエストが独立し、サーバーが会話履歴を自動保持しない設計</span></td><td>毎回履歴を送るため、長会話ではトークンと遅延が増える前提で設計する</td></tr><tr><th scope="row"><strong>Tool Use</strong></th><td><span class="kw-mask">モデルが必要に応じて外部ツール呼び出しを構造化形式で要求する機能</span></td><td>社内 DB 参照や最新データ取得に必須。全データをプロンプトに貼る代わりに使う</td></tr><tr><th scope="row"><strong>Vision</strong></th><td><span class="kw-mask">画像や図表付き PDF などをコンテキストとして直接読み取る能力</span></td><td>OCR 前処理を簡素化できる場合があるが、トークン消費と精度確認は必要</td></tr></tbody></table></div>
 <h2>4. モデル選定</h2>
 <div tabindex="0" role="region" aria-label="表 4" class="table-wrapper" id="sec-glossary-tbl-4"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th><th scope="col">混同・注意ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>Claude Opus</strong></th><td><span class="kw-mask">最高難度の推論・長時間の自律コーディング向けフラッグシップ</span></td><td>全タスクに使うとコストと遅延が過大になるため、高難度タスクに絞る</td></tr><tr><th scope="row"><strong>Claude Sonnet</strong></th><td><span class="kw-mask">高い知能と高速な応答を両立するバランス型主力モデル</span></td><td>多くの企業アプリ・開発支援における標準の起点</td></tr><tr><th scope="row"><strong>Claude Haiku</strong></th><td><span class="kw-mask">最速・最安価な軽量モデル</span></td><td>大量分類・抽出・ルーティング向き。複雑な多段階推論には不向き</td></tr><tr><th scope="row"><strong>Effort Parameter</strong></th><td><span class="kw-mask">同一モデル内で推論に使う計算量（思考の深さ）を調整する設定</span></td><td>上位モデルへ即座に変える前に、Effort 調整で品質と速度の折り合いを探れる</td></tr><tr><th scope="row"><strong>Efficiency-First</strong></th><td><span class="kw-mask">軽量モデルから始め、不足分だけ上位モデルへ上げる進め方</span></td><td>大量処理や厳しいコスト・遅延制約が明確な案件に向く</td></tr><tr><th scope="row"><strong>Capability-First</strong></th><td><span class="kw-mask">高性能モデルでまず成立性を証明し、後から最適化する進め方</span></td><td>難易度が高く、まず価値実証（PoC）を成立させたい案件に向く</td></tr></tbody></table></div>
+<h2>5. デリバリーメソドロジー（Delivery Methodology）</h2>
+<div tabindex="0" role="region" aria-label="表 5" class="table-wrapper" id="sec-glossary-tbl-5"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th><th scope="col">混同・注意ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>Use-Case Qualification</strong></th><td><span class="kw-mask">顧客課題が LLM / エージェント適用に適しているかを見極める工程</span></td><td>全要望をそのまま受けず、価値・技術適合性・検証可能性で選別する</td></tr><tr><th scope="row"><strong>Baseline Metrics</strong></th><td><span class="kw-mask">AI 導入前の現状値（時間、コスト、エラー率等）の定量記録</span></td><td>導入後に効果を証明するため、実装前に必ず計測しておく</td></tr><tr><th scope="row"><strong>Success Metrics</strong></th><td><span class="kw-mask">パイロットの成否を判定するために事前合意する目標数値</span></td><td>曖昧な感想ではなく、数値の合格ラインを関係者と合意する</td></tr><tr><th scope="row"><strong>First Slice</strong></th><td><span class="kw-mask">全体構想のうち、短期間で価値実証しやすい最小の初期範囲</span></td><td>全社一括ではなく、効果と制御性のバランスが良い切り口から始める</td></tr><tr><th scope="row"><strong>Delivery Plan Pack</strong></th><td><span class="kw-mask">適格性評価、パイロット設計、ROI Scorecard、リスク計画をまとめた標準資料</span></td><td>期待値合わせと本番移行判断の根拠として作成する</td></tr><tr><th scope="row"><strong>ROI Scorecard</strong></th><td><span class="kw-mask">投資コストと期待効果を定量比較する評価表</span></td><td>開発・API 費用だけでなく、現状 Baseline との差分を示す</td></tr></tbody></table></div>
+<h2>6. エンタープライズ導入の推進（Driving Enterprise Adoption）</h2>
+<div tabindex="0" role="region" aria-label="表 6" class="table-wrapper" id="sec-glossary-tbl-6"><table><thead><tr><th scope="col">用語</th><th scope="col">意味</th><th scope="col">混同・注意ポイント</th></tr></thead><tbody><tr><th scope="row"><strong>30-Day Fade</strong></th><td><span class="kw-mask">導入直後 2〜3 週間の盛り上がりの後、1 か月前後で利用率が急落する現象</span></td><td>ツール配布だけでは防げず、導入後の定着支援が必要</td></tr><tr><th scope="row"><strong>Champion Network</strong></th><td><span class="kw-mask">各部門の推進役を配置し、現場の質問対応や事例共有を担わせる仕組み</span></td><td>IT 部門の一方的な案内より現場への浸透が早い</td></tr><tr><th scope="row"><strong>Role-Based Training</strong></th><td><span class="kw-mask">職種ごとの実業務シナリオに即したトレーニング設計</span></td><td>全社一律の一般デモより業務定着につながりやすい</td></tr><tr><th scope="row"><strong>Workload Expansion</strong></th><td><span class="kw-mask">パイロット成功後に、隣接チームや他部門へ適用範囲を広げる展開戦略</span></td><td>部門の準備度と価値の大きさで優先順位を決めて進める</td></tr></tbody></table></div>
           </div>
           <div class="chapter-pager">
-            <button type="button" class="btn nav-step" data-jump="sec-ch4">← 第4章 モデル選定</button>
+            <button type="button" class="btn nav-step" data-jump="sec-ch6">← 第6章 エンタープライズ導入</button>
             <button type="button" class="btn btn-primary nav-step" data-jump="sec-check">直前チェック →</button>
           </div>
         </div>
@@ -702,20 +1348,24 @@
 <h1>直前チェック（Claude FDE Core）</h1>
 <p>Core 4 コースの学びを「二択の判断軸」と「総合シナリオ問題」で最終確認します。今後資格試験化された際にもそのまま問われやすい判断ポイントを中心にまとめています。</p>
 <h2>4 コース横断：二択判断表</h2>
-<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-check-tbl-1"><table><thead><tr><th scope="col">場面</th><th scope="col">避けるべき判断</th><th scope="col">とるべき判断</th></tr></thead><tbody><tr><th scope="row"><strong>能力と限界</strong></th><td>厳密な計算や最終承認まで 1 回の LLM 呼び出しに丸投げする</td><td><span class="kw-mask">抽出・下書きは LLM、厳密計算はコード、最終承認は人間（HITL）に分担する</span></td></tr><tr><th scope="row"><strong>Hallucination 対策</strong></th><td>プロンプトで「絶対に嘘をつくな」と精神論を追記する</td><td><span class="kw-mask">根拠となる社内資料をコンテキストへ渡し、根拠がない場合は保留させる</span></td></tr><tr><th scope="row"><strong>長会話の指示漏れ</strong></th><td>同じ注意文を会話履歴の後ろに何度も重複して貼り直す</td><td><span class="kw-mask">不要な履歴を整理し、制約を明確な位置へ再配置するかセッションを分ける</span></td></tr><tr><th scope="row"><strong>4D: Delegation</strong></th><td>テスト生成もセキュリティ承認も区別なく AI に任せる</td><td><span class="kw-mask">実装の下書きは委任し、要件定義と最終判断は人間が保持する</span></td></tr><tr><th scope="row"><strong>4D: Description</strong></th><td>「いい感じの画面を作って」と目的だけを一言で投げる</td><td><span class="kw-mask">Product（何を作るか）・Process（どう進めるか）・Performance（どう振る舞うか）を明記する</span></td></tr><tr><th scope="row"><strong>4D: Discernment / Diligence</strong></th><td>動くコードを中身も読まずそのまま本番へ反映する</td><td><span class="kw-mask">仕様・脆弱性・ライセンス・説明責任を人間が検証してから出荷する</span></td></tr><tr><th scope="row"><strong>実行環境の選定</strong></th><td>顧客のクラウド統制を確認せず個人 API キーで組み始める</td><td><span class="kw-mask">AWS なら Bedrock、GCP なら Vertex AI、最新機能優先なら Anthropic API など要件で選ぶ</span></td></tr><tr><th scope="row"><strong>ステートレス前提</strong></th><td>API が前回のやり取りを記憶していると想定して設計する</td><td><span class="kw-mask">毎回必要な履歴・システム指示を組み立てて送る前提でコストと遅延を見積もる</span></td></tr><tr><th scope="row"><strong>モデル選定の起点</strong></th><td>すべてのタスクを無条件に最上位モデル（Opus）で動かす</td><td><span class="kw-mask">Sonnet を基準にし、大量・低遅延は Haiku、高難度推論は Opus と使い分ける</span></td></tr><tr><th scope="row"><strong>導入アプローチ</strong></th><td>失敗が許されない高難度 PoC を最安モデルだけで試して諦める</td><td><span class="kw-mask">成立性検証は Capability-First、大量・制約厳守タスクは Efficiency-First を採る</span></td></tr></tbody></table></div>
+<div tabindex="0" role="region" aria-label="表 1" class="table-wrapper" id="sec-check-tbl-1"><table><thead><tr><th scope="col">場面</th><th scope="col">避けるべき判断</th><th scope="col">とるべき判断</th></tr></thead><tbody><tr><th scope="row"><strong>能力と限界</strong></th><td>厳密な計算や最終承認まで 1 回の LLM 呼び出しに丸投げする</td><td><span class="kw-mask">抽出・下書きは LLM、厳密計算はコード、最終承認は人間（HITL）に分担する</span></td></tr><tr><th scope="row"><strong>Hallucination 対策</strong></th><td>プロンプトで「絶対に嘘をつくな」と精神論を追記する</td><td><span class="kw-mask">根拠となる社内資料をコンテキストへ渡し、根拠がない場合は保留させる</span></td></tr><tr><th scope="row"><strong>長会話の指示漏れ</strong></th><td>同じ注意文を会話履歴の後ろに何度も重複して貼り直す</td><td><span class="kw-mask">不要な履歴を整理し、制約を明確な位置へ再配置するかセッションを分ける</span></td></tr><tr><th scope="row"><strong>4D: Delegation</strong></th><td>テスト生成もセキュリティ承認も区別なく AI に任せる</td><td><span class="kw-mask">実装の下書きは委任し、要件定義と最終判断は人間が保持する</span></td></tr><tr><th scope="row"><strong>4D: Description</strong></th><td>「いい感じの画面を作って」と目的だけを一言で投げる</td><td><span class="kw-mask">Product（何を作るか）・Process（どう進めるか）・Performance（どう振る舞うか）を明記する</span></td></tr><tr><th scope="row"><strong>4D: Discernment / Diligence</strong></th><td>動くコードを中身も読まずそのまま本番へ反映する</td><td><span class="kw-mask">仕様・脆弱性・ライセンス・説明責任を人間が検証してから出荷する</span></td></tr><tr><th scope="row"><strong>実行環境の選定</strong></th><td>顧客のクラウド統制を確認せず個人 API キーで組み始める</td><td><span class="kw-mask">AWS なら Bedrock、GCP なら Vertex AI、最新機能優先なら Anthropic API など要件で選ぶ</span></td></tr><tr><th scope="row"><strong>ステートレス前提</strong></th><td>API が前回のやり取りを記憶していると想定して設計する</td><td><span class="kw-mask">毎回必要な履歴・システム指示を組み立てて送る前提でコストと遅延を見積もる</span></td></tr><tr><th scope="row"><strong>モデル選定の起点</strong></th><td>すべてのタスクを無条件に最上位モデル（Opus）で動かす</td><td><span class="kw-mask">Sonnet を基準にし、大量・低遅延は Haiku、高難度推論は Opus と使い分ける</span></td></tr><tr><th scope="row"><strong>導入アプローチ</strong></th><td>失敗が許されない高難度 PoC を最安モデルだけで試して諦める</td><td><span class="kw-mask">成立性検証は Capability-First、大量・制約厳守タスクは Efficiency-First を採る</span></td></tr><tr><th scope="row"><strong>パイロット計画</strong></th><td>全社一括の巨大開発で指標も決めずに着手する</td><td><span class="kw-mask">Baseline と Success Metrics を事前合意し、First Slice から始める</span></td></tr><tr><th scope="row"><strong>全社定着</strong></th><td>ライセンスだけ配布して 30-Day Fade を放置する</td><td><span class="kw-mask">Champion Network・職種別トレーニング・ガバナンスで日常業務に組み込む</span></td></tr></tbody></table></div>
 <div class="qa-header"><h2>総合確認問題（シナリオ形式）</h2><button type="button" class="btn btn-sm qa-toggle-all" aria-expanded="false">すべて開く</button></div>
 <h3>総合問 1（能力と限界 ＋ 4D Framework）</h3>
 <p>FDE として顧客企業の開発チームを支援しています。顧客のエンジニアが「Claude に既存システムの複雑な決済ロジックのリファクタリングを依頼し、生成されたコードの単体テストも AI に書かせてすべてパスしたので、コードレビューを省略して本番リリースしたい」と提案してきました。FDE として指摘すべき最も重要な懸念はどれですか。</p>
-<p>A. AI が書いたコードは単体テストが通るなら論理的に 100% 正しいため、レビュー省略で問題ない B. テスト自体も AI が生成しているため前提の抜け漏れやエッジケースの欠落が起きる可能性があり、Discernment（出力の批判的評価）と Diligence（セキュリティ・出荷責任）の観点から人間による検証が不可欠である C. リファクタリングは Next-Token Prediction の仕組み上、絶対に成功しないため手作業に戻すべきである D. 単体テストの代わりに、より大型のモデルに「問題ないですか」と質問して Yes ならリリースしてよい</p>
+<p>A. AI が書いたコードは単体テストが通るなら論理的に 100% 正しいため、レビュー省略で問題ない<br> B. テスト自体も AI が生成しているため前提の抜け漏れやエッジケースの欠落が起きる可能性があり、Discernment（出力の批判的評価）と Diligence（セキュリティ・出荷責任）の観点から人間による検証が不可欠である<br> C. リファクタリングは Next-Token Prediction の仕組み上、絶対に成功しないため手作業に戻すべきである<br> D. 単体テストの代わりに、より大型のモデルに「問題ないですか」と質問して Yes ならリリースしてよい</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。実装やテストの下書き生成は Delegation できますが、決済のような重要領域で人間の検証（Discernment）と責任担保（Diligence）を省略するのは危険です。</p></div></details>
 <h3>総合問 2（プラットフォーム基盤 ＋ モデル選定）</h3>
 <p>ある大手企業で、社内の問い合わせ一次振り分け（1 日 20 万件、500ms 以内で 6 カテゴリに分類）と、複雑な法務契約書のリスク条項分析（1 日 50 件、見落とし厳禁）の 2 つのユースケースを、既存の GCP セキュリティ統制下で稼働させたいという要件があります。基盤とモデルの組み合わせとして最も適切なものはどれですか。</p>
-<p>A. Anthropic API（個人アカウント）上で、両方のユースケースを Claude Opus で処理する B. Google Cloud Vertex AI 上で、一次振り分けには Claude Haiku、契約書リスク分析には Claude Opus（または上位モデル）を割り当てる C. Google Cloud Vertex AI 上で、一次振り分けには Claude Opus、契約書リスク分析には Claude Haiku を割り当てる D. 2 つのユースケースを 1 つの長い会話セッションに混ぜて処理する</p>
+<p>A. Anthropic API（個人アカウント）上で、両方のユースケースを Claude Opus で処理する<br> B. Google Cloud Vertex AI 上で、一次振り分けには Claude Haiku、契約書リスク分析には Claude Opus（または上位モデル）を割り当てる<br> C. Google Cloud Vertex AI 上で、一次振り分けには Claude Opus、契約書リスク分析には Claude Haiku を割り当てる<br> D. 2 つのユースケースを 1 つの長い会話セッションに混ぜて処理する</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。GCP のセキュリティ統制要件には Google Cloud Vertex AI が適合します。また、大量・低遅延の分類には Haiku、高難度で見落とし厳禁の分析には Opus を選ぶのがモデル選定の原則に合致しています。</p></div></details>
 <h3>総合問 3（Description ＋ モデル挙動の診断）</h3>
 <p>顧客向けアプリで Claude に JSON 形式で顧客データを出力させようとしていますが、ときどき前置き文が混ざったり項目名が揺れたりして後続プログラムがエラーになります。原因と対策として最も適切なものはどれですか。</p>
-<p>A. LLM は非決定的な性質を持つため、自然言語のお願いだけで形式を 100% 保証しようとせず、Tool Use や構造化出力のスキーマ定義を用い、アプリケーション側でも検証を行う B. 出力が揺れるのはモデルが壊れているため、毎回異なるランダムなプロンプトを送る C. 顧客データを画像に変換して Vision で出力させる D. 会話履歴を 100 往復以上溜めてから JSON を出力させる</p>
+<p>A. LLM は非決定的な性質を持つため、自然言語のお願いだけで形式を 100% 保証しようとせず、Tool Use や構造化出力のスキーマ定義を用い、アプリケーション側でも検証を行う<br> B. 出力が揺れるのはモデルが壊れているため、毎回異なるランダムなプロンプトを送る<br> C. 顧客データを画像に変換して Vision で出力させる<br> D. 会話履歴を 100 往復以上溜めてから JSON を出力させる</p>
 <details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>A</strong>。LLM は非決定的であるため、自然言語の指示だけに頼らず構造化出力や Tool Use のスキーマ機能で形式を制御し、さらにアプリ層でバリデーションするのが安全な設計です。</p></div></details>
+<h3>総合問 4（Delivery Methodology ＋ Driving Enterprise Adoption）</h3>
+<p>ある製造業の顧客で、FDE として新規 AI パイロットを立ち上げ、さらにその後の全社展開まで見据えた提案を求められています。成功確率を最も高める進め方はどれですか。</p>
+<p>A. 全社 8 部門の業務を最初から一括で自動化し、評価指標は導入後のアンケートのみで測る<br> B. まず効果と検証性の高い First Slice を選び、Baseline と Success Metrics を合意した Delivery Plan Pack でパイロットを実証した上で、全社展開時は Champion Network と職種別トレーニングで 30-Day Fade を防ぐ<br> C. 全社員にライセンスを配布して「自由に活用してください」とメールを一斉送信するだけで完了とする<br> D. 投資対効果の算出は行わず、最も高価なモデルを全社員の日常チャットへ無制限に割り当てる</p>
+<details class="qa-details"><summary>解答</summary><div class="details-body"><p><strong>B</strong>。パイロット段階では First Slice・Baseline・Success Metrics・Delivery Plan Pack で確実に価値を証明し、全社展開段階では Champion Network と職種別 Enablement によって 30-Day Fade を防ぐ二段構えが有効です。</p></div></details>
           </div>
           <div class="chapter-pager">
             <button type="button" class="btn nav-step" data-jump="sec-glossary">← 用語集</button>
@@ -801,6 +1451,7 @@
       window.scrollTo({ top: 0, behavior: "instant" });
     }
 
+    // Bind clicks
     tabBtns.forEach(btn => btn.addEventListener("click", () => showSection(btn.dataset.sec)));
     navLinks.forEach(a => a.addEventListener("click", e => {
       e.preventDefault();
@@ -814,15 +1465,18 @@
       });
     });
 
+    // Find-in-page support via beforematch
     panels.forEach(p => {
       p.addEventListener("beforematch", () => showSection(p.id, false));
     });
 
+    // Initial hash
     const initHash = location.hash.replace("#", "");
     if (initHash && document.getElementById(initHash)) {
       showSection(initHash, false);
     }
 
+    // QA Expand/Collapse All
     document.querySelectorAll(".qa-toggle-all").forEach(btn => {
       btn.addEventListener("click", () => {
         const body = btn.closest(".md-body");
@@ -834,6 +1488,7 @@
       });
     });
 
+    // Memorize Mode
     const btnMemorize = document.getElementById("btnMemorize");
     btnMemorize.addEventListener("click", () => {
       document.body.classList.toggle("memorize-mode");
@@ -850,6 +1505,7 @@
       });
     });
 
+    // Theme Toggle (Light / Dark / System / BW)
     const btnTheme = document.getElementById("btnTheme");
     const btnBW = document.getElementById("btnBW");
     const metaCS = document.querySelector('meta[name="color-scheme"]');
@@ -887,39 +1543,43 @@
       updateThemeUI();
     });
 
+    // Cross-chapter Search (uses textContent so hidden panels are searched too)
     function clearSearchHighlights() {
-      document.querySelectorAll("mark.search-hit").forEach(m => {
-        const p = m.parentNode;
-        p.replaceChild(document.createTextNode(m.textContent), m);
-        p.normalize();
+      document.querySelectorAll("mark.search-hit").forEach(mark => {
+        const parent = mark.parentNode;
+        if (parent) {
+          parent.replaceChild(document.createTextNode(mark.textContent), mark);
+          parent.normalize();
+        }
       });
     }
 
-    function highlightInPanel(panel, rawQuery) {
+    function highlightInPanel(panelEl, rawQuery) {
       clearSearchHighlights();
-      if (!panel || !rawQuery) return null;
-      const body = panel.querySelector(".md-body");
+      if (!panelEl || !rawQuery) return null;
+      const body = panelEl.querySelector(".md-body");
       if (!body) return null;
       const qLower = rawQuery.toLowerCase();
       const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
-        acceptNode: node => {
+        acceptNode(node) {
           if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
           const p = node.parentElement;
-          if (!p || p.closest(".mermaid, script, style")) return NodeFilter.FILTER_REJECT;
+          if (!p || p.closest(".mermaid, .mermaid-wrap, svg, script, style")) return NodeFilter.FILTER_REJECT;
           return NodeFilter.FILTER_ACCEPT;
         }
       });
-      const nodes = [];
+      const textNodes = [];
       let n;
-      while ((n = walker.nextNode())) nodes.push(n);
+      while ((n = walker.nextNode())) textNodes.push(n);
+
       let firstMark = null;
-      nodes.forEach(node => {
+      textNodes.forEach(node => {
         const text = node.nodeValue;
         const lower = text.toLowerCase();
-        if (!lower.includes(qLower)) return;
+        let idx = lower.indexOf(qLower);
+        if (idx === -1) return;
         const frag = document.createDocumentFragment();
         let last = 0;
-        let idx = lower.indexOf(qLower);
         while (idx !== -1) {
           if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
           const mark = document.createElement("mark");
@@ -990,6 +1650,7 @@
       });
     });
 
+    // Mobile Drawer & Back-to-Top
     const sidebar = document.getElementById("sidebar");
     const backdrop = document.getElementById("sidebarBackdrop");
     const fabTop = document.getElementById("fabTop");
